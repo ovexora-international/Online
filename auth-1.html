@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://pl29040628.profitablecpmratenetwork.com/fc/2c/e3/fc2ce31532655c4ca8d31afa17d8443b.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Vexora Pro | Login & Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --bg:#020810;--card:#06101f;--dark:#030c18;
+  --border:rgba(201,162,39,0.15);--border2:rgba(201,162,39,0.35);
+  --gold:#c9a227;--gold2:#e8c547;
+  --grad:linear-gradient(135deg,#9b6e14,#c9a227,#e8c547);
+  --muted:#4a6080;--text:#d0e4ff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 90% 55% at 50% -10%,rgba(14,40,90,0.65) 0%,transparent 65%);}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(201,162,39,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,0.04) 1px,transparent 1px);
+  background-size:44px 44px;}
+
+.page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 16px;position:relative;z-index:1;}
+
+/* ── LOGO BLOCK ── */
+.logo-block{text-align:center;margin-bottom:22px;}
+/* ✅ LOGO FIX — proper box with object-fit */
+.logo-box{
+  width:80px;height:80px;
+  border-radius:20px;
+  border:2px solid rgba(201,162,39,0.3);
+  overflow:hidden;
+  margin:0 auto 12px;
+  box-shadow:0 0 40px rgba(201,162,39,0.22),0 10px 28px rgba(0,0,0,0.6);
+  background:#06101f;
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;     /* ✅ fills box without distortion */
+  object-position:center;
+  display:block;
+}
+.logo-name{
+  font-family:'Orbitron',sans-serif;font-size:26px;font-weight:800;
+  letter-spacing:5px;text-transform:uppercase;
+  background:linear-gradient(135deg,#c9a227,#f0d060);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.logo-divider{width:40px;height:2px;margin:8px auto;background:linear-gradient(90deg,transparent,#c9a227,transparent);border-radius:2px;}
+.logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:700;}
+
+/* ── CARD ── */
+.card{
+  width:100%;max-width:390px;
+  background:linear-gradient(160deg,#081528 0%,#040d1a 100%);
+  border:1px solid var(--border);border-radius:24px;
+  padding:24px 20px 20px;
+  box-shadow:0 0 50px rgba(201,162,39,0.05),0 20px 50px rgba(0,0,0,0.6);
+  position:relative;overflow:hidden;
+}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#c9a227,#f0d060,#c9a227,transparent);}
+
+/* ── TABS ── */
+.tab-bar{display:flex;background:rgba(3,9,20,0.9);border:1px solid rgba(201,162,39,0.12);border-radius:13px;padding:4px;margin-bottom:22px;gap:4px;}
+.tab-btn{flex:1;padding:10px;border:none;background:transparent;color:var(--muted);font-size:13.5px;font-weight:800;border-radius:10px;cursor:pointer;transition:.25s;font-family:'Nunito',sans-serif;}
+.tab-btn.active{background:linear-gradient(135deg,#9b6e14,#e8c547);color:#06100d;box-shadow:0 3px 16px rgba(201,162,39,0.3);}
+
+/* ── FORM PANEL ── */
+.form-panel{display:none;animation:fadeUp .3s ease;}
+.form-panel.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── FIELDS ── */
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:9.5px;font-weight:800;color:rgba(201,162,39,0.55);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:5px;}
+.iw{position:relative;}
+.iw input,.iw select{
+  width:100%;padding:12px 14px 12px 40px;
+  background:rgba(3,9,20,0.9);border:1.5px solid rgba(201,162,39,0.14);
+  border-radius:11px;color:#d0e4ff;font-family:'Nunito',sans-serif;
+  font-size:13.5px;outline:none;transition:.25s;appearance:none;
+}
+.iw input::placeholder{color:#2d4060;}
+.iw input:focus,.iw select:focus{border-color:rgba(201,162,39,0.45);box-shadow:0 0 0 3px rgba(201,162,39,0.09);}
+.iw select option{background:#040d1a;color:#d0e4ff;}
+.ii{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:rgba(201,162,39,0.45);font-size:13px;pointer-events:none;}
+.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;cursor:pointer;background:none;border:none;z-index:2;}
+.pfx{position:absolute;left:37px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:800;color:var(--gold);pointer-events:none;}
+.iw.phone input{padding-left:78px;}
+
+/* ── STRENGTH ── */
+.str-track{display:flex;gap:5px;margin-top:6px;height:3px;}
+.str-seg{flex:1;border-radius:3px;background:rgba(201,162,39,0.08);transition:.3s;}
+.s-weak{background:#ff3d71!important;}
+.s-med{background:#ff9d00!important;}
+.s-strong{background:#c9a227!important;}
+.str-lbl{font-size:10px;margin-top:4px;font-weight:700;min-height:15px;}
+
+/* ── TERMS ── */
+.terms-row{display:flex;align-items:flex-start;gap:10px;margin:14px 0;cursor:pointer;}
+.terms-row input{accent-color:var(--gold);width:15px;height:15px;margin-top:2px;flex-shrink:0;}
+.terms-row span{font-size:11.5px;color:var(--muted);line-height:1.5;}
+.terms-row b{color:var(--gold);}
+
+/* ── SUBMIT ── */
+.submit-btn{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,#9b6e14 0%,#c9a227 30%,#e8c547 60%,#c9a227 80%,#9b6e14 100%);
+  border:none;border-radius:12px;
+  color:#060f0a;font-size:14px;font-weight:800;
+  cursor:pointer;transition:.25s;
+  box-shadow:0 4px 24px rgba(201,162,39,0.3);
+  font-family:'Nunito',sans-serif;letter-spacing:.5px;
+  position:relative;overflow:hidden;
+}
+.submit-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,0.2) 50%,transparent 80%);transform:translateX(-100%);animation:shimmer 3s 1s ease-in-out infinite;}
+@keyframes shimmer{0%,70%,100%{transform:translateX(-100%);}35%{transform:translateX(200%);}}
+.submit-btn:active{transform:scale(.97);}
+
+/* ── DEVICE ── */
+.device-row{margin-top:16px;text-align:center;font-size:10px;color:#1a2e45;display:flex;align-items:center;justify-content:center;gap:5px;}
+.did-val{color:#2a4060;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- LOGO -->
+  <div class="logo-block">
+    <!-- ✅ Logo properly fitted in box -->
+    <div class="logo-box">
+      <img src="logo.jpeg" alt="Vexora Pro Logo">
+    </div>
+    <div class="logo-name">VEXORA</div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub">Secure Authentication Portal</div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-login"    onclick="switchTab('login')">🔐 Login</button>
+      <button class="tab-btn"        id="tab-register" onclick="switchTab('register')">⚡ Register</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="form-panel active" id="panel-login">
+      <div class="field">
+        <label>Phone Number</label>
+        <div class="iw phone">
+          <i class="fas fa-phone ii"></i>
+          <span class="pfx">+92</span>
+          <input type="tel" id="l-num" placeholder="3001234567" inputmode="numeric">
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="iw">
+          <i class="fas fa-lock ii"></i>
+          <input type="password" id="l-pass" placeholder="Enter your password">
+          <button class="eye" onclick="toggleEye('l-pass',this)" type="button"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="doLogin()"><i class="fas fa-right-to-bracket"></i>&nbsp; Login</button>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="form-panel" id="panel-register">
+      <div class="field">
+        <label>Full Name</label>
+        <div class="iw">
+          <i class="fas fa-user ii"></i>
+          <input type="text" id="r-name" placeholder="Apna pura naam likhein">
+        </div>
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <div class="iw phone">
+          <i class="fas fa-phone ii"></i>
+          <span class="pfx" id="r-prefix">+92</span>
+          <input type="tel" id="r-num" placeholder="3001234567" inputmode="numeric">
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="iw">
+          <i class="fas fa-lock ii"></i>
+          <input type="password" id="r-pass" placeholder="Strong password banayein" oninput="checkStrength()">
+          <button class="eye" onclick="toggleEye('r-pass',this)" type="button"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="str-track"><div class="str-seg" id="seg1"></div><div class="str-seg" id="seg2"></div><div class="str-seg" id="seg3"></div></div>
+        <div class="str-lbl" id="strength-label"></div>
+      </div>
+      <div class="field">
+        <label>Country</label>
+        <div class="iw">
+          <i class="fas fa-globe ii"></i>
+          <select id="r-country" onchange="updatePhonePrefix()">
+            <option value="">-- Select Country --</option>
+            <option value="Pakistan">🇵🇰 Pakistan</option>
+            <option value="India">🇮🇳 India</option>
+            <option value="Bangladesh">🇧🇩 Bangladesh</option>
+            <option value="USA">🇺🇸 USA</option>
+            <option value="Canada">🇨🇦 Canada</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Referral Code <span style="color:rgba(201,162,39,0.25);font-weight:400;">(Optional)</span></label>
+        <div class="iw">
+          <i class="fas fa-tag ii"></i>
+          <input type="text" id="r-ref" placeholder="VX0001" oninput="this.value=this.value.toUpperCase()">
+        </div>
+      </div>
+      <label class="terms-row">
+        <input type="checkbox" id="terms-chk">
+        <span>I agree to the <b>Terms &amp; Conditions</b> of Vexora Pro</span>
+      </label>
+      <button class="submit-btn" onclick="doRegister()"><i class="fas fa-user-plus"></i>&nbsp; Create Account</button>
+    </div>
+
+    <div class="device-row">
+      <i class="fas fa-microchip"></i>
+      Device: <span class="did-val" id="did-text">loading...</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwQaEaNWzlYCW4CO-oYylobxdS7ekye3TWafPNYfkYR7oMaRJ9ME99R_HTIvgOlEStM0A/exec";
+
+window.onload = function() {
+  if (localStorage.getItem("anLoggedIn")==="true"&&localStorage.getItem("anID")) {
+    window.location.replace("dashboard.html"); return;
+  }
+  const did = getDeviceId();
+  document.getElementById("did-text").innerText = did.substring(0,10)+"...";
+  const ref = new URLSearchParams(window.location.search).get("ref");
+  if (ref) { document.getElementById("r-ref").value=ref.toUpperCase(); switchTab("register"); }
+};
+
+function getDeviceId() {
+  let id=localStorage.getItem("an_device_token");
+  if (!id) { id="dev-"+Math.random().toString(36).substr(2,9)+"-"+Date.now(); localStorage.setItem("an_device_token",id); }
+  return id;
+}
+
+const COUNTRY_CODES={"Pakistan":{code:"+92",ph:"3001234567"},"India":{code:"+91",ph:"9876543210"},"Bangladesh":{code:"+880",ph:"1712345678"},"USA":{code:"+1",ph:"2025551234"},"Canada":{code:"+1",ph:"4165551234"}};
+
+function updatePhonePrefix() {
+  const c=document.getElementById("r-country").value;
+  const info=COUNTRY_CODES[c]||{code:"+92",ph:"3001234567"};
+  document.getElementById("r-prefix").textContent=info.code;
+  document.getElementById("r-num").placeholder=info.ph;
+}
+
+function switchTab(type) {
+  document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});
+  document.querySelectorAll(".form-panel").forEach(function(p){p.classList.remove("active");});
+  document.getElementById("tab-"+type).classList.add("active");
+  document.getElementById("panel-"+type).classList.add("active");
+}
+
+function toggleEye(id,btn) {
+  const inp=document.getElementById(id),icon=btn.querySelector("i");
+  if(inp.type==="password"){inp.type="text";icon.className="fas fa-eye-slash";}
+  else{inp.type="password";icon.className="fas fa-eye";}
+}
+
+function checkStrength() {
+  const val=document.getElementById("r-pass").value;
+  const segs=["seg1","seg2","seg3"].map(function(id){return document.getElementById(id);});
+  const lbl=document.getElementById("strength-label");
+  segs.forEach(function(s){s.className="str-seg";});
+  if(!val.length){lbl.textContent="";return;}
+  if(val.length<5){segs[0].classList.add("s-weak");lbl.textContent="Weak";lbl.style.color="#ff3d71";}
+  else if(val.length<8){segs[0].classList.add("s-med");segs[1].classList.add("s-med");lbl.textContent="Medium";lbl.style.color="#ff9d00";}
+  else{segs.forEach(function(s){s.classList.add("s-strong");});lbl.textContent="Strong";lbl.style.color="#c9a227";}
+}
+
+function saveSession(user) {
+  const u=JSON.stringify(user);
+  localStorage.setItem("anLoggedIn","true");
+  localStorage.setItem("anID",user.user_id);
+  localStorage.setItem("anUser",u);
+  localStorage.setItem("an_user",u);
+}
+
+async function doLogin() {
+  const num=document.getElementById("l-num").value.trim();
+  const pass=document.getElementById("l-pass").value.trim();
+  const deviceId=getDeviceId();
+  if(!num||!pass) return Swal.fire({title:"Error",text:"Phone aur Password zarori hai",icon:"error",background:"#06101f",color:"#d0e4ff"});
+  Swal.fire({title:"Verifying...",allowOutsideClick:false,background:"#06101f",color:"#d0e4ff",didOpen:function(){Swal.showLoading();}});
+  try {
+    const res=await fetch(GAS_URL,{method:"POST",body:JSON.stringify({type:"login",num,pass,deviceId})});
+    const out=await res.json();
+    if(out.status==="success"){
+      saveSession(out.user);
+      Swal.fire({title:"Welcome Back! 🚀",text:out.user.name||"",icon:"success",timer:1500,showConfirmButton:false,background:"#06101f",color:"#d0e4ff"});
+      setTimeout(function(){window.location.replace("dashboard.html");},1600);
+    } else {
+      Swal.fire({title:"Access Denied",text:out.message||"Login failed",icon:"error",background:"#06101f",color:"#d0e4ff"});
+    }
+  } catch(e) {
+    Swal.fire({title:"Error",text:"Connection failed. Try again.",icon:"error",background:"#06101f",color:"#d0e4ff"});
+  }
+}
+
+async function doRegister() {
+  const name=document.getElementById("r-name").value.trim();
+  const num=document.getElementById("r-num").value.trim();
+  const pass=document.getElementById("r-pass").value.trim();
+  const ref=document.getElementById("r-ref").value.trim().toUpperCase()||"DIRECT";
+  const country=document.getElementById("r-country").value;
+  const deviceId=getDeviceId();
+  if(!name||!num||!pass) return Swal.fire({title:"Error",text:"Tamam fields bharen",icon:"error",background:"#06101f",color:"#d0e4ff"});
+  if(!country) return Swal.fire({title:"Country",text:"Apna country select karen",icon:"warning",background:"#06101f",color:"#d0e4ff"});
+  if(pass.length<5) return Swal.fire({title:"Weak Password",text:"Kam se kam 5 characters chahiye",icon:"warning",background:"#06101f",color:"#d0e4ff"});
+  if(!document.getElementById("terms-chk").checked) return Swal.fire({title:"Terms",text:"Terms & Conditions agree karein",icon:"warning",background:"#06101f",color:"#d0e4ff"});
+  Swal.fire({title:"Creating Account...",allowOutsideClick:false,background:"#06101f",color:"#d0e4ff",didOpen:function(){Swal.showLoading();}});
+  try {
+    const res=await fetch(GAS_URL,{method:"POST",body:JSON.stringify({type:"register",name,number:num,password:pass,referral:ref,device_id:deviceId,country})});
+    const out=await res.json();
+    if(out.status==="success"){
+      const userObj=out.user||{user_id:out.user_id,name,number:num,balance:0,referral:ref};
+      saveSession(userObj);
+      Swal.fire({title:"Account Created! 🎉",html:"Your ID: <b style='color:#c9a227;font-size:22px;'>"+out.user_id+"</b>",icon:"success",timer:2500,showConfirmButton:false,background:"#06101f",color:"#d0e4ff"});
+      setTimeout(function(){window.location.replace("dashboard.html");},2600);
+    } else {
+      Swal.fire({title:"Failed",text:out.message||"Registration failed",icon:"error",background:"#06101f",color:"#d0e4ff"});
+    }
+  } catch(e) {
+    Swal.fire({title:"Network Error",text:"Connection failed. Try again.",icon:"error",background:"#06101f",color:"#d0e4ff"});
+  }
+}
+</script>
+</body>
+</html>
