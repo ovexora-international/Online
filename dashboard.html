@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://pl29040628.profitablecpmratenetwork.com/fc/2c/e3/fc2ce31532655c4ca8d31afa17d8443b.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vexora | Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- AUTH GUARD -->
+<script>
+(function() {
+  var anUser   = localStorage.getItem("anUser");
+  var anOld    = localStorage.getItem("an_user");
+  var loggedIn = localStorage.getItem("anLoggedIn");
+  if (anUser && !anOld)  { localStorage.setItem("an_user", anUser); anOld = anUser; }
+  if (anOld  && !anUser) { localStorage.setItem("anUser",  anOld);  localStorage.setItem("anLoggedIn","true"); }
+  var userData = anOld || anUser;
+  if (!userData) window.location.replace("auth.html");
+})();
+</script>
+
+<style>
+:root {
+  --bg:      #030b18;
+  --s1:      #071020;
+  --s2:      #0a1628;
+  --border:  rgba(201,162,39,0.15);
+  --border2: rgba(201,162,39,0.28);
+  --blue:    #c9a227;
+  --violet:  #e8c547;
+  --teal:    #f0d060;
+  --emerald: #34d399;
+  --amber:   #fbbf24;
+  --rose:    #fb7185;
+  --grad:    linear-gradient(135deg,#b8891e,#e8c547);
+  --muted:   #4a6080;
+  --dim:     #8899bb;
+  --text:    #d8e8ff;
+  --shadow:  0 8px 32px rgba(0,0,0,0.45);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);padding-bottom:92px;overflow-x:hidden;min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse 80vw 55vh at 15% 10%,rgba(79,142,247,0.05) 0%,transparent 70%),radial-gradient(ellipse 60vw 50vh at 85% 80%,rgba(201,162,39,0.04) 0%,transparent 70%);pointer-events:none;z-index:0;}
+
+/* HEADER */
+.header{padding:13px 18px;background:rgba(5,12,25,0.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;display:flex;align-items:baseline;gap:1px;}
+.logo-click{color:#e8c547;}.logo-eran{color:#c9a227;}
+.logo-pro{font-size:9px;font-weight:700;background:linear-gradient(135deg,#c9a227,#b8891e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;text-transform:uppercase;margin-left:5px;}
+.hdr-actions{display:flex;gap:8px;align-items:center;}
+.hdr-btn{width:36px;height:36px;background:var(--s2);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--dim);transition:all .2s;}
+.hdr-btn:hover{border-color:var(--border2);color:var(--text);}
+.hdr-btn.danger{color:var(--rose);}
+.hdr-btn.danger:hover{background:rgba(251,113,133,0.08);border-color:rgba(251,113,133,0.25);}
+
+/* USER META */
+.user-meta{display:flex;align-items:center;justify-content:space-between;padding:9px 18px;background:var(--s1);border-bottom:1px solid var(--border);position:relative;z-index:1;}
+.u-name-wrap{display:flex;align-items:center;gap:8px;}
+.online-dot{width:7px;height:7px;border-radius:50%;background:var(--emerald);box-shadow:0 0 7px rgba(52,211,153,0.7);flex-shrink:0;}
+.u-name{font-size:13px;font-weight:600;color:var(--dim);}
+.id-badge{display:flex;align-items:center;gap:6px;background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.2);color:var(--blue);padding:5px 12px;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+.id-badge:hover{background:rgba(201,162,39,0.14);}
+.id-badge i{font-size:10px;opacity:0.6;}
+
+/* BALANCE CARD */
+.bal-wrap{margin:18px;position:relative;z-index:1;}
+.bal-card{border-radius:20px;padding:26px 22px 22px;background:var(--s2);border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.bal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(135deg,#b8891e,#e8c547);}
+.bal-card::after{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(201,162,39,0.08) 0%,transparent 65%);pointer-events:none;}
+.bal-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+.bal-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:8px;}
+.bal-amount{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;color:#fff;line-height:1;letter-spacing:-1px;}
+.bal-currency{font-size:16px;font-weight:600;color:var(--dim);margin-right:3px;vertical-align:middle;letter-spacing:0;}
+.bal-hist-btn{width:42px;height:42px;background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.2);border-radius:12px;color:var(--blue);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .2s;flex-shrink:0;}
+.bal-hist-btn:hover{background:rgba(201,162,39,0.15);}
+.bal-hist-btn:active{transform:scale(.94);}
+.income-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.2);border-radius:10px;color:var(--blue);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;}
+.income-btn:hover{background:rgba(201,162,39,0.15);}
+.income-btn:active{transform:scale(.96);}
+
+/* TICKER */
+.ticker{margin:0 18px 16px;background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:9px 13px;display:flex;align-items:center;gap:10px;position:relative;z-index:1;}
+.ticker-pill{background:linear-gradient(135deg,#b8891e,#e8c547);color:#fff;padding:3px 9px;border-radius:6px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;flex-shrink:0;}
+.ticker marquee{font-size:12px;font-weight:500;color:var(--dim);}
+
+/* SECTION HEAD */
+.sec-head{padding:0 18px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);position:relative;z-index:1;}
+
+/* ACTION GRID */
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 18px 20px;position:relative;z-index:1;}
+.action-btn{display:flex;align-items:center;gap:11px;padding:14px 14px;border-radius:14px;border:1px solid var(--border);cursor:pointer;text-decoration:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;color:#fff;background:var(--s2);transition:transform .18s,box-shadow .18s,border-color .18s;position:relative;overflow:hidden;}
+.action-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03),transparent);pointer-events:none;}
+.action-btn:active{transform:scale(.95);}
+.action-btn:hover{transform:translateY(-2px);}
+.btn-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.btn-text{display:flex;flex-direction:column;line-height:1.25;}
+.btn-text small{font-size:10px;font-weight:500;opacity:0.45;margin-top:2px;}
+.btn-arr{margin-left:auto;opacity:0.3;font-size:11px;flex-shrink:0;}
+.fw{grid-column:1/-1;}
+
+.a-buy{border-color:rgba(52,211,153,0.2);background:linear-gradient(135deg,rgba(52,211,153,0.07),rgba(45,212,191,0.04));}
+.a-buy:hover{border-color:rgba(52,211,153,0.35);box-shadow:0 6px 24px rgba(52,211,153,0.1);}
+.a-buy .btn-icon{background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.2);}
+
+.a-ads{border-color:rgba(251,191,36,0.2)!important;background:linear-gradient(135deg,rgba(251,191,36,0.07),rgba(245,158,11,0.04))!important;}
+.a-ads:hover{border-color:rgba(251,191,36,0.35)!important;box-shadow:0 6px 24px rgba(251,191,36,0.1)!important;}
+.a-ads .btn-icon{background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.2);}
+
+.a-company{border-color:rgba(129,140,248,0.2);background:linear-gradient(135deg,rgba(129,140,248,0.07),rgba(99,102,241,0.04));}
+.a-company:hover{border-color:rgba(129,140,248,0.35);box-shadow:0 6px 24px rgba(129,140,248,0.1);}
+.a-company .btn-icon{background:rgba(129,140,248,0.1);border-color:rgba(129,140,248,0.2);}
+
+.a-tg{border-color:rgba(42,171,238,0.2);background:linear-gradient(135deg,rgba(42,171,238,0.07),rgba(0,136,204,0.04));}
+.a-tg:hover{border-color:rgba(42,171,238,0.35);box-shadow:0 6px 20px rgba(42,171,238,0.1);}
+.a-tg .btn-icon{background:rgba(42,171,238,0.1);border-color:rgba(42,171,238,0.2);color:#29abe2;}
+
+.a-yt{border-color:rgba(255,48,48,0.18);background:linear-gradient(135deg,rgba(255,48,48,0.07),rgba(204,0,0,0.04));}
+.a-yt:hover{border-color:rgba(255,48,48,0.32);box-shadow:0 6px 20px rgba(255,48,48,0.1);}
+.a-yt .btn-icon{background:rgba(255,48,48,0.1);border-color:rgba(255,48,48,0.18);color:#ff4040;}
+
+.a-wa{border-color:rgba(37,211,102,0.2);background:linear-gradient(135deg,rgba(37,211,102,0.07),rgba(18,140,126,0.04));}
+.a-wa:hover{border-color:rgba(37,211,102,0.35);box-shadow:0 6px 20px rgba(37,211,102,0.1);}
+.a-wa .btn-icon{background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.2);color:#25d366;}
+
+/* NAV BAR */
+.nav-bar{position:fixed;bottom:0;width:100%;background:rgba(4,9,20,0.97);backdrop-filter:blur(20px);display:flex;justify-content:space-around;padding:10px 0 16px;border-top:1px solid var(--border);z-index:1000;}
+.nav-link{color:var(--muted);text-decoration:none;font-size:10px;font-weight:700;letter-spacing:0.3px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0 10px;transition:color .2s;}
+.nav-link i{font-size:19px;}
+.nav-link.active{color:#c9a227;}
+.nav-link.active i{filter:drop-shadow(0 0 8px rgba(201,162,39,0.55));}
+
+/* HISTORY MODAL */
+.hist-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:flex-end;justify-content:center;}
+.hist-modal.show{display:flex;}
+.hist-sheet{background:var(--s1);border-radius:22px 22px 0 0;border:1px solid var(--border);border-bottom:none;width:100%;max-width:520px;max-height:82vh;overflow-y:auto;}
+.hist-head{padding:18px 18px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--s1);z-index:1;border-radius:22px 22px 0 0;}
+.hist-head h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+.hist-head h3 i{color:var(--blue);}
+.close-modal{background:rgba(251,113,133,0.08);border:1px solid rgba(251,113,133,0.25);color:var(--rose);padding:6px 13px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;transition:background .2s;}
+.close-modal:hover{background:rgba(251,113,133,0.14);}
+.hist-body{padding:14px 16px;}
+.history-item{background:var(--s2);padding:13px 14px;border-radius:12px;margin-bottom:8px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;transition:border-color .2s;}
+.history-item:hover{border-color:var(--border2);}
+.history-type{font-size:13px;font-weight:700;color:var(--text);}
+.history-amount{font-size:15px;font-weight:800;}
+
+/* POPUP */
+.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9998;align-items:center;justify-content:center;padding:20px;}
+.popup-overlay.show{display:flex;}
+.popup-box{background:var(--s1);border:1px solid var(--border);border-radius:20px;max-width:400px;width:100%;padding:26px 22px;position:relative;box-shadow:var(--shadow);}
+.popup-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(135deg,#b8891e,#e8c547);border-radius:20px 20px 0 0;}
+.popup-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#c9a227;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.popup-msg{font-size:14px;color:var(--dim);line-height:1.7;}
+.popup-close{display:block;width:100%;margin-top:20px;padding:12px;background:linear-gradient(135deg,#b8891e,#e8c547);border:none;border-radius:11px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .2s;}
+.popup-close:hover{opacity:0.88;}
+.popup-close:active{transform:scale(.97);}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <span class="logo-click">Vex</span><span class="logo-eran">ora</span>
+  </div>
+  <div class="hdr-actions">
+    <div class="hdr-btn"><i class="fa-solid fa-headset" style="color:var(--blue);"></i></div>
+    <div class="hdr-btn danger" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></div>
+  </div>
+</div>
+
+<!-- USER META -->
+<div class="user-meta">
+  <div class="u-name-wrap">
+    <div class="online-dot"></div>
+    <span class="u-name" id="u-name">Loading...</span>
+  </div>
+  <div class="id-badge" onclick="copyID()">
+    <span id="u-id">CE####</span>
+    <i class="fa-regular fa-copy"></i>
+  </div>
+</div>
+
+<!-- BALANCE CARD -->
+<div class="bal-wrap">
+  <div class="bal-card">
+    <div class="bal-top">
+      <div>
+        <div class="bal-label">Available Balance</div>
+        <div class="bal-amount"><span class="bal-currency">Rs.</span><span id="u-bal">0.00</span></div>
+      </div>
+      <div class="bal-hist-btn" onclick="openHistory()">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </div>
+    </div>
+    <div class="income-btn" onclick="showIncome()">
+      <i class="fa-solid fa-chart-line"></i> View Income
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <span class="ticker-pill">Live</span>
+  <marquee id="news-text">Syncing with server...</marquee>
+</div>
+
+<!-- ACTION GRID -->
+<div class="sec-head">Quick Actions</div>
+<div class="action-grid">
+
+  <div id="plan-btn-wrap" class="fw">
+    <!-- No active plan -->
+    <a href="plan.html" class="action-btn a-buy fw" id="btn-buy-plan">
+      <div class="btn-icon">💰</div>
+      <div class="btn-text">Buy Plan <small>Invest &amp; Earn Daily</small></div>
+      <i class="fa-solid fa-chevron-right btn-arr"></i>
+    </a>
+    <!-- Has active plan -->
+    <div id="btn-active-plan" style="display:none;">
+      <a href="ads.html" class="action-btn a-ads fw" style="margin-bottom:9px;">
+        <div class="btn-icon">📺</div>
+        <div class="btn-text">Watch Ads &amp; Earn <small id="plan-earn-label">Active Plan</small></div>
+        <i class="fa-solid fa-chevron-right btn-arr"></i>
+      </a>
+      <a href="plan.html" class="action-btn a-buy fw">
+        <div class="btn-icon">➕</div>
+        <div class="btn-text">Buy Another Plan <small>Multiple plans khareedein</small></div>
+        <i class="fa-solid fa-chevron-right btn-arr"></i>
+      </a>
+    </div>
+  </div>
+
+  <a href="about.html" class="action-btn a-company fw">
+    <div class="btn-icon">🏢</div>
+    <div class="btn-text">Company Profile <small>About Vexora</small></div>
+    <i class="fa-solid fa-chevron-right btn-arr"></i>
+  </a>
+
+  <a href="https://t.me/Vexora" class="action-btn a-tg">
+    <div class="btn-icon"><i class="fa-brands fa-telegram" style="font-size:19px;"></i></div>
+    <div class="btn-text">Telegram <small>Join Channel</small></div>
+  </a>
+
+  <a href="https://youtube.com/@earnclickprox?si=bsTC-k9DPxZQ1Wyo" class="action-btn a-yt">
+    <div class="btn-icon"><i class="fa-brands fa-youtube" style="font-size:19px;"></i></div>
+    <div class="btn-text">YouTube <small>Watch Videos</small></div>
+  </a>
+
+  <a href="https://whatsapp.com/channel/0029Vb5fim24NVilKv6KBr1Z" class="action-btn a-wa fw">
+    <div class="btn-icon"><i class="fa-brands fa-whatsapp" style="font-size:19px;"></i></div>
+    <div class="btn-text">WhatsApp <small>Follow Our Channel</small></div>
+    <i class="fa-solid fa-chevron-right btn-arr"></i>
+  </a>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="nav-bar">
+  <a href="dashboard.html" class="nav-link active"><i class="fa-solid fa-house-signal"></i>Home</a>
+  <a href="ads.html"       class="nav-link"><i class="fa-solid fa-rectangle-ad"></i>Ads</a>
+  <a href="team.html"      class="nav-link"><i class="fa-solid fa-people-group"></i>Team</a>
+  <a href="wallet.html"    class="nav-link"><i class="fa-solid fa-wallet"></i>Wallet</a>
+</nav>
+
+<!-- HISTORY BOTTOM SHEET -->
+<div class="hist-modal" id="history-modal">
+  <div class="hist-sheet">
+    <div class="hist-head">
+      <h3><i class="fa-solid fa-receipt"></i> Transaction History</h3>
+      <button class="close-modal" onclick="closeHistory()">✕ Close</button>
+    </div>
+    <div class="hist-body" id="history-body">
+      <p style="text-align:center;color:var(--muted);padding:30px;">Loading...</p>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN POPUP -->
+<div class="popup-overlay" id="admin-popup">
+  <div class="popup-box">
+    <div class="popup-title"><i class="fa-solid fa-bullhorn"></i> Admin Message</div>
+    <div class="popup-msg" id="popup-msg-text"></div>
+    <button class="popup-close" onclick="document.getElementById('admin-popup').classList.remove('show')">
+      <i class="fa-solid fa-check"></i>&nbsp; OK, Got It!
+    </button>
+  </div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxMdKdEA1Xb--hnRmlZ5l61Jv9XoEp2jDxoaAB5rHIYpxjURc5lK-cJIv0TdnBNRUPDKg/exec";
+const CACHE_SETTINGS = "an_cached_settings";
+const CACHE_TIME     = "an_cache_ts";
+const CACHE_TTL      = 5 * 60 * 1000;
+
+function getUser() {
+  try { return JSON.parse(localStorage.getItem("anUser") || localStorage.getItem("an_user") || "null"); }
+  catch(e) { return null; }
+}
+
+function renderUser(u) {
+  document.getElementById("u-name").innerText = u.name    || "—";
+  document.getElementById("u-id").innerText   = u.user_id || "—";
+  document.getElementById("u-bal").innerText  = parseFloat(u.balance || 0).toFixed(2);
+
+  const hasPlan   = !!(u.active_plan || u.plan_ads_count > 0);
+  const buyBtn    = document.getElementById("btn-buy-plan");
+  const activeDiv = document.getElementById("btn-active-plan");
+  const earnLbl   = document.getElementById("plan-earn-label");
+
+  if (hasPlan) {
+    buyBtn.style.display    = "none";
+    activeDiv.style.display = "block";
+    const pname = (u.active_plan || "").replace("plan_","Rs. ");
+    const daily = u.plan_daily_earn || 0;
+    if (earnLbl) earnLbl.innerText = (pname ? pname + " — " : "") + "Rs. " + daily + "/day";
+  } else {
+    buyBtn.style.display    = "flex";
+    activeDiv.style.display = "none";
+  }
+}
+
+function renderSettings(s) {
+  if (s.announcement) document.getElementById("news-text").innerText = s.announcement;
+  if (s.popup_message && String(s.popup_message).trim()) {
+    if (!sessionStorage.getItem("popup_shown")) {
+      document.getElementById("popup-msg-text").innerText = s.popup_message;
+      document.getElementById("admin-popup").classList.add("show");
+      sessionStorage.setItem("popup_shown", "1");
+    }
+  }
+}
+
+async function syncDashboard() {
+  const localUser = getUser();
+  if (!localUser) { window.location.replace("auth.html"); return; }
+  renderUser(localUser);
+  try {
+    const cachedSettings = JSON.parse(localStorage.getItem(CACHE_SETTINGS) || "null");
+    if (cachedSettings) renderSettings(cachedSettings);
+  } catch(e) {}
+  const lastFetch = parseInt(localStorage.getItem(CACHE_TIME) || "0");
+  const now = Date.now();
+  if ((now - lastFetch) < CACHE_TTL) return;
+  try {
+    const res  = await fetch(API_URL + "?type=get_dashboard&userId=" + encodeURIComponent(localUser.user_id || ""));
+    const data = await res.json();
+    if (data.status === "success") {
+      if (data.user) {
+        const merged = Object.assign({}, localUser, data.user);
+        localStorage.setItem("anUser",  JSON.stringify(merged));
+        localStorage.setItem("an_user", JSON.stringify(merged));
+        localStorage.setItem("anID",    merged.user_id);
+        renderUser(merged);
+      }
+      if (data.settings) {
+        localStorage.setItem(CACHE_SETTINGS, JSON.stringify(data.settings));
+        renderSettings(data.settings);
+      }
+      localStorage.setItem(CACHE_TIME, String(now));
+    }
+  } catch(e) { console.log("Sync failed:", e.message); }
+}
+
+async function openHistory() {
+  document.getElementById("history-modal").classList.add("show");
+  const hb = document.getElementById("history-body");
+  try {
+    const cached = JSON.parse(localStorage.getItem("an_cached_history") || "null");
+    if (cached && cached.length) {
+      renderHistory(hb, cached);
+      const localUser = getUser();
+      if (localUser) {
+        fetch(API_URL + "?type=get_history&userId=" + encodeURIComponent(localUser.user_id || ""))
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            if (data.status === "success" && data.history && data.history.length) {
+              localStorage.setItem("an_cached_history", JSON.stringify(data.history));
+              renderHistory(hb, data.history);
+            }
+          }).catch(function(){});
+      }
+      return;
+    }
+  } catch(e) {}
+  hb.innerHTML = '<p style="text-align:center;padding:30px;color:var(--muted);"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
+  const localUser = getUser();
+  if (!localUser) return;
+  try {
+    const res  = await fetch(API_URL + "?type=get_history&userId=" + encodeURIComponent(localUser.user_id || ""));
+    const data = await res.json();
+    if (data.status !== "success" || !data.history || !data.history.length) {
+      hb.innerHTML = '<p style="text-align:center;padding:30px;color:var(--muted);">No history yet.</p>'; return;
+    }
+    localStorage.setItem("an_cached_history", JSON.stringify(data.history));
+    renderHistory(hb, data.history);
+  } catch(e) { hb.innerHTML = '<p style="text-align:center;padding:20px;color:var(--rose);">Load failed.</p>'; }
+}
+
+function renderHistory(hb, list) {
+  const colorMap = {
+    "Salary":"#34d399","Commission":"#c9a227","Reward":"#e8c547",
+    "Bonus":"#fbbf24","Withdrawal":"#fbbf24","Rejected":"#fb7185","Deduction":"#fb7185"
+  };
+  let html = "";
+  list.forEach(function(h) {
+    const color = colorMap[h.type] || "#4b5680";
+    const sign  = (h.type==="Withdrawal"||h.type==="Rejected"||h.type==="Deduction") ? "−" : "+";
+    const date  = new Date(h.date).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+    html += '<div class="history-item"><div><div class="history-type">'+(h.title||h.type)+'</div><div style="font-size:11px;color:var(--muted);margin-top:3px;">'+date+'</div></div><div style="text-align:right"><div class="history-amount" style="color:'+color+'">'+sign+' Rs. '+parseFloat(h.amount).toFixed(2)+'</div>'+(h.status?'<div style="font-size:11px;font-weight:700;color:'+color+'">'+h.status+'</div>':'')+'</div></div>';
+  });
+  hb.innerHTML = html;
+}
+
+function closeHistory() {
+  document.getElementById("history-modal").classList.remove("show");
+  localStorage.removeItem("an_cached_history");
+}
+
+function showIncome() {
+  const user = getUser();
+  Swal.fire({
+    title:'<strong>📊 Your Income</strong>',
+    html:'<div style="text-align:left;padding:10px;"><p><b>Balance:</b> Rs. '+parseFloat(user.balance||0).toFixed(2)+'</p><p><b>User ID:</b> '+user.user_id+'</p></div>',
+    icon:'info', confirmButtonColor:'#c9a227',
+    background:'#071020', color:'#d8e8ff'
+  });
+}
+
+function logout() {
+  ["an_user","anUser","anLoggedIn","anID","an_cached_settings","an_cached_history","an_cache_ts"]
+    .forEach(function(k){ localStorage.removeItem(k); });
+  window.location.replace("auth.html");
+}
+
+function copyID() {
+  const idText = document.getElementById("u-id").innerText;
+  navigator.clipboard.writeText(idText).then(function() {
+    Swal.mixin({ toast:true, position:'top-end', showConfirmButton:false, timer:2000, background:'#071020', color:'#d8e8ff' })
+      .fire({ icon:'success', title:'Copied: '+idText });
+  });
+}
+
+async function prefetchHistory() {
+  const localUser = getUser();
+  if (!localUser || !localUser.user_id) return;
+  try {
+    const res  = await fetch(API_URL+'?type=get_history&userId='+encodeURIComponent(localUser.user_id));
+    const data = await res.json();
+    if (data.status === 'success' && data.history && data.history.length)
+      localStorage.setItem('an_cached_history', JSON.stringify(data.history));
+  } catch(e) {}
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  syncDashboard();
+  setTimeout(prefetchHistory, 1500);
+});
+</script>
+</body>
+</html>

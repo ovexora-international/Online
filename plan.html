@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Plans | Vexora</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;600;700&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  background: #030b18;
+  min-height: 100vh;
+  font-family: 'Noto Nastaliq Urdu', serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+/* ══════ POSTER ══════ */
+.poster {
+  width: 100%;
+  max-width: 880px;
+  background: linear-gradient(160deg, #071220 0%, #040d1a 40%, #030b18 100%);
+  border: 1px solid rgba(201,162,39,0.10);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.poster::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,162,39,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,162,39,0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none; z-index: 0;
+}
+.poster::after {
+  content: '';
+  position: absolute;
+  top: -50px; left: 50%; transform: translateX(-50%);
+  width: 100%; height: 200px;
+  background: radial-gradient(ellipse, rgba(201,162,39,0.08) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ══════ HEADER ══════ */
+.header {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 14px 10px;
+  direction: ltr;
+  gap: 8px;
+}
+
+.badge-coming {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 10px;
+  padding: 7px 10px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.badge-coming .num {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(18px, 4vw, 28px);
+  font-weight: 700; color: #f5c842;
+  line-height: 1; display: block;
+}
+.badge-coming .txt {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(6px, 1.5vw, 8px);
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 3px; display: block;
+}
+
+.header-center { text-align: center; flex: 1; min-width: 0; }
+.main-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(16px, 5vw, 36px);
+  font-weight: 900; letter-spacing: 2px;
+  background: linear-gradient(180deg,#ffffff 0%,#d0d8ff 40%,#8070ff 80%,#5040cc 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 0 16px rgba(100,60,255,0.5));
+  line-height: 1.1; white-space: nowrap;
+}
+.sub-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(6px, 1.5vw, 9px);
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.22);
+  margin-top: 4px;
+}
+
+.urdu-tag {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: clamp(9px, 2vw, 13px);
+  color: rgba(255,220,100,0.8);
+  font-weight: 600;
+  line-height: 1.8;
+  direction: rtl; text-align: right;
+  flex-shrink: 0;
+}
+
+/* ══════ BONUS BANNER — only signup reward ══════ */
+.bonus-banner {
+  position: relative; z-index: 1;
+  margin: 0 12px 12px;
+  background: linear-gradient(90deg, rgba(80,200,120,0.12), rgba(60,180,100,0.18), rgba(80,200,120,0.12));
+  border: 1px solid rgba(80,200,120,0.28);
+  border-radius: 10px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  direction: ltr;
+}
+.bonus-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(80,200,120,0.15);
+  border: 1px solid rgba(80,200,120,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.bonus-text { display: flex; flex-direction: column; }
+.bonus-num {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(18px, 4vw, 24px);
+  font-weight: 700; color: #fff; line-height: 1;
+}
+.bonus-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(8px, 1.8vw, 10px);
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 2px;
+}
+
+/* ══════ PLANS GRID — always 3 columns ══════ */
+.plans-grid {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(6px, 1.5vw, 12px);
+  padding: 0 clamp(8px, 2vw, 18px) 12px;
+}
+
+.plan-card {
+  border-radius: 12px; overflow: hidden; position: relative;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,162,39,0.10);
+  transition: transform 0.2s;
+  display: flex; flex-direction: column;
+}
+.plan-card:hover { transform: translateY(-2px); }
+
+.plan-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--c); z-index: 2;
+}
+.plan-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, var(--g) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+/* 8 color themes */
+.c1{--c:linear-gradient(90deg,#06b6d4,#0ea5e9);--g:rgba(6,182,212,0.09);--b:linear-gradient(135deg,#06b6d4,#0ea5e9);--s:rgba(6,182,212,0.5);}
+.c2{--c:linear-gradient(90deg,#8b5cf6,#6366f1);--g:rgba(139,92,246,0.09);--b:linear-gradient(135deg,#8b5cf6,#6366f1);--s:rgba(139,92,246,0.5);}
+.c3{--c:linear-gradient(90deg,#10b981,#059669);--g:rgba(16,185,129,0.09);--b:linear-gradient(135deg,#10b981,#059669);--s:rgba(16,185,129,0.5);}
+.c4{--c:linear-gradient(90deg,#f59e0b,#d97706);--g:rgba(245,158,11,0.09);--b:linear-gradient(135deg,#f59e0b,#d97706);--s:rgba(245,158,11,0.5);}
+.c5{--c:linear-gradient(90deg,#ef4444,#dc2626);--g:rgba(239,68,68,0.09); --b:linear-gradient(135deg,#ef4444,#dc2626);--s:rgba(239,68,68,0.5);}
+.c6{--c:linear-gradient(90deg,#ec4899,#db2777);--g:rgba(236,72,153,0.09);--b:linear-gradient(135deg,#ec4899,#db2777);--s:rgba(236,72,153,0.5);}
+.c7{--c:linear-gradient(90deg,#14b8a6,#0d9488);--g:rgba(20,184,166,0.09);--b:linear-gradient(135deg,#14b8a6,#0d9488);--s:rgba(20,184,166,0.5);}
+.c8{--c:linear-gradient(90deg,#f97316,#ea580c);--g:rgba(249,115,22,0.09);--b:linear-gradient(135deg,#f97316,#ea580c);--s:rgba(249,115,22,0.5);}
+
+.plan-header {
+  background: rgba(255,255,255,0.04);
+  padding: clamp(6px,1.5vw,10px) clamp(8px,2vw,14px);
+  display: flex; align-items: center; justify-content: space-between;
+  direction: ltr;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  position: relative; z-index: 1;
+}
+.plan-amount {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(12px, 3vw, 20px);
+  font-weight: 700; color: #fff;
+  white-space: nowrap;
+}
+.plan-tag {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: clamp(9px, 2vw, 12px);
+  color: rgba(255,255,255,0.35);
+  direction: rtl;
+  white-space: nowrap;
+}
+
+.plan-body {
+  padding: clamp(7px,1.5vw,10px) clamp(8px,2vw,14px) 4px;
+  direction: rtl;
+  position: relative; z-index: 1;
+  flex: 1;
+}
+.plan-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: clamp(4px,1vw,6px) 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  gap: 4px;
+}
+.plan-row:last-child { border-bottom: none; }
+.plan-row-label {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: clamp(9px, 2vw, 12px);
+  color: rgba(255,255,255,0.4);
+  white-space: nowrap;
+}
+.plan-row-value {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(12px, 2.5vw, 16px);
+  font-weight: 700; color: #fff;
+  white-space: nowrap;
+}
+
+.plan-days {
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  padding: clamp(5px,1.2vw,7px) 10px;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  direction: rtl; position: relative; z-index: 1;
+}
+.d-num {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(11px, 2.2vw, 14px);
+  font-weight: 700; color: rgba(255,255,255,0.55);
+}
+.d-lbl {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: clamp(9px, 1.8vw, 11px);
+  color: rgba(255,255,255,0.28);
+}
+
+/* ══════ INVEST BUTTON ══════ */
+.invest-btn {
+  display: block;
+  width: calc(100% - clamp(12px,3vw,20px));
+  margin: 6px auto 10px;
+  padding: clamp(8px,2vw,11px) 0;
+  background: var(--b);
+  border: none;
+  border-radius: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(9px, 2vw, 12px);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: clamp(0.5px, 0.3vw, 1.5px);
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative; z-index: 1;
+  box-shadow: 0 3px 12px var(--s);
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+.invest-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.invest-btn:active { transform: translateY(0); opacity: 1; }
+
+/* ══════ COMING SOON CARD ══════ */
+.coming-card {
+  border-radius: 12px;
+  border: 1px dashed rgba(255,255,255,0.08);
+  background: rgba(201,162,39,0.02);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; padding: 14px 8px;
+  min-height: 150px;
+}
+.cs-num  { font-family:'Cinzel Decorative',serif; font-size:clamp(24px,6vw,40px); font-weight:900; color:rgba(255,255,255,0.06); }
+.cs-title{ font-family:'Cinzel',serif; font-size:clamp(8px,2vw,11px); letter-spacing:2px; color:rgba(255,255,255,0.18); }
+.cs-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:clamp(9px,2vw,12px); color:rgba(255,255,255,0.13); direction:rtl; text-align:center; }
+.cs-badge{ background:rgba(255,255,255,0.04); border:1px solid rgba(201,162,39,0.10); border-radius:20px; padding:4px 12px; font-family:'Cinzel',serif; font-size:clamp(7px,1.5vw,9px); letter-spacing:2px; color:rgba(255,255,255,0.18); }
+
+/* ══════ DIVIDER ══════ */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  margin: 2px 14px 0;
+  position: relative; z-index: 1;
+}
+
+/* ══════ BOTTOM — 3 boxes ══════ */
+.bottom-section {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: clamp(6px,1.5vw,12px);
+  padding: clamp(10px,2vw,16px) clamp(8px,2vw,14px) clamp(12px,2.5vw,18px);
+  direction: ltr;
+}
+.bottom-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: clamp(10px,2vw,14px) clamp(10px,2vw,14px);
+}
+.bb-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(7px,1.5vw,9px);
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.withdraw-time-row { display:flex; align-items:center; gap:8px; }
+.clock-wrap {
+  width: clamp(28px,6vw,36px); height: clamp(28px,6vw,36px);
+  background: rgba(255,255,255,0.05); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(14px,3vw,18px); flex-shrink: 0;
+}
+.withdraw-text {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: clamp(9px,2vw,13px);
+  color: rgba(255,255,255,0.6);
+  direction: rtl; line-height: 1.7;
+}
+
+.ref-row {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(7px,1.5vw,9px);
+  color: rgba(255,255,255,0.28);
+  text-align: center;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.dep-val {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(11px,2.5vw,14px);
+  font-weight: 700; color: #f59e0b;
+  text-align: center;
+}
+.dep-pct {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(20px,5vw,30px);
+  font-weight: 700; color: #f5c842;
+  text-align: center; display: block;
+  filter: drop-shadow(0 0 8px rgba(245,200,66,0.4));
+}
+
+.comm-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: clamp(4px,1vw,6px) 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.comm-row:last-child { border-bottom: none; }
+.comm-lbl { font-family:'Cinzel',serif; font-size:clamp(9px,2vw,11px); color:rgba(255,255,255,0.32); }
+.comm-pct { font-family:'Cinzel',serif; font-size:clamp(12px,3vw,15px); font-weight:700; }
+.pct-1{color:#10b981;} .pct-2{color:#6366f1;} .pct-3{color:#f59e0b;}
+</style>
+</head>
+
+<script>
+(function(){
+  if(localStorage.getItem("anLoggedIn")!=="true"){window.location.replace("auth.html");return;}
+  try{window.CU=JSON.parse(localStorage.getItem("anUser")||localStorage.getItem("an_user")||"{}");}
+  catch(e){localStorage.clear();window.location.replace("auth.html");}
+})();
+</script>
+
+<body>
+<div class="poster">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge-coming">
+      <span class="num">15</span>
+      <span class="txt">PLANS COMING SOON</span>
+    </div>
+    <div class="header-center">
+      <div class="main-title">CLICK ERAN PRO</div>
+      <div class="sub-title">Buy a Plan</div>
+    </div>
+    <div class="urdu-tag">ہر ہفتے بعد دو دو<br>پلین لانچ ہوگے</div>
+  </div>
+
+  <!-- BONUS — signup only -->
+  <div class="bonus-banner">
+    <div class="bonus-icon">🎁</div>
+    <div class="bonus-text">
+      <span class="bonus-num">20 PKR</span>
+      <span class="bonus-lbl">New Account Reward</span>
+    </div>
+  </div>
+
+  <!-- PLANS GRID -->
+  
+  
+  <div class="plans-grid">
+
+    <div class="plan-card c1" id="pcard-starter">
+      <div class="plan-header">
+        <span class="plan-amount">350</span>
+        <span class="plan-tag">Starter</span>
+      </div>
+      <div class="plan-body">
+        <div class="plan-row"><span class="plan-row-label">روزانہ منافع</span><span class="plan-row-value">15</span></div>
+        <div class="plan-row"><span class="plan-row-label">کل منافع</span><span class="plan-row-value">900</span></div>
+        <div class="plan-row"><span class="plan-row-label">روزانہ Ads</span><span class="plan-row-value">1 📺</span></div>
+      </div>
+      <div class="plan-days"><span class="d-lbl">مدت</span><span class="d-num">60</span><span class="d-lbl">دن</span></div>
+      <button class="invest-btn" id="pbtn-starter" onclick="buyPlan('starter',350,15,60)">⚡ Invest Now</button>
+    </div>
+
+    <div class="plan-card c2" id="pcard-standard">
+      <div class="plan-header">
+        <span class="plan-amount">800</span>
+        <span class="plan-tag">Standard</span>
+      </div>
+      <div class="plan-body">
+        <div class="plan-row"><span class="plan-row-label">روزانہ منافع</span><span class="plan-row-value">35</span></div>
+        <div class="plan-row"><span class="plan-row-label">کل منافع</span><span class="plan-row-value">2,100</span></div>
+        <div class="plan-row"><span class="plan-row-label">روزانہ Ads</span><span class="plan-row-value">2 📺</span></div>
+      </div>
+      <div class="plan-days"><span class="d-lbl">مدت</span><span class="d-num">60</span><span class="d-lbl">دن</span></div>
+      <button class="invest-btn" id="pbtn-standard" onclick="buyPlan('standard',800,35,60)">⚡ Invest Now</button>
+    </div>
+
+    <div class="plan-card c3" id="pcard-professional">
+      <div class="plan-header">
+        <span class="plan-amount">1,500</span>
+        <span class="plan-tag">Professional</span>
+      </div>
+      <div class="plan-body">
+        <div class="plan-row"><span class="plan-row-label">روزانہ منافع</span><span class="plan-row-value">70</span></div>
+        <div class="plan-row"><span class="plan-row-label">کل منافع</span><span class="plan-row-value">4,200</span></div>
+        <div class="plan-row"><span class="plan-row-label">روزانہ Ads</span><span class="plan-row-value">3 📺</span></div>
+      </div>
+      <div class="plan-days"><span class="d-lbl">مدت</span><span class="d-num">60</span><span class="d-lbl">دن</span></div>
+      <button class="invest-btn" id="pbtn-professional" onclick="buyPlan('professional',1500,70,60)">⚡ Invest Now</button>
+    </div>
+
+    <div class="plan-card c4" id="pcard-business">
+      <div class="plan-header">
+        <span class="plan-amount">4,000</span>
+        <span class="plan-tag">Business</span>
+      </div>
+      <div class="plan-body">
+        <div class="plan-row"><span class="plan-row-label">روزانہ منافع</span><span class="plan-row-value">200</span></div>
+        <div class="plan-row"><span class="plan-row-label">کل منافع</span><span class="plan-row-value">14,000</span></div>
+        <div class="plan-row"><span class="plan-row-label">روزانہ Ads</span><span class="plan-row-value">4 📺</span></div>
+      </div>
+      <div class="plan-days"><span class="d-lbl">مدت</span><span class="d-num">70</span><span class="d-lbl">دن</span></div>
+      <button class="invest-btn" id="pbtn-business" onclick="buyPlan('business',4000,200,70)">⚡ Invest Now</button>
+    </div>
+
+    <div class="plan-card c5" id="pcard-premium">
+      <div class="plan-header">
+        <span class="plan-amount">8,000</span>
+        <span class="plan-tag">Premium</span>
+      </div>
+      <div class="plan-body">
+        <div class="plan-row"><span class="plan-row-label">روزانہ منافع</span><span class="plan-row-value">450</span></div>
+        <div class="plan-row"><span class="plan-row-label">کل منافع</span><span class="plan-row-value">33,750</span></div>
+        <div class="plan-row"><span class="plan-row-label">روزانہ Ads</span><span class="plan-row-value">5 📺</span></div>
+      </div>
+      <div class="plan-days"><span class="d-lbl">مدت</span><span class="d-num">75</span><span class="d-lbl">دن</span></div>
+      <button class="invest-btn" id="pbtn-premium" onclick="buyPlan('premium',8000,450,75)">⚡ Invest Now</button>
+    </div>
+
+    <div class="plan-card c6" id="pcard-vip">
+      <div class="plan-header">
+        <span class="plan-amount">15,000</span>
+        <span class="plan-tag">VIP</span>
+      </div>
+      <div class="plan-body">
+        <div class="plan-row"><span class="plan-row-label">روزانہ منافع</span><span class="plan-row-value">900</span></div>
+        <div class="plan-row"><span class="plan-row-label">کل منافع</span><span class="plan-row-value">72,000</span></div>
+        <div class="plan-row"><span class="plan-row-label">روزانہ Ads</span><span class="plan-row-value">6 📺</span></div>
+      </div>
+      <div class="plan-days"><span class="d-lbl">مدت</span><span class="d-num">80</span><span class="d-lbl">دن</span></div>
+      <button class="invest-btn" id="pbtn-vip" onclick="buyPlan('vip',15000,900,80)">⚡ Invest Now</button>
+    </div>
+
+    <div class="plan-card c7" id="pcard-investor">
+      <div class="plan-header">
+        <span class="plan-amount">30,000</span>
+        <span class="plan-tag">Investor</span>
+      </div>
+      <div class="plan-body">
+        <div class="plan-row"><span class="plan-row-label">روزانہ منافع</span><span class="plan-row-value">2,000</span></div>
+        <div class="plan-row"><span class="plan-row-label">کل منافع</span><span class="plan-row-value">160,000</span></div>
+        <div class="plan-row"><span class="plan-row-label">روزانہ Ads</span><span class="plan-row-value">7 📺</span></div>
+      </div>
+      <div class="plan-days"><span class="d-lbl">مدت</span><span class="d-num">80</span><span class="d-lbl">دن</span></div>
+      <button class="invest-btn" id="pbtn-investor" onclick="buyPlan('investor',30000,2000,80)">⚡ Invest Now</button>
+    </div>
+
+    <div class="coming-card">
+      <div class="cs-num">+8</div>
+      <div class="cs-title">More Plans</div>
+      <div class="cs-urdu">مزید پلان جلد آ رہے ہیں</div>
+      <div class="cs-badge">COMING SOON</div>
+    </div>
+
+  </div><!-- /plans-grid -->
+
+  <div class="divider"></div>
+
+  <!-- BOTTOM 3 boxes -->
+  <div class="bottom-section">
+
+    <!-- Withdraw Timing -->
+    <div class="bottom-box">
+      <div class="bb-title">Withdraw Timing</div>
+      <div class="withdraw-time-row">
+        <div class="clock-wrap">🕘</div>
+        <div class="withdraw-text">صبح 9 بجے سے شام 9 بجے تک</div>
+      </div>
+    </div>
+
+    <!-- Deposit Commission -->
+    <div class="bottom-box" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div class="ref-row">Deposit Commission</div>
+      <span class="dep-pct">2%</span>
+      <div class="ref-row" style="margin-top:5px;">Referral Commission</div>
+    </div>
+
+    <!-- Interest Commission -->
+    <div class="bottom-box">
+      <div class="bb-title">Interest Commission</div>
+      <div class="comm-row"><span class="comm-lbl">Level 1</span><span class="comm-pct pct-1">12%</span></div>
+      <div class="comm-row"><span class="comm-lbl">Level 2</span><span class="comm-pct pct-2">05%</span></div>
+      <div class="comm-row"><span class="comm-lbl">Level 3</span><span class="comm-pct pct-3">03%</span></div>
+    </div>
+
+  </div>
+
+</div><!-- /poster -->
+
+<!-- ── BACK NAV ── -->
+<div style="position:fixed;top:14px;left:14px;z-index:200;">
+  <a href="dashboard.html" style="background:rgba(201,162,39,0.10);border:1px solid rgba(255,255,255,0.12);color:#fff;padding:8px 16px;border-radius:10px;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:6px;">
+    <i class="fas fa-arrow-left"></i> Back
+  </a>
+</div>
+
+<!-- ══ PLAN BUY MODAL ══ -->
+<div id="buy-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9000;align-items:center;justify-content:center;padding:16px;">
+<div style="background:#071020;border:1px solid #1a2e40;border-radius:22px;max-width:420px;width:100%;padding:0;overflow:hidden;position:relative;">
+  <!-- top grad bar -->
+  <div style="height:3px;background:linear-gradient(90deg,#c9a227,#b8891e);"></div>
+  <div style="padding:24px 22px;">
+    <h3 id="modal-title" style="font-family:Rajdhani,sans-serif;font-size:20px;color:#c9a227;margin-bottom:6px;"></h3>
+    <p id="modal-info" style="font-size:13px;color:#6b7fa3;margin-bottom:18px;"></p>
+
+    <!-- Payment Method tabs -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button onclick="setPayTab('easy')" id="tab-easy" style="flex:1;padding:10px;border-radius:10px;border:1.5px solid #c9a227;background:rgba(201,162,39,0.12);color:#c9a227;font-weight:800;font-size:13px;cursor:pointer;font-family:Nunito,sans-serif;">📱 EasyPaisa</button>
+      <button onclick="setPayTab('usdt')" id="tab-usdt" style="flex:1;padding:10px;border-radius:10px;border:1.5px solid #1a2e40;background:transparent;color:#6b7fa3;font-weight:800;font-size:13px;cursor:pointer;font-family:Nunito,sans-serif;">💚 USDT TRC20</button>
+    </div>
+
+    <!-- EasyPaisa panel -->
+    <div id="panel-easy">
+      <div style="background:#04090f;border:1px solid #1a2e40;border-radius:12px;padding:14px;margin-bottom:12px;">
+        <p style="font-size:11px;color:#6b7fa3;margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Send Payment To</p>
+        <p style="font-size:18px;font-weight:800;color:#00e676;font-family:Rajdhani,sans-serif;" id="ep-number">Loading...</p>
+        <p style="font-size:12px;color:#6b7fa3;margin-top:3px;" id="ep-name">Account Name</p>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;color:#6b7fa3;font-weight:800;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Your Transaction ID (TID)</label>
+        <input type="text" id="tid-easy" placeholder="EasyPaisa TID number" style="width:100%;background:#04090f;border:1.5px solid #1a2e40;color:#fff;padding:12px 14px;border-radius:10px;font-size:14px;outline:none;font-family:Nunito,sans-serif;" onfocus="this.style.borderColor='#c9a227'" onblur="this.style.borderColor='#1a2e40'">
+      </div>
+      <a id="wa-link" href="https://wa.me/447887165039" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.25);border-radius:10px;padding:10px 14px;text-decoration:none;margin-bottom:4px;">
+        <i class="fas fa-brands fa-whatsapp" style="color:#25d366;font-size:18px;"></i>
+        <span style="color:#25d366;font-size:13px;font-weight:700;">Support: +44 7887 165039</span>
+      </a>
+    </div>
+
+    <!-- USDT panel -->
+    <div id="panel-usdt" style="display:none;">
+      <div style="background:#04090f;border:1px solid #1a2e40;border-radius:12px;padding:14px;margin-bottom:12px;">
+        <p style="font-size:11px;color:#6b7fa3;margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Send USDT (TRC20) To</p>
+        <p id="usdt-address" style="font-size:13px;font-weight:800;color:#00e676;word-break:break-all;font-family:monospace;">TRC20_ADDRESS_HERE</p>
+        <p style="font-size:11px;color:#ff9d00;margin-top:6px;">⚠️ Sirf TRC20 network use karen</p>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;color:#6b7fa3;font-weight:800;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">USDT Transaction Hash / TxID</label>
+        <input type="text" id="tid-usdt" placeholder="0x... ya TxID" style="width:100%;background:#04090f;border:1.5px solid #1a2e40;color:#fff;padding:12px 14px;border-radius:10px;font-size:14px;outline:none;font-family:Nunito,sans-serif;" onfocus="this.style.borderColor='#c9a227'" onblur="this.style.borderColor='#1a2e40'">
+      </div>
+    </div>
+
+    <div id="modal-error" style="display:none;background:rgba(255,61,113,0.1);border:1px solid rgba(255,61,113,0.3);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13px;color:#ff3d71;"></div>
+
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button onclick="closeBuyModal()" style="flex:1;padding:13px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid #1a2e40;color:#6b7fa3;font-weight:700;font-size:13px;cursor:pointer;font-family:Nunito,sans-serif;">Cancel</button>
+      <button onclick="submitPlanRequest()" style="flex:2;padding:13px;border-radius:10px;background:linear-gradient(135deg,#c9a227,#b8891e);border:none;color:#fff;font-weight:800;font-size:14px;cursor:pointer;font-family:Nunito,sans-serif;" id="submit-btn">
+        <i class="fas fa-paper-plane"></i>&nbsp; Submit Request
+      </button>
+    </div>
+  </div>
+</div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbyO-0vgJsa4tuitUdY-CaOKU-wllvq-xNhMGv9_m-vNW360NX0MKEqGfDRlmXfdDO9LeA/exec";
+
+// ─── Mark active plan button as disabled on load ────────────────────────────
+window.addEventListener("load", function() {
+  if (!window.CU) return;
+  // Fetch fresh data from server to get latest active_plan
+  fetch(API_URL + "?type=get_dashboard&userId=" + encodeURIComponent(window.CU.user_id))
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.status === "success" && data.user) {
+        const merged = Object.assign({}, window.CU, data.user);
+        window.CU = merged;
+        localStorage.setItem("anUser",  JSON.stringify(merged));
+        localStorage.setItem("an_user", JSON.stringify(merged));
+        if (data.settings) {
+          localStorage.setItem("an_cached_settings", JSON.stringify(data.settings));
+          if (data.settings.ep_number)    document.getElementById("ep-number").innerText    = data.settings.ep_number;
+          if (data.settings.ep_name)      document.getElementById("ep-name").innerText      = data.settings.ep_name;
+          if (data.settings.usdt_address) document.getElementById("usdt-address").innerText = data.settings.usdt_address;
+          if (data.settings.whatsapp)     document.getElementById("wa-link").href = "https://wa.me/" + data.settings.whatsapp.replace(/\D/g,"");
+        }
+      }
+      // Now mark active plan with fresh data
+      const activePlan = window.CU.active_plan || "";
+      if (activePlan) markActivePlan(activePlan);
+    })
+    .catch(function(){
+      // Fallback to cached data
+      const activePlan = window.CU.active_plan || "";
+      if (activePlan) markActivePlan(activePlan);
+      loadPaymentDetails();
+    });
+});
+
+function markActivePlan(planId) {
+  const btn = document.getElementById("pbtn-" + planId);
+  if (!btn) return;
+  btn.disabled = true;
+  btn.style.background = "rgba(255,255,255,0.08)";
+  btn.style.boxShadow  = "none";
+  btn.style.cursor     = "not-allowed";
+  btn.style.opacity    = "0.5";
+  btn.innerText        = "✅ Active Plan";
+  const card = document.getElementById("pcard-" + planId);
+  if (card) {
+    card.style.border = "1.5px solid rgba(0,230,118,0.4)";
+    const badge = document.createElement("div");
+    badge.style.cssText = "position:absolute;top:10px;right:10px;background:rgba(0,230,118,0.15);border:1px solid rgba(0,230,118,0.35);border-radius:8px;padding:3px 10px;font-family:Cinzel,serif;font-size:10px;font-weight:700;color:#00e676;z-index:3;";
+    badge.innerText = "ACTIVE";
+    card.style.position = "relative";
+    card.appendChild(badge);
+  }
+}
+
+// ─── BUY PLAN MODAL ─────────────────────────────────────────────────────────
+let _curPlan = null;
+
+function buyPlan(planId, amount, dailyEarn, duration) {
+  if (!window.CU || !window.CU.user_id) { window.location.replace("auth.html"); return; }
+
+  // Block if this plan already active
+  if (window.CU.active_plan === planId) {
+    Swal.fire({ title:"Already Active!", text:"Yeh plan pehle se active hai.", icon:"info", confirmButtonColor:"#c9a227" });
+    return;
+  }
+
+  _curPlan = { planId, amount, dailyEarn, duration };
+
+  const planNames = {
+    starter:"Starter", standard:"Standard", professional:"Professional",
+    business:"Business", premium:"Premium", vip:"VIP", investor:"Investor"
+  };
+
+  document.getElementById("modal-title").innerText = "💰 " + (planNames[planId]||planId) + " Plan — Rs. " + amount.toLocaleString();
+  document.getElementById("modal-info").innerText  = "Daily: Rs. " + dailyEarn + "  |  Duration: " + duration + " days";
+  document.getElementById("modal-error").style.display = "none";
+  document.getElementById("tid-easy").value = "";
+  document.getElementById("tid-usdt").value = "";
+  setPayTab("easy");
+  document.getElementById("buy-modal").style.display = "flex";
+}
+
+function closeBuyModal() {
+  document.getElementById("buy-modal").style.display = "none";
+}
+
+function setPayTab(tab) {
+  document.getElementById("panel-easy").style.display = tab==="easy" ? "block" : "none";
+  document.getElementById("panel-usdt").style.display = tab==="usdt" ? "block" : "none";
+  const btnE = document.getElementById("tab-easy");
+  const btnU = document.getElementById("tab-usdt");
+  btnE.style.borderColor  = tab==="easy" ? "#c9a227" : "#1a2e40";
+  btnE.style.background   = tab==="easy" ? "rgba(201,162,39,0.12)" : "transparent";
+  btnE.style.color        = tab==="easy" ? "#c9a227" : "#6b7fa3";
+  btnU.style.borderColor  = tab==="usdt" ? "#00e676" : "#1a2e40";
+  btnU.style.background   = tab==="usdt" ? "rgba(0,230,118,0.1)" : "transparent";
+  btnU.style.color        = tab==="usdt" ? "#00e676" : "#6b7fa3";
+  window._payTab = tab;
+}
+
+async function loadPaymentDetails() {
+  try {
+    const cached = JSON.parse(localStorage.getItem("an_cached_settings") || "{}");
+    if (cached.ep_number)    document.getElementById("ep-number").innerText    = cached.ep_number;
+    if (cached.ep_name)      document.getElementById("ep-name").innerText      = cached.ep_name;
+    if (cached.usdt_address) document.getElementById("usdt-address").innerText = cached.usdt_address;
+    if (cached.whatsapp)     document.getElementById("wa-link").href = "https://wa.me/" + cached.whatsapp.replace(/\D/g,"");
+
+    if (!cached.ep_number) {
+      const res  = await fetch(API_URL + "?type=get_dashboard&userId=" + encodeURIComponent(window.CU.user_id));
+      const data = await res.json();
+      if (data.settings) {
+        localStorage.setItem("an_cached_settings", JSON.stringify(data.settings));
+        if (data.settings.ep_number)    document.getElementById("ep-number").innerText    = data.settings.ep_number;
+        if (data.settings.ep_name)      document.getElementById("ep-name").innerText      = data.settings.ep_name;
+        if (data.settings.usdt_address) document.getElementById("usdt-address").innerText = data.settings.usdt_address;
+        if (data.settings.whatsapp)     document.getElementById("wa-link").href = "https://wa.me/" + data.settings.whatsapp.replace(/\D/g,"");
+      }
+    }
+  } catch(e) {}
+}
+
+async function submitPlanRequest() {
+  const tab = window._payTab || "easy";
+  const tid = tab === "easy"
+    ? document.getElementById("tid-easy").value.trim()
+    : document.getElementById("tid-usdt").value.trim();
+
+  if (!tid) {
+    const errEl = document.getElementById("modal-error");
+    errEl.innerText = tab==="easy" ? "EasyPaisa TID zarori hai" : "Transaction Hash zarori hai";
+    errEl.style.display = "block"; return;
+  }
+
+  const sbtn = document.getElementById("submit-btn");
+  sbtn.disabled = true;
+  sbtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&nbsp; Submitting...';
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action:     "buy_plan",
+        user_id:    window.CU.user_id,
+        plan_id:    _curPlan.planId,
+        amount:     _curPlan.amount,
+        daily_earn: _curPlan.dailyEarn,
+        pay_method: tab === "easy" ? "EasyPaisa" : "USDT_TRC20",
+        tid: tid
+      })
+    });
+    const out = await res.json();
+    closeBuyModal();
+
+    if (out.status === "success") {
+      Swal.fire({
+        title: "Payment Submitted Successfully! ✅",
+        html:
+          '<div style="text-align:left;font-size:13px;line-height:1.8;color:#c8e8ff;padding:4px 0;">' +
+          'Thank you for submitting your payment. Your transaction ID has been received and is currently under review by our admin team.<br><br>' +
+          'You will be notified once your payment has been verified.<br><br>' +
+          'For immediate support or any questions, please reach out to our Customer Support team directly.' +
+          '<br><br><a href="https://wa.me/447887165039" target="_blank" style="color:#25d366;font-weight:800;text-decoration:none;">'+
+          '💬 WhatsApp Support: +44 7887 165039</a></div>',
+        icon: "success",
+        confirmButtonText: "OK, Got it!",
+        confirmButtonColor: "#c9a227",
+        background: "#071020",
+        color: "#fff"
+      });
+    } else {
+      Swal.fire({ title:"Error", text: out.message || "Request fail hui", icon:"error" });
+    }
+  } catch(e) {
+    Swal.fire({ title:"Network Error", text:"Connection failed. Try again.", icon:"error" });
+  } finally {
+    sbtn.disabled = false;
+    sbtn.innerHTML = '<i class="fas fa-paper-plane"></i>&nbsp; Submit Request';
+  }
+}
+
+</script>
+</body>
+</html>

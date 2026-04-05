@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>About Us | Vexora</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+  --bg:      #030b18;
+  --s1:      #071020;
+  --s2:      #0a1628;
+  --s3:      #0d1f3c;
+  --border:  rgba(201,162,39,0.15);
+  --border2: rgba(201,162,39,0.28);
+  --blue:    #c9a227;
+  --blue2:   #c9a227;
+  --violet:  #e8c547;
+  --emerald: #34d399;
+  --amber:   #fbbf24;
+  --rose:    #fb7185;
+  --teal:    #f0d060;
+  --grad:    linear-gradient(135deg,#b8891e,#e8c547);
+  --grad-g:  linear-gradient(135deg,#b8891e,#c9a227);
+  --grad-a:  linear-gradient(135deg,#e8c547,#c9a227);
+  --muted:   #4a6080;
+  --dim:     #8899bb;
+  --text:    #d8e8ff;
+  --white:   #ffffff;
+  --shadow:  0 8px 40px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  padding-bottom: 40px;
+}
+
+/* ── BG ATMOSPHERE ── */
+.bg-orb {
+  position: fixed; border-radius: 50%;
+  filter: blur(80px); pointer-events: none; z-index: 0;
+}
+.orb1 { width:500px; height:500px; background:rgba(201,162,39,0.06); top:-150px; left:-150px; }
+.orb2 { width:400px; height:400px; background:rgba(201,162,39,0.04); bottom:0; right:-100px; }
+.orb3 { width:300px; height:300px; background:rgba(201,162,39,0.03); top:50%; left:50%; transform:translate(-50%,-50%); }
+
+/* ── HEADER ── */
+.header {
+  padding: 14px 20px;
+  background: rgba(5,12,25,0.95);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top:0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  backdrop-filter: blur(20px);
+}
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px; font-weight: 700;
+  display: flex; align-items: baseline; gap: 1px;
+}
+.logo-click { color: #fff; }
+.logo-eran  { color: var(--gold,#c9a227); }
+.logo-pro {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-left: 5px;
+  background: var(--grad-a);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.back-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--s2); border: 1px solid var(--border);
+  color: var(--dim); padding: 8px 14px; border-radius: 10px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  text-decoration: none; transition: all .2s;
+}
+.back-btn:hover { border-color: var(--border2); color: var(--text); }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  padding: 50px 24px 40px;
+  text-align: center;
+  animation: fadeUp .7s ease both;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(79,142,247,0.1);
+  border: 1px solid rgba(79,142,247,0.25);
+  color: var(--gold,#c9a227); padding: 6px 16px;
+  border-radius: 30px; font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 22px;
+}
+.hero-badge i { font-size: 11px; }
+
+.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 34px; font-weight: 700;
+  line-height: 1.15; margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+.hero-title .hl {
+  background: var(--grad);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 15px; color: var(--dim); line-height: 1.7;
+  max-width: 340px; margin: 0 auto 28px;
+}
+
+/* Floating stats */
+.hero-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 10px; max-width: 400px; margin: 0 auto;
+}
+.stat-item {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 10px; text-align: center;
+  transition: border-color .2s, transform .2s;
+}
+.stat-item:hover { border-color: var(--border2); transform: translateY(-2px); }
+.stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 700; color: #fff;
+}
+.stat-lbl { font-size: 10px; color: var(--dim); font-weight: 600; margin-top: 2px; }
+
+/* ── SECTION WRAPPER ── */
+.section {
+  position: relative; z-index: 1;
+  margin: 0 18px 20px;
+  animation: fadeUp .7s ease both;
+}
+.section:nth-child(3) { animation-delay: .1s; }
+.section:nth-child(4) { animation-delay: .15s; }
+.section:nth-child(5) { animation-delay: .2s; }
+.section:nth-child(6) { animation-delay: .25s; }
+.section:nth-child(7) { animation-delay: .3s; }
+
+.card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px 20px;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: border-color .25s;
+}
+.card:hover { border-color: var(--border2); }
+
+.card-accent {
+  position: absolute; top:0; left:0; right:0; height:2px;
+  background: var(--grad);
+}
+.card-accent.green  { background: var(--grad-g); }
+.card-accent.amber  { background: var(--grad-a); }
+.card-accent.violet { background: linear-gradient(135deg,#e8c547,#a78bfa); }
+.card-accent.rose   { background: linear-gradient(135deg,#fb7185,#f43f5e); }
+.card-accent.teal   { background: linear-gradient(135deg,#e8c547,#06b6d4); }
+
+/* card glow blob */
+.card::after {
+  content: ''; position: absolute;
+  top: -40px; right: -40px;
+  width: 150px; height: 150px;
+  background: radial-gradient(circle, rgba(201,162,39,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px; color: #fff;
+}
+.card-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.ci-blue   { background: rgba(79,142,247,0.12); color: var(--gold,#c9a227); }
+.ci-green  { background: rgba(52,211,153,0.12); color: var(--emerald); }
+.ci-amber  { background: rgba(251,191,36,0.12);  color: var(--amber); }
+.ci-violet { background: rgba(129,140,248,0.12); color: var(--violet); }
+.ci-rose   { background: rgba(251,113,133,0.12); color: var(--rose); }
+.ci-teal   { background: rgba(45,212,191,0.12);  color: var(--teal); }
+
+.card-body { font-size: 14px; color: var(--dim); line-height: 1.75; }
+
+/* ── FEATURES LIST ── */
+.feat-list { display: flex; flex-direction: column; gap: 10px; }
+.feat-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 14px;
+  transition: border-color .2s, transform .2s;
+}
+.feat-item:hover { border-color: var(--border2); transform: translateX(3px); }
+.feat-dot {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(52,211,153,0.12);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--emerald); font-size: 12px; flex-shrink: 0; margin-top: 1px;
+}
+.feat-text { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.5; }
+.feat-text small { font-size: 11px; color: var(--dim); font-weight: 400; display: block; margin-top: 1px; }
+
+/* ── COUNTRIES ── */
+.country-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.country-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 12px;
+  font-size: 12px; font-weight: 600; color: var(--text);
+  transition: border-color .2s;
+}
+.country-chip:hover { border-color: var(--border2); }
+
+/* ── TRUST PILLARS ── */
+.trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.trust-item {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 12px;
+  transition: border-color .2s, transform .2s;
+}
+.trust-item:hover { border-color: var(--border2); transform: scale(1.02); }
+.trust-icon { font-size: 20px; margin-bottom: 8px; }
+.trust-label { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.trust-desc { font-size: 11px; color: var(--dim); line-height: 1.5; }
+
+/* ── CHANNELS ── */
+.channel-list { display: flex; flex-direction: column; gap: 10px; }
+.channel-btn {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border-radius: 14px;
+  text-decoration: none; color: #fff;
+  font-weight: 700; font-size: 14px;
+  border: 1px solid var(--border);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.channel-btn:active { transform: scale(.97); }
+.channel-btn:hover  { transform: translateY(-2px); }
+.channel-btn .ch-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.ch-wa { background: linear-gradient(135deg,rgba(37,211,102,0.08),rgba(18,140,126,0.05)); border-color: rgba(37,211,102,0.2); }
+.ch-wa:hover { border-color: rgba(37,211,102,0.4); box-shadow: 0 6px 24px rgba(37,211,102,0.1); }
+.ch-wa .ch-icon { background: rgba(37,211,102,0.12); color: #25d366; }
+.ch-tg { background: linear-gradient(135deg,rgba(42,171,238,0.08),rgba(0,136,204,0.05)); border-color: rgba(42,171,238,0.2); }
+.ch-tg:hover { border-color: rgba(42,171,238,0.4); box-shadow: 0 6px 24px rgba(42,171,238,0.1); }
+.ch-tg .ch-icon { background: rgba(42,171,238,0.12); color: #29abe2; }
+.ch-meta { display: flex; flex-direction: column; line-height: 1.3; }
+.ch-meta small { font-size: 11px; font-weight: 500; color: var(--dim); margin-top: 2px; }
+.ch-arr { margin-left: auto; opacity: 0.35; font-size: 12px; }
+
+/* ── CTA ── */
+.cta-card {
+  background: linear-gradient(135deg, rgba(79,142,247,0.1), rgba(129,140,248,0.07));
+  border: 1px solid rgba(201,162,39,0.2);
+  border-radius: 20px; padding: 28px 22px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-card::before { background: var(--grad); }
+.cta-glow {
+  position: absolute; top: -60px; left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(79,142,247,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-emoji { font-size: 40px; margin-bottom: 14px; display: block; }
+.cta-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 700; color: #fff;
+  margin-bottom: 8px;
+}
+.cta-sub { font-size: 13px; color: var(--dim); margin-bottom: 22px; line-height: 1.6; }
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--grad); color: #fff;
+  padding: 13px 28px; border-radius: 12px;
+  font-size: 14px; font-weight: 800;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: opacity .2s, transform .2s;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.cta-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+.cta-btn:active { transform: scale(.96); }
+
+/* ── CONTACT ── */
+.contact-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 18px; padding: 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.contact-icon-wrap {
+  width: 48px; height: 48px; border-radius: 14px;
+  background: rgba(52,211,153,0.1);
+  border: 1px solid rgba(52,211,153,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--emerald); flex-shrink: 0;
+}
+.contact-label { font-size: 11px; color: var(--dim); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+.contact-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 700; color: #fff;
+}
+.contact-call {
+  margin-left: auto;
+  background: var(--grad-g);
+  color: #fff; border: none;
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; cursor: pointer; text-decoration: none;
+  transition: opacity .2s, transform .2s; flex-shrink: 0;
+}
+.contact-call:hover { opacity: 0.88; transform: scale(1.08); }
+
+/* ── FOOTER NOTE ── */
+.footer-note {
+  text-align: center; padding: 20px 20px 0;
+  font-size: 11px; color: var(--muted);
+  position: relative; z-index: 1;
+}
+.footer-note span { color: var(--gold,#c9a227); font-weight: 700; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(22px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* divider line */
+.divider {
+  height: 1px; background: var(--border);
+  margin: 0 18px 20px; position: relative; z-index:1;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <span class="logo-click">Click</span><span class="logo-eran">Earn</span><span class="logo-pro">PRO</span>
+  </div>
+  <a href="dashboard.html" class="back-btn">
+    <i class="fa-solid fa-arrow-left" style="font-size:12px;"></i> Back
+  </a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">
+    <i class="fa-solid fa-globe"></i> About Us
+  </div>
+  <h1 class="hero-title">
+    Next-Gen<br><span class="hl">Online Earning</span><br>Platform
+  </h1>
+  <p class="hero-sub">
+    A trusted digital earning ecosystem designed to empower individuals worldwide — real, reliable, and transparent.
+  </p>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">5+</div>
+      <div class="stat-lbl">Countries</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-lbl">Transparent</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24/7</div>
+      <div class="stat-lbl">Support</div>
+    </div>
+  </div>
+</div>
+
+<!-- WHO WE ARE -->
+<div class="section">
+  <div class="card">
+    <div class="card-accent"></div>
+    <div class="card-title">
+      <div class="card-icon ci-blue"><i class="fa-solid fa-briefcase"></i></div>
+      Who We Are
+    </div>
+    <p class="card-body">
+      Vexora is a professional online earning platform that connects users with digital advertising opportunities. We work with advanced systems and smart technology to ensure that every user gets a fair and transparent earning experience.<br><br>
+      We understand that <strong style="color:var(--text);">trust is everything</strong> in online earning — that's why we focus on honesty, clarity, and user satisfaction above all else.
+    </p>
+  </div>
+</div>
+
+<!-- WHAT MAKES US DIFFERENT -->
+<div class="section">
+  <div class="card">
+    <div class="card-accent green"></div>
+    <div class="card-title">
+      <div class="card-icon ci-green"><i class="fa-solid fa-bolt"></i></div>
+      What Makes Us Different
+    </div>
+    <div class="feat-list">
+      <div class="feat-item">
+        <div class="feat-dot"><i class="fa-solid fa-check"></i></div>
+        <div class="feat-text">100% User-Friendly Interface <small>Simple, clean & easy to use for everyone</small></div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"><i class="fa-solid fa-check"></i></div>
+        <div class="feat-text">Smart Ad-Watching Earning System <small>Earn money by watching ads daily</small></div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"><i class="fa-solid fa-check"></i></div>
+        <div class="feat-text">Real-Time Earnings Tracking <small>Watch your balance grow live</small></div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"><i class="fa-solid fa-check"></i></div>
+        <div class="feat-text">Fast &amp; Secure Withdrawals <small>Your money, your time, no delays</small></div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"><i class="fa-solid fa-check"></i></div>
+        <div class="feat-text">Multi-Country Availability <small>Available globally for all users</small></div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"><i class="fa-solid fa-check"></i></div>
+        <div class="feat-text">No Hidden Charges – Full Transparency <small>What you see is what you get</small></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GLOBAL VISION -->
+<div class="section">
+  <div class="card">
+    <div class="card-accent amber"></div>
+    <div class="card-title">
+      <div class="card-icon ci-amber"><i class="fa-solid fa-earth-asia"></i></div>
+      Our Global Vision
+    </div>
+    <p class="card-body" style="margin-bottom:16px;">
+      Our vision is to build a <strong style="color:var(--text);">worldwide trusted earning platform</strong> where users from different countries can earn without barriers. We aim to redefine online earning by creating a system where every click has value.
+    </p>
+    <div class="country-grid">
+      <div class="country-chip">🇵🇰 Pakistan</div>
+      <div class="country-chip">🇮🇳 India</div>
+      <div class="country-chip">🇧🇩 Bangladesh</div>
+      <div class="country-chip">🇺🇸 USA</div>
+      <div class="country-chip">🇨🇦 Canada</div>
+      <div class="country-chip">🌍 More...</div>
+    </div>
+  </div>
+</div>
+
+<!-- OUR COMMITMENT -->
+<div class="section">
+  <div class="card">
+    <div class="card-accent violet"></div>
+    <div class="card-title">
+      <div class="card-icon ci-violet"><i class="fa-solid fa-shield-halved"></i></div>
+      Our Commitment to Trust
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon">🔐</div>
+        <div class="trust-label">Data Protection</div>
+        <div class="trust-desc">Your personal data is always safe with us</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">📊</div>
+        <div class="trust-label">Transparency</div>
+        <div class="trust-desc">Every earning is clear & trackable</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">⚖️</div>
+        <div class="trust-label">Fair Policies</div>
+        <div class="trust-desc">Equal rules for all users, no exceptions</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🛠️</div>
+        <div class="trust-label">Improvements</div>
+        <div class="trust-desc">Continuous platform upgrades</div>
+      </div>
+      <div class="trust-item" style="grid-column:1/-1;">
+        <div class="trust-icon">🤝</div>
+        <div class="trust-label">Reliable Support</div>
+        <div class="trust-desc">We are here for every user, every day — trust is earned through actions</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAY UPDATED -->
+<div class="section">
+  <div class="card">
+    <div class="card-accent teal"></div>
+    <div class="card-title">
+      <div class="card-icon ci-teal"><i class="fa-solid fa-bell"></i></div>
+      Stay Updated
+    </div>
+    <p class="card-body" style="margin-bottom:16px;">
+      Join our official channels to get instant updates, earning tips, and announcements. Never miss an opportunity!
+    </p>
+    <div class="channel-list">
+      <a href="https://whatsapp.com/channel/0029Vb5fim24NVilKv6KBr1Z" class="channel-btn ch-wa">
+        <div class="ch-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <div class="ch-meta">
+          WhatsApp Channel
+          <small>Instant updates & alerts</small>
+        </div>
+        <i class="fa-solid fa-chevron-right ch-arr"></i>
+      </a>
+      <a href="https://t.me/Vexora" class="channel-btn ch-tg">
+        <div class="ch-icon"><i class="fa-brands fa-telegram"></i></div>
+        <div class="ch-meta">
+          Telegram Channel
+          <small>Announcements & earning tips</small>
+        </div>
+        <i class="fa-solid fa-chevron-right ch-arr"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOMER SUPPORT -->
+<div class="section">
+  <div class="card-title" style="padding:0 2px 12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;font-size:10px;">
+    Customer Service
+  </div>
+  <div class="contact-card">
+    <div class="contact-icon-wrap">
+      <i class="fa-solid fa-headset"></i>
+    </div>
+    <div>
+      <div class="contact-label">24/7 Support</div>
+      <div class="contact-num">+44 7887 165039</div>
+    </div>
+    <a href="tel:+447887165039" class="contact-call">
+      <i class="fa-solid fa-phone"></i>
+    </a>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section">
+  <div class="cta-card">
+    <div class="card-accent"></div>
+    <div class="cta-glow"></div>
+    <span class="cta-emoji">🚀</span>
+    <div class="cta-title">Your Earning Journey<br>Starts Here</div>
+    <p class="cta-sub">
+      This is more than just a website — it's your opportunity to step into the world of smart online earning. Turn your time into income with confidence.
+    </p>
+    <a href="dashboard.html" class="cta-btn">
+      <i class="fa-solid fa-house-signal"></i> Go to Dashboard
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="divider"></div>
+<div class="footer-note">
+  © 2025 <span>Vexora</span> — All Rights Reserved<br>
+  Built with ❤️ for digital earners worldwide
+</div>
+
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://pl29040628.profitablecpmratenetwork.com/fc/2c/e3/fc2ce31532655c4ca8d31afa17d8443b.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Vexora | Login & Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --bg:#030b18; --card:#071020; --card-dark:#04090f;
+  --border:rgba(201,162,39,0.18); --border-glow:rgba(201,162,39,0.35);
+  --gold:#c9a227; --gold2:#f0d060;
+  --grad:linear-gradient(135deg,#b8891e 0%,#e8c547 55%,#b8891e 100%);
+  --grad-soft:linear-gradient(135deg,#c9a227,#f0d060);
+  --muted:#5a7090; --navy:#0d1f3c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(201,162,39,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(201,162,39,0.03) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+body::after{
+  content:'';position:fixed;top:-18%;left:50%;transform:translateX(-50%);
+  width:700px;height:600px;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse,rgba(201,162,39,0.07) 0%,rgba(13,31,60,0.10) 50%,transparent 75%);
+}
+
+.page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 16px;position:relative;z-index:1;}
+
+/* ── LOGO ── */
+.logo-wrap{text-align:center;margin-bottom:24px;}
+.logo-img-wrap{
+  width:76px;height:76px;
+  border-radius:20px;
+  border:2px solid rgba(201,162,39,0.35);
+  overflow:hidden;
+  box-shadow:0 0 32px rgba(201,162,39,0.22), 0 8px 24px rgba(0,0,0,0.5);
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#071020;
+  margin-bottom:12px;
+}
+.logo-img-wrap img{width:100%;height:100%;object-fit:cover;border-radius:18px;}
+.logo-wrap h1{
+  font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;
+  letter-spacing:5px;text-transform:uppercase;
+  background:var(--grad-soft);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.gold-line{width:50px;height:2px;margin:10px auto 6px;background:var(--grad-soft);border-radius:2px;}
+.logo-wrap p{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+
+/* ── CARD ── */
+.card{
+  width:100%;max-width:390px;
+  background:linear-gradient(160deg,#081526 0%,#040d1a 100%);
+  border:1px solid rgba(201,162,39,0.18);
+  border-radius:26px;padding:26px 20px 22px;
+  box-shadow:0 0 0 1px rgba(201,162,39,0.04), 0 0 50px rgba(201,162,39,0.05), 0 22px 50px rgba(0,0,0,0.6);
+}
+
+/* ── TABS ── */
+.tab-bar{
+  display:flex;background:rgba(4,9,15,0.9);
+  border:1px solid rgba(201,162,39,0.15);
+  border-radius:14px;padding:4px;margin-bottom:24px;gap:4px;
+}
+.tab-btn{
+  flex:1;padding:11px;border:none;background:transparent;
+  color:var(--muted);font-size:14px;font-weight:700;
+  border-radius:11px;cursor:pointer;transition:.25s;
+  font-family:'Nunito',sans-serif;letter-spacing:0.3px;
+}
+.tab-btn.active{
+  background:linear-gradient(135deg,#b8891e,#e8c547);
+  color:#0a1628;
+  box-shadow:0 3px 16px rgba(201,162,39,0.3);
+}
+
+/* ── FORM PANEL ── */
+.form-panel{display:none;animation:fadeUp .3s ease;}
+.form-panel.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── FIELDS ── */
+.field{margin-bottom:14px;}
+.field label{
+  display:block;font-size:10px;font-weight:800;
+  color:rgba(201,162,39,0.6);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;
+}
+.input-wrap{position:relative;}
+.input-wrap input,.input-wrap select{
+  width:100%;padding:13px 14px 13px 42px;
+  background:rgba(4,9,15,0.9);
+  border:1.5px solid rgba(201,162,39,0.15);
+  border-radius:12px;color:#d8e8ff;
+  font-family:'Nunito',sans-serif;font-size:14px;outline:none;transition:.25s;appearance:none;
+}
+.input-wrap input::placeholder{color:#2d4060;}
+.input-wrap input:focus,.input-wrap select:focus{
+  border-color:rgba(201,162,39,0.5);
+  box-shadow:0 0 0 3px rgba(201,162,39,0.10);
+}
+.input-wrap select option{background:#040d1a;color:#d8e8ff;}
+.input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:rgba(201,162,39,0.5);font-size:14px;pointer-events:none;}
+.eye-toggle{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;cursor:pointer;background:none;border:none;z-index:2;}
+.phone-prefix{position:absolute;left:38px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:800;color:var(--gold);pointer-events:none;}
+.input-wrap.phone input{padding-left:80px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ── STRENGTH ── */
+.strength-track{display:flex;gap:5px;margin-top:7px;height:3px;}
+.strength-seg{flex:1;border-radius:3px;background:rgba(201,162,39,0.1);transition:.3s;}
+.s-weak{background:#ff3d71!important;}
+.s-medium{background:#ff9d00!important;}
+.s-strong{background:#c9a227!important;}
+.strength-label{font-size:11px;margin-top:5px;font-weight:700;min-height:16px;}
+
+/* ── TERMS ── */
+.terms-row{display:flex;align-items:flex-start;gap:10px;margin:16px 0;cursor:pointer;}
+.terms-row input{accent-color:var(--gold);width:16px;height:16px;margin-top:2px;flex-shrink:0;}
+.terms-row span{font-size:12px;color:var(--muted);line-height:1.5;}
+.terms-row b{color:var(--gold);}
+
+/* ── SUBMIT ── */
+.submit-btn{
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,#b8891e 0%,#e8c547 55%,#b8891e 100%);
+  border:none;border-radius:13px;
+  color:#0a1628;font-size:15px;font-weight:800;
+  cursor:pointer;transition:.25s;
+  box-shadow:0 4px 24px rgba(201,162,39,0.3);
+  font-family:'Nunito',sans-serif;letter-spacing:0.5px;
+}
+.submit-btn:hover{box-shadow:0 6px 32px rgba(201,162,39,0.45);}
+.submit-btn:active{transform:scale(0.97);}
+
+/* ── DEVICE ── */
+.device-row{margin-top:18px;text-align:center;font-size:11px;color:#1a2e45;display:flex;align-items:center;justify-content:center;gap:6px;}
+.did-value{color:#2a4060;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="logo-wrap">
+    <div class="logo-img-wrap">
+      <img src="logo.jpeg" alt="Vexora Logo">
+    </div>
+    <h1>Vexora</h1>
+    <div class="gold-line"></div>
+    <p>Secure Authentication Portal</p>
+  </div>
+
+  <div class="card">
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-login"    onclick="switchTab('login')">🔐 Login</button>
+      <button class="tab-btn"        id="tab-register" onclick="switchTab('register')">⚡ Register</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="form-panel active" id="panel-login">
+      <div class="field">
+        <label>Phone Number</label>
+        <div class="input-wrap phone">
+          <i class="fas fa-phone input-icon"></i>
+          <span class="phone-prefix">+92</span>
+          <input type="tel" id="l-num" placeholder="3001234567" inputmode="numeric">
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="l-pass" placeholder="Enter your password">
+          <button class="eye-toggle" onclick="toggleEye('l-pass',this)" type="button"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="doLogin()"><i class="fas fa-right-to-bracket"></i>&nbsp; Login</button>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="form-panel" id="panel-register">
+      <div class="field">
+        <label>Full Name</label>
+        <div class="input-wrap">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="r-name" placeholder="Apna pura naam likhein">
+        </div>
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <div class="input-wrap phone">
+          <i class="fas fa-phone input-icon"></i>
+          <span class="phone-prefix" id="r-prefix">+92</span>
+          <input type="tel" id="r-num" placeholder="3001234567" inputmode="numeric">
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="r-pass" placeholder="Strong password banayein" oninput="checkStrength()">
+          <button class="eye-toggle" onclick="toggleEye('r-pass',this)" type="button"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="strength-track">
+          <div class="strength-seg" id="seg1"></div>
+          <div class="strength-seg" id="seg2"></div>
+          <div class="strength-seg" id="seg3"></div>
+        </div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+      <div class="field">
+        <label>Country</label>
+        <div class="input-wrap">
+          <i class="fas fa-globe input-icon"></i>
+          <select id="r-country" onchange="updatePhonePrefix()">
+            <option value="">-- Select Country --</option>
+            <option value="Pakistan">🇵🇰 Pakistan</option>
+            <option value="India">🇮🇳 India</option>
+            <option value="Bangladesh">🇧🇩 Bangladesh</option>
+            <option value="USA">🇺🇸 USA</option>
+            <option value="Canada">🇨🇦 Canada</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Referral Code <span style="color:rgba(201,162,39,0.3);font-weight:400;">(Optional)</span></label>
+        <div class="input-wrap">
+          <i class="fas fa-tag input-icon"></i>
+          <input type="text" id="r-ref" placeholder="CE0001" oninput="this.value=this.value.toUpperCase()">
+        </div>
+      </div>
+      <label class="terms-row">
+        <input type="checkbox" id="terms-chk">
+        <span>I agree to the <b>Terms & Conditions</b> of Vexora</span>
+      </label>
+      <button class="submit-btn" onclick="doRegister()"><i class="fas fa-user-plus"></i>&nbsp; Create Account</button>
+    </div>
+
+    <div class="device-row">
+      <i class="fas fa-microchip"></i>
+      Device ID: <span class="did-value" id="did-text">loading...</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyO-0vgJsa4tuitUdY-CaOKU-wllvq-xNhMGv9_m-vNW360NX0MKEqGfDRlmXfdDO9LeA/exec"; // ← Apna GAS Web App URL yahan daalen
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+window.onload = function() {
+  if (localStorage.getItem("anLoggedIn") === "true" && localStorage.getItem("anID")) {
+    window.location.replace("dashboard.html"); return;
+  }
+  const did = getDeviceId();
+  document.getElementById("did-text").innerText = did.substring(0, 10) + "...";
+
+  const ref = new URLSearchParams(window.location.search).get("ref");
+  if (ref) {
+    document.getElementById("r-ref").value = ref.toUpperCase();
+    switchTab("register");
+  }
+};
+
+// ─── DEVICE ID ───────────────────────────────────────────────────────────────
+function getDeviceId() {
+  let id = localStorage.getItem("an_device_token");
+  if (!id) {
+    id = "dev-" + Math.random().toString(36).substr(2, 9) + "-" + Date.now();
+    localStorage.setItem("an_device_token", id);
+  }
+  return id;
+}
+
+// ─── TAB SWITCH ──────────────────────────────────────────────────────────────
+const COUNTRY_CODES = {
+  "Pakistan":   { code: "+92",  placeholder: "3001234567" },
+  "India":      { code: "+91",  placeholder: "9876543210" },
+  "Bangladesh": { code: "+880", placeholder: "1712345678" },
+  "USA":        { code: "+1",   placeholder: "2025551234" },
+  "Canada":     { code: "+1",   placeholder: "4165551234" }
+};
+
+function updatePhonePrefix() {
+  const country = document.getElementById("r-country").value;
+  const info = COUNTRY_CODES[country] || { code: "+92", placeholder: "3001234567" };
+  document.getElementById("r-prefix").textContent = info.code;
+  document.getElementById("r-num").placeholder    = info.placeholder;
+}
+
+function switchTab(type) {
+  document.querySelectorAll(".tab-btn").forEach(function(b)  { b.classList.remove("active"); });
+  document.querySelectorAll(".form-panel").forEach(function(p){ p.classList.remove("active"); });
+  document.getElementById("tab-"   + type).classList.add("active");
+  document.getElementById("panel-" + type).classList.add("active");
+}
+
+// ─── EYE TOGGLE ──────────────────────────────────────────────────────────────
+function toggleEye(id, btn) {
+  const inp  = document.getElementById(id);
+  const icon = btn.querySelector("i");
+  if (inp.type === "password") { inp.type = "text";     icon.className = "fas fa-eye-slash"; }
+  else                         { inp.type = "password"; icon.className = "fas fa-eye"; }
+}
+
+// ─── PASSWORD STRENGTH ────────────────────────────────────────────────────────
+function checkStrength() {
+  const val  = document.getElementById("r-pass").value;
+  const segs = ["seg1","seg2","seg3"].map(function(id){ return document.getElementById(id); });
+  const lbl  = document.getElementById("strength-label");
+  segs.forEach(function(s){ s.className = "strength-seg"; });
+  if (!val.length) { lbl.textContent = ""; return; }
+  if (val.length < 5) {
+    segs[0].classList.add("s-weak");
+    lbl.textContent = "Weak"; lbl.style.color = "#ff3d71";
+  } else if (val.length < 8) {
+    segs[0].classList.add("s-medium"); segs[1].classList.add("s-medium");
+    lbl.textContent = "Medium"; lbl.style.color = "#ff9d00";
+  } else {
+    segs.forEach(function(s){ s.classList.add("s-strong"); });
+    lbl.textContent = "Strong"; lbl.style.color = "#c9a227";
+  }
+}
+
+// ─── SAVE SESSION ────────────────────────────────────────────────────────────
+function saveSession(user) {
+  const u = JSON.stringify(user);
+  localStorage.setItem("anLoggedIn", "true");
+  localStorage.setItem("anID",       user.user_id);
+  localStorage.setItem("anUser",     u);
+  localStorage.setItem("an_user",    u);
+}
+
+// ─── LOGIN ───────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const num      = document.getElementById("l-num").value.trim();
+  const pass     = document.getElementById("l-pass").value.trim();
+  const deviceId = getDeviceId();
+
+  if (!num || !pass)
+    return Swal.fire({ title:"Error", text:"Phone aur Password zarori hai", icon:"error" });
+
+  Swal.fire({ title:"Verifying...", allowOutsideClick:false, didOpen:function(){ Swal.showLoading(); } });
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method:"POST",
+      body: JSON.stringify({ type:"login", num, pass, deviceId })
+    });
+    const out = await res.json();
+
+    if (out.status === "success") {
+      saveSession(out.user);
+      Swal.fire({ title:"Welcome Back! 🚀", text:out.user.name || "", icon:"success", timer:1500, showConfirmButton:false });
+      setTimeout(function(){ window.location.replace("dashboard.html"); }, 1600);
+    } else {
+      Swal.fire({ title:"Access Denied", text:out.message || "Login failed", icon:"error" });
+    }
+  } catch(e) {
+    Swal.fire({ title:"Error", text:"Connection failed. Try again.", icon:"error" });
+  }
+}
+
+// ─── REGISTER ────────────────────────────────────────────────────────────────
+async function doRegister() {
+  const name     = document.getElementById("r-name").value.trim();
+  const num      = document.getElementById("r-num").value.trim();
+  const pass     = document.getElementById("r-pass").value.trim();
+  const ref      = document.getElementById("r-ref").value.trim().toUpperCase() || "DIRECT";
+  const country  = document.getElementById("r-country").value;
+  const deviceId = getDeviceId();
+
+  if (!name || !num || !pass)
+    return Swal.fire({ title:"Error", text:"Tamam fields bharen", icon:"error" });
+  if (!country)
+    return Swal.fire({ title:"Country", text:"Apna country select karen", icon:"warning" });
+  if (pass.length < 5)
+    return Swal.fire({ title:"Weak Password", text:"Kam se kam 5 characters chahiye", icon:"warning" });
+  if (!document.getElementById("terms-chk").checked)
+    return Swal.fire({ title:"Terms", text:"Terms & Conditions agree karein", icon:"warning" });
+
+  Swal.fire({ title:"Creating Account...", allowOutsideClick:false, didOpen:function(){ Swal.showLoading(); } });
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method:"POST",
+      body: JSON.stringify({ type:"register", name, number:num, password:pass, referral:ref, device_id:deviceId, country })
+    });
+    const out = await res.json();
+
+    if (out.status === "success") {
+      const userObj = out.user || { user_id:out.user_id, name, number:num, balance:0, referral:ref };
+      saveSession(userObj);
+      Swal.fire({
+        title:"Account Created! 🎉",
+        html:"Your ID: <b style='color:#c9a227;font-size:22px;'>" + out.user_id + "</b>",
+        icon:"success", timer:2500, showConfirmButton:false
+      });
+      setTimeout(function(){ window.location.replace("dashboard.html"); }, 2600);
+    } else {
+      Swal.fire({ title:"Failed", text:out.message || "Registration failed", icon:"error" });
+    }
+  } catch(e) {
+    Swal.fire({ title:"Network Error", text:"Connection failed. Try again.", icon:"error" });
+  }
+}
+</script>
+</body>
+</html>

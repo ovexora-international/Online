@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Wallet | Vexora</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+:root{
+  --bg:#030b18; --card:#071020; --card-dark:#04090f;
+  --border:rgba(201,162,39,0.18); --cyan:#c9a227; --purple:#b8891e;
+  --grad:linear-gradient(135deg,#b8891e,#e8c547);
+  --muted:#6b7fa3; --success:#00e676; --danger:#ff3d71;
+  --warn:#ff9d00; --blue:#e8c547;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:#fff;font-family:'Nunito',sans-serif;padding-bottom:30px;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(201,162,39,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,0.03) 1px,transparent 1px);background-size:40px 40px;}
+
+/* ── TOP BAR ── */
+.top-bar{background:rgba(4,9,20,0.97);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);}
+.back-btn{background:var(--card);border:1px solid var(--border);color:#fff;padding:9px 14px;border-radius:10px;cursor:pointer;font-size:14px;}
+.top-bar h2{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:1.5px;background:linear-gradient(135deg,#b8891e,#e8c547);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logout-icon{color:var(--danger);font-size:18px;cursor:pointer;}
+
+.container{padding:20px;position:relative;z-index:1;}
+
+/* ── BALANCE CARD ── */
+.balance-card{padding:28px 24px;border-radius:22px;margin-bottom:24px;position:relative;overflow:hidden;background:var(--grad);box-shadow:0 0 50px rgba(201,162,39,0.15),0 12px 40px rgba(0,0,0,0.4);}
+.balance-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.08),transparent);pointer-events:none;}
+.balance-label{font-size:11px;font-weight:800;opacity:0.8;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.balance-amount{font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;letter-spacing:1px;}
+.balance-meta{font-size:11px;opacity:0.75;margin-top:6px;font-weight:700;}
+
+/* ── SECTION TITLE ── */
+.section-title{font-size:11px;font-weight:800;color:#c9a227;margin:22px 0 12px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:1px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── ACTION CARD ── */
+.action-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:20px;margin-bottom:20px;}
+.account-details-card{background:var(--card-dark);border-radius:18px;border:1px solid var(--border);padding:22px;margin-bottom:10px;}
+.account-detail-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.account-detail-row:last-child{border-bottom:none;}
+.detail-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;}
+.detail-value{font-size:14px;font-weight:800;color:#fff;}
+.detail-icon{color:#c9a227;margin-right:8px;font-size:13px;}
+
+/* ── INPUTS ── */
+.input-wrapper{margin-bottom:14px;}
+.input-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;display:block;}
+.input-box{width:100%;background:var(--card-dark);border:1.5px solid var(--border);color:#fff;padding:13px 15px;border-radius:12px;outline:none;font-size:14px;transition:0.3s;font-family:'Nunito',sans-serif;}
+.input-box:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(201,162,39,0.10);}
+select.input-box option{background:var(--card-dark);}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ── BUTTONS ── */
+.btn{width:100%;border:none;padding:15px;border-radius:12px;font-weight:800;cursor:pointer;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;font-family:'Nunito',sans-serif;}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 18px rgba(201,162,39,0.2);}
+.btn-success{background:linear-gradient(135deg,#00e676,#00b890);color:#030b18;}
+.btn:active{transform:scale(0.97);}
+.change-btn{background:none;border:1px solid rgba(201,162,39,0.25);color:var(--cyan);padding:10px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;font-family:'Nunito',sans-serif;}
+
+/* ── RULES BOX ── */
+.rules-box{background:rgba(201,162,39,0.04);border:1px solid rgba(201,162,39,0.15);border-radius:12px;padding:16px;margin-bottom:16px;}
+.rules-title{font-size:12px;font-weight:800;color:#c9a227;margin-bottom:10px;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;}
+.rule-item{font-size:12px;color:#8899bb;margin-bottom:8px;padding-left:18px;position:relative;line-height:1.6;}
+.rule-item::before{content:'›';position:absolute;left:4px;color:#c9a227;font-weight:900;}
+.rule-item:last-child{margin-bottom:0;}
+
+/* ── HISTORY ── */
+.history-container{max-height:300px;overflow-y:auto;}
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:12px;background:var(--card-dark);margin-bottom:10px;border:1px solid var(--border);}
+.history-left{flex:1;}
+.history-amount{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;margin-bottom:3px;}
+.history-date{font-size:11px;color:var(--muted);font-weight:700;}
+.history-status{padding:6px 12px;border-radius:8px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;}
+.status-pending {background:rgba(255,157,0,0.1); color:var(--warn);   border:1px solid rgba(255,157,0,0.3);}
+.status-approved{background:rgba(0,230,118,0.1);  color:var(--success);border:1px solid rgba(0,230,118,0.3);}
+.status-rejected{background:rgba(255,61,113,0.1);  color:var(--danger); border:1px solid rgba(255,61,113,0.3);}
+
+.empty-state{text-align:center;padding:40px 20px;color:#3d527a;}
+.empty-state i{font-size:44px;opacity:0.3;margin-bottom:12px;display:block;}
+.empty-state p{font-size:13px;font-weight:700;}
+.hidden{display:none!important;}
+.footer{text-align:center;padding:20px;color:#2d3f60;font-size:10px;font-weight:700;letter-spacing:0.5px;}
+</style>
+</head>
+<body>
+
+<script>
+(function() {
+  var u = localStorage.getItem("anUser") || localStorage.getItem("an_user");
+  if (!u || localStorage.getItem("anLoggedIn") !== "true") {
+    window.location.replace("auth.html"); return;
+  }
+  try { window.CU = JSON.parse(u); }
+  catch(e) { localStorage.clear(); window.location.replace("auth.html"); }
+})();
+</script>
+
+<div class="top-bar">
+  <div class="back-btn" onclick="window.location.href='dashboard.html'"><i class="fas fa-arrow-left"></i></div>
+  <h2>MY WALLET</h2>
+  <i class="fas fa-power-off logout-icon" onclick="doLogout()"></i>
+</div>
+
+<div class="container">
+
+  <div class="balance-card">
+    <p class="balance-label">💰 Available Balance</p>
+    <h1 class="balance-amount" id="balance-amount">Rs. 0.00</h1>
+    <p class="balance-meta" id="user-meta">Loading...</p>
+  </div>
+
+  <!-- Payment Method Form -->
+  <div id="bind-section">
+    <div class="section-title"><i class="fas fa-credit-card"></i> Payment Method</div>
+    <div class="action-card">
+      <div class="input-wrapper">
+        <label class="input-label">Payment Method</label>
+        <select id="bind-type" class="input-box" onchange="onMethodChange()">
+          <option value="Easypaisa">Easypaisa</option>
+          <option value="JazzCash">JazzCash</option>
+          <option value="Bank">Bank Account</option>
+          <option value="USDT_TRC20">💚 USDT — TRC20</option>
+        </select>
+      </div>
+      <div class="input-wrapper" id="network-wrap" style="display:none;">
+        <label class="input-label">Network</label>
+        <div class="input-box" style="background:rgba(0,230,118,0.07);border-color:rgba(0,230,118,0.3);color:#00e676;font-weight:700;">
+          ✅ USDT — TRC20 (Fixed)
+        </div>
+      </div>
+      <div class="input-wrapper">
+        <label class="input-label" id="account-label">Account Number</label>
+        <input type="text" id="bind-no" class="input-box" placeholder="03001234567">
+      </div>
+      <div class="input-wrapper">
+        <label class="input-label">Account Title</label>
+        <input type="text" id="bind-title" class="input-box" placeholder="Your Name">
+      </div>
+      <button class="btn btn-primary" onclick="bindAccount()">
+        <i class="fas fa-save"></i>&nbsp; Save Details
+      </button>
+    </div>
+  </div>
+
+  <!-- Payment Details Card -->
+  <div id="details-section" class="hidden">
+    <div class="section-title"><i class="fas fa-credit-card"></i> Payment Method</div>
+    <div class="account-details-card">
+      <div class="account-detail-row">
+        <div><i class="fas fa-user detail-icon"></i><span class="detail-label">Account Title</span></div>
+        <span class="detail-value" id="disp-title">—</span>
+      </div>
+      <div class="account-detail-row">
+        <div><i class="fas fa-wallet detail-icon"></i><span class="detail-label">Method</span></div>
+        <span class="detail-value" id="disp-type">—</span>
+      </div>
+      <div class="account-detail-row">
+        <div><i class="fas fa-hashtag detail-icon"></i><span class="detail-label">Account No.</span></div>
+        <span class="detail-value" id="disp-no">—</span>
+      </div>
+      <div class="account-detail-row" id="disp-network-row" style="display:none;">
+        <div><i class="fas fa-network-wired detail-icon"></i><span class="detail-label">Network</span></div>
+        <span class="detail-value" id="disp-network">—</span>
+      </div>
+    </div>
+    <button class="change-btn" onclick="showBindForm()">
+      <i class="fas fa-pen"></i>&nbsp; Change Payment Details
+    </button>
+  </div>
+
+  <!-- Withdraw -->
+  <div class="section-title" style="margin-top:24px;"><i class="fas fa-arrow-up-from-bracket"></i> Withdraw Funds</div>
+
+  <div class="rules-box">
+    <div class="rules-title"><i class="fas fa-circle-info"></i> Withdrawal Rules</div>
+    <div class="rule-item">Minimum withdrawal: <b>$1 (Rs. 280)</b></div>
+    <div class="rule-item">Processing fee: <b>5%</b> deducted from amount</div>
+    <div class="rule-item">Payment within <b>24-48 hours</b> after approval</div>
+    <div class="rule-item">JazzCash / Easypaisa: Pakistani number required</div>
+    <div class="rule-item">USDT TRC20: Wallet address required (TRC20 only)</div>
+    <div class="rule-item">Save payment details before requesting</div>
+  </div>
+
+  <div class="action-card">
+    <div class="input-wrapper">
+      <label class="input-label">Amount (Rs.)</label>
+      <input type="number" id="withdraw-amount" class="input-box" placeholder="Minimum Rs. 280 ($1)" min="280">
+    </div>
+    <button class="btn btn-success" onclick="submitWithdraw()">
+      <i class="fas fa-paper-plane"></i>&nbsp; Submit Withdrawal
+    </button>
+  </div>
+
+  <!-- History -->
+  <div class="section-title"><i class="fas fa-clock-rotate-left"></i> Withdrawal History</div>
+  <div class="history-container" id="history-list">
+    <div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>
+  </div>
+
+  <div class="footer">Vexora &nbsp;|&nbsp; Advertise. Earn. Grow.</div>
+
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbyO-0vgJsa4tuitUdY-CaOKU-wllvq-xNhMGv9_m-vNW360NX0MKEqGfDRlmXfdDO9LeA/exec"; // ← Apna GAS Web App URL yahan daalen
+
+function loadWallet() {
+  try {
+    document.getElementById("balance-amount").innerText = "Rs. " + parseFloat(CU.balance || 0).toFixed(2);
+    document.getElementById("user-meta").innerText      = (CU.name || "") + " · " + (CU.user_id || "");
+    if (CU.account_no) showDetailsCard(CU);
+    else               showBindForm();
+  } catch(e) { console.log(e); }
+  loadHistory();
+}
+
+function showDetailsCard(u) {
+  document.getElementById("bind-section").classList.add("hidden");
+  document.getElementById("details-section").classList.remove("hidden");
+  document.getElementById("disp-title").innerText = u.account_title || "—";
+  document.getElementById("disp-type").innerText  = u.account_type  || "—";
+  document.getElementById("disp-no").innerText    = u.account_no    || "—";
+  const isCrypto = u.account_type === "USDT_TRC20";
+  const netRow = document.getElementById("disp-network-row");
+  if (isCrypto && u.account_network) {
+    netRow.style.display = "flex";
+    document.getElementById("disp-network").innerText = u.account_network;
+  } else {
+    netRow.style.display = "none";
+  }
+}
+
+function showBindForm() {
+  document.getElementById("details-section").classList.add("hidden");
+  document.getElementById("bind-section").classList.remove("hidden");
+  if (CU.account_no)    document.getElementById("bind-no").value      = CU.account_no;
+  if (CU.account_title) document.getElementById("bind-title").value   = CU.account_title;
+  if (CU.account_type)  document.getElementById("bind-type").value    = CU.account_type;
+  onMethodChange();
+}
+
+function onMethodChange() {
+  const method = document.getElementById("bind-type").value;
+  const isCrypto = method === "USDT_TRC20";
+  document.getElementById("network-wrap").style.display = isCrypto ? "block" : "none";
+  const lbl = document.getElementById("account-label");
+  const inp = document.getElementById("bind-no");
+  if (isCrypto) {
+    lbl.textContent = "USDT TRC20 Wallet Address";
+    inp.placeholder = "T... apna TRC20 address dalen";
+  } else {
+    lbl.textContent = "Account Number";
+    inp.placeholder = "03001234567";
+  }
+}
+
+async function bindAccount() {
+  const no      = document.getElementById("bind-no").value.trim();
+  const type    = document.getElementById("bind-type").value;
+  const title   = document.getElementById("bind-title").value.trim();
+  const isCrypto = type === "USDT_TRC20";
+  const network = isCrypto ? "TRC20" : "";
+
+  if (!no || !title) { Swal.fire("Incomplete!", "Tamam fields bharen", "warning"); return; }
+
+  Swal.fire({ title:"Saving...", allowOutsideClick:false, didOpen:() => Swal.showLoading() });
+
+  try {
+    const res = await fetch(API_URL, {
+      method:"POST",
+      body: JSON.stringify({ action:"bind_account", user_id:CU.user_id, account_no:no, account_type:type, account_title:title, account_network:network })
+    });
+    const out = await res.json();
+    if (out.status === "success") {
+      CU.account_no = no; CU.account_type = type; CU.account_title = title; CU.account_network = network;
+      localStorage.setItem("anUser",  JSON.stringify(CU));
+      localStorage.setItem("an_user", JSON.stringify(CU));
+      showDetailsCard(CU);
+      Swal.fire({ title:"Saved! ✅", text:"Payment details save ho gaye", icon:"success", timer:1500, showConfirmButton:false });
+    } else {
+      Swal.fire("Error", out.message || "Save nahi hua", "error");
+    }
+  } catch(e) { Swal.fire("Error", "Connection failed", "error"); }
+}
+
+async function submitWithdraw() {
+  const amount = parseFloat(document.getElementById("withdraw-amount").value);
+  const MIN_RS = 280; // $1
+  if (!amount || amount < MIN_RS) { Swal.fire("Invalid", "Minimum Rs. 280 ($1) hai", "warning"); return; }
+  if (amount > parseFloat(CU.balance || 0)) { Swal.fire("Error", "Insufficient balance", "error"); return; }
+  if (!CU.account_no) { Swal.fire("Required", "Pehle payment details save karen", "warning"); return; }
+
+  const fee = Math.round(amount * 0.05 * 100) / 100;
+  const net = Math.round((amount - fee) * 100) / 100;
+
+  const c = await Swal.fire({
+    title:"Confirm Withdrawal",
+    html:"Amount: <b>Rs. " + amount + "</b><br>Fee 5%: <b>Rs. " + fee + "</b><br>You'll Receive: <b style='color:#00e676;'>Rs. " + net + "</b>",
+    icon:"question", showCancelButton:true,
+    confirmButtonText:"Submit", confirmButtonColor:"#00e676", cancelButtonColor:"#ff3d71"
+  });
+  if (!c.isConfirmed) return;
+
+  Swal.fire({ title:"Processing...", allowOutsideClick:false, didOpen:() => Swal.showLoading() });
+
+  try {
+    const res = await fetch(API_URL, {
+      method:"POST",
+      body: JSON.stringify({ action:"withdraw", user_id:CU.user_id, amount })
+    });
+    const out = await res.json();
+    if (out.status === "success") {
+      CU.balance = out.new_balance;
+      localStorage.setItem("anUser",  JSON.stringify(CU));
+      localStorage.setItem("an_user", JSON.stringify(CU));
+      document.getElementById("balance-amount").innerText = "Rs. " + parseFloat(out.new_balance).toFixed(2);
+      document.getElementById("withdraw-amount").value = "";
+      Swal.fire("Submitted! 🚀", "Rs. " + amount + " request submit. Milega: Rs. " + out.net_amount, "success");
+      loadHistory();
+    } else {
+      Swal.fire("Error", out.message || "Request fail", "error");
+    }
+  } catch(e) { Swal.fire("Error", "Connection failed", "error"); }
+}
+
+async function loadHistory() {
+  const el = document.getElementById("history-list");
+  el.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
+  try {
+    const res  = await fetch(API_URL + "?type=get_withdrawals&userId=" + encodeURIComponent(CU.user_id || ""));
+    const data = await res.json();
+    if (data.status !== "success" || !data.withdrawals || !data.withdrawals.length) {
+      el.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No withdrawals yet</p></div>'; return;
+    }
+    let html = "";
+    data.withdrawals.forEach(function(w) {
+      const status = w.status || "Pending";
+      const cls    = status === "Approved" ? "status-approved" : status === "Rejected" ? "status-rejected" : "status-pending";
+      const date   = new Date(w.date).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+      const fee    = parseFloat(w.fee || 0).toFixed(2);
+      const net    = parseFloat(w.net_amount || w.amount).toFixed(2);
+      html += '<div class="history-item"><div class="history-left"><div class="history-amount">Rs. ' + parseFloat(w.amount).toFixed(2) + '</div><div class="history-date">' + date + '</div><div class="history-date" style="margin-top:2px;">Fee: Rs.' + fee + '&nbsp;|&nbsp; Net: <span style="color:var(--success);font-weight:800;">Rs.' + net + '</span></div></div><div class="history-status ' + cls + '">' + status + '</div></div>';
+    });
+    el.innerHTML = html;
+  } catch(e) { el.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Load nahi hui</p></div>'; }
+}
+
+function doLogout() {
+  Swal.fire({ title:"Logout?", icon:"warning", showCancelButton:true, confirmButtonColor:"#ff3d71", confirmButtonText:"Logout" })
+    .then(function(r) {
+      if (r.isConfirmed) {
+        ["an_user","anUser","anLoggedIn","anID"].forEach(function(k){ localStorage.removeItem(k); });
+        window.location.replace("auth.html");
+      }
+    });
+}
+
+window.addEventListener("load", loadWallet);
+</script>
+</body>
+</html>
