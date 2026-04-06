@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Vexora Pro — Loading...</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;width:100%;font-family:'Nunito',sans-serif;background:#020810;color:#fff;overflow:hidden;-webkit-font-smoothing:antialiased;}
+
+/* ── BG ── */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 90% 55% at 50% -10%,rgba(14,40,90,0.65) 0%,transparent 65%);}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(201,162,39,0.04) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(201,162,39,0.04) 1px,transparent 1px);
+  background-size:44px 44px;}
+
+/* ── PHASES ── */
+.phase{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:20px;transition:opacity .4s;}
+.phase.hidden{opacity:0;pointer-events:none;}
+
+/* ── AD PHASE ── */
+#phase-ad{background:#000;z-index:50;}
+
+/* Ad iframe */
+#ad-iframe{
+  position:fixed;inset:0;width:100%;height:100%;border:none;
+  z-index:51;
+}
+
+/* Ad overlay bar (bottom) */
+.ad-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:52;
+  background:rgba(2,8,16,0.96);backdrop-filter:blur(14px);
+  border-top:1px solid rgba(201,162,39,0.2);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:14px;
+}
+.ad-bar-left{flex:1;}
+.ad-bar-label{font-size:9.5px;color:#4a6080;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+.ad-bar-timer{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:800;color:#c9a227;line-height:1;}
+.ad-bar-timer.done{color:#00e676;}
+.ad-bar-msg{font-size:10px;color:#4a6080;margin-top:3px;font-weight:600;}
+.ad-prog{height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:6px;}
+.ad-prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#9b6e14,#c9a227,#e8c547);width:0%;transition:width 1s linear;}
+
+.skip-btn{
+  padding:12px 18px;border-radius:13px;border:none;
+  font-size:13px;font-weight:800;cursor:not-allowed;
+  font-family:'Nunito',sans-serif;transition:all .35s;
+  pointer-events:none;opacity:.35;flex-shrink:0;
+  background:rgba(201,162,39,.1);border:1px solid rgba(201,162,39,.2);color:#c9a227;
+}
+.skip-btn.ready{
+  cursor:pointer;pointer-events:all;opacity:1;
+  background:linear-gradient(135deg,#9b6e14,#e8c547);
+  color:#060f0a;border-color:transparent;
+  box-shadow:0 4px 20px rgba(201,162,39,.35);
+}
+.skip-btn.ready:active{transform:scale(.96);}
+
+/* ── LOADING PHASE ── */
+#phase-loading{z-index:20;}
+.logo-img-load{
+  width:90px;height:90px;border-radius:22px;
+  object-fit:cover;margin-bottom:20px;
+  border:2px solid rgba(201,162,39,.3);
+  box-shadow:0 0 40px rgba(201,162,39,.2);
+  animation:logoPulse 2s ease-in-out infinite;
+}
+@keyframes logoPulse{0%,100%{box-shadow:0 0 40px rgba(201,162,39,.2);}50%{box-shadow:0 0 60px rgba(201,162,39,.4);}}
+.load-name{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:4px;
+  background:linear-gradient(135deg,#c9a227,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:5px;}
+.load-sub{font-size:11px;color:#4a6080;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;}
+.spinner-ring{
+  width:44px;height:44px;border-radius:50%;
+  border:3px solid rgba(201,162,39,.15);
+  border-top-color:#c9a227;
+  animation:spin 1s linear infinite;
+  margin-bottom:14px;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.load-msg{font-size:12px;color:#2d4060;font-weight:700;}
+
+/* ── REDIRECT PHASE ── */
+#phase-redirect{z-index:30;}
+.success-ico{font-size:56px;margin-bottom:16px;animation:bounce .6s ease-in-out infinite alternate;}
+@keyframes bounce{from{transform:translateY(0);}to{transform:translateY(-8px);}}
+.redir-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;letter-spacing:2px;
+  background:linear-gradient(135deg,#c9a227,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:8px;}
+.redir-sub{font-size:13px;color:#4a6080;font-weight:700;margin-bottom:20px;}
+.redir-btn{
+  padding:14px 32px;background:linear-gradient(135deg,#9b6e14,#e8c547);
+  border:none;border-radius:14px;color:#060f0a;font-size:14px;font-weight:800;
+  cursor:pointer;font-family:'Nunito',sans-serif;
+  box-shadow:0 4px 20px rgba(201,162,39,.35);
+}
+.redir-btn:active{transform:scale(.96);}
+</style>
+</head>
+<body>
+
+<!-- PHASE 1: LOADING -->
+<div class="phase" id="phase-loading">
+  <img src="logo.jpeg" class="logo-img-load" alt="Vexora Pro" onerror="this.style.display='none'">
+  <div class="load-name">VEXORA</div>
+  <div class="load-sub">P &nbsp; R &nbsp; O</div>
+  <div class="spinner-ring"></div>
+  <div class="load-msg" id="load-msg">Initializing...</div>
+</div>
+
+<!-- PHASE 2: AD -->
+<div class="phase hidden" id="phase-ad">
+  <iframe id="ad-iframe" src="" scrolling="yes" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"></iframe>
+  <div class="ad-bar">
+    <div class="ad-bar-left">
+      <div class="ad-bar-label">⏳ Loading destination</div>
+      <div class="ad-bar-timer" id="ad-timer">30</div>
+      <div class="ad-prog"><div class="ad-prog-fill" id="ad-fill"></div></div>
+      <div class="ad-bar-msg" id="ad-msg">Please wait while the page loads...</div>
+    </div>
+    <button class="skip-btn" id="skip-btn" onclick="goToSite()">
+      <i class="fas fa-arrow-right"></i><br>Continue
+    </button>
+  </div>
+</div>
+
+<!-- PHASE 3: REDIRECT -->
+<div class="phase hidden" id="phase-redirect">
+  <div class="success-ico">✅</div>
+  <div class="redir-title">Click Registered!</div>
+  <div class="redir-sub">Redirecting to Vexora Pro...</div>
+  <button class="redir-btn" onclick="goToSite()">
+    <i class="fas fa-rocket"></i>&nbsp; Open Vexora Pro
+  </button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   click.html — Full Flow:
+   1. Read URL params: ref, c (card number)
+   2. Register click in GAS → count for user
+   3. Show Adsterra ad for 30 seconds (earn ad revenue)
+   4. Then redirect to main site auth.html?ref=USERID
+═══════════════════════════════════════════════ */
+
+var GAS_URL   = "https://script.google.com/macros/s/AKfycbwQaEaNWzlYCW4CO-oYylobxdS7ekye3TWafPNYfkYR7oMaRJ9ME99R_HTIvgOlEStM0A/exec";
+var SITE_URL  = "https://powerstarsindhi-ux.github.io/CLICK-Eran-Pro/auth.html";
+var AD_URL    = "https://www.profitablecpmratenetwork.com/zcf4r8ctn?key=83b7821a31b4644c1f504fb786d90836";
+
+var params  = new URLSearchParams(window.location.search);
+var refId   = params.get("ref") || "";
+var cardNum = params.get("c")   || "1";
+var destURL = SITE_URL + (refId ? "?ref=" + encodeURIComponent(refId) : "");
+
+var adTimer = null;
+var timerSec = 30;
+
+/* ── STEP 1: Show loading, register click ── */
+window.addEventListener("DOMContentLoaded", async function() {
+  setMsg("Registering your click...");
+
+  // Register click in GAS (non-blocking)
+  try {
+    await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action:  "register_click",
+        ref_id:  refId,
+        country: "XX",  // GAS will detect via IP if needed
+        ua:      navigator.userAgent,
+        ts:      new Date().toISOString()
+      })
+    });
+  } catch(e) {
+    // fail silently — don't block user
+  }
+
+  setMsg("Loading destination...");
+
+  // Small delay then show ad
+  setTimeout(showAd, 1200);
+});
+
+function setMsg(txt) {
+  var el = document.getElementById("load-msg");
+  if (el) el.textContent = txt;
+}
+
+/* ── STEP 2: Show Adsterra Ad ── */
+function showAd() {
+  // Switch phases
+  document.getElementById("phase-loading").classList.add("hidden");
+  document.getElementById("phase-ad").classList.remove("hidden");
+
+  // Load Adsterra in iframe
+  document.getElementById("ad-iframe").src = AD_URL;
+
+  // Start 30s countdown
+  var fill = document.getElementById("ad-fill");
+  var timerEl = document.getElementById("ad-timer");
+  var skipBtn = document.getElementById("skip-btn");
+  var msgEl   = document.getElementById("ad-msg");
+
+  timerSec = 30;
+  timerEl.textContent = timerSec;
+
+  // Animate progress bar
+  setTimeout(function(){
+    fill.style.width = "100%";
+  }, 100);
+
+  adTimer = setInterval(function() {
+    timerSec--;
+    timerEl.textContent = timerSec;
+
+    if (timerSec <= 0) {
+      clearInterval(adTimer);
+      timerEl.textContent = "✓";
+      timerEl.className = "ad-bar-timer done";
+      msgEl.textContent = "✅ You can continue now!";
+      skipBtn.classList.add("ready");
+      skipBtn.innerHTML = '<i class="fas fa-arrow-right"></i>&nbsp; Continue';
+
+      // Auto redirect after 3 more seconds
+      setTimeout(function() {
+        goToSite();
+      }, 3000);
+    }
+  }, 1000);
+}
+
+/* ── STEP 3: Go to main site ── */
+function goToSite() {
+  clearInterval(adTimer);
+
+  // Show redirect phase briefly
+  document.getElementById("phase-ad").classList.add("hidden");
+  document.getElementById("phase-redirect").classList.remove("hidden");
+
+  // Redirect after 1.5s
+  setTimeout(function() {
+    window.location.replace(destURL);
+  }, 1500);
+}
+</script>
+</body>
+</html>
