@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://upcomingperusehike.com/50/e5/57/50e557cf9cc1005d7bf547336eed1e00.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>My Team | Vexora Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+(function() {
+  if (localStorage.getItem("psLoggedIn") !== "true" || !localStorage.getItem("psID")) {
+    window.location.replace("auth.html"); return;
+  }
+  try { window.CU = JSON.parse(localStorage.getItem("psUser")||localStorage.getItem("ps_user") || "{}"); }
+  catch(e) { localStorage.clear(); window.location.replace("auth.html"); }
+})();
+</script>
+<style>
+:root{
+  --bg:#020810;--card:#071020;--dark:#040c1a;
+  --border:rgba(201,162,39,0.15);--border2:rgba(201,162,39,0.3);
+  --gold:#c9a227;--gold2:#e8c547;--gold3:#f5d870;
+  --grad:linear-gradient(135deg,#9b6e14,#c9a227,#f0d060,#c9a227,#9b6e14);
+  --muted:#5a7090;--green:#00e676;--red:#ff3d71;--text:#d0e4ff;
+  --purple:#b085f5;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:30px;}
+
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 50% at 50% -5%,rgba(14,40,90,0.7) 0%,transparent 70%),#020810;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(201,162,39,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,0.04) 1px,transparent 1px);
+  background-size:44px 44px;}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(2,8,16,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;}
+.back-btn{width:38px;height:38px;background:rgba(201,162,39,0.07);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--gold2);text-decoration:none;font-size:14px;flex-shrink:0;transition:.2s;}
+.back-btn:active{transform:scale(.92);}
+.topbar-brand{flex:1;}
+.topbar-title{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,#c9a227,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+.topbar-sub{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:1px;text-transform:uppercase;}
+.refresh-btn{width:38px;height:38px;background:rgba(201,162,39,0.07);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gold);font-size:14px;flex-shrink:0;transition:.2s;}
+.refresh-btn:active{transform:scale(.92);}
+.refresh-btn.spinning i{animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.content{padding:16px;position:relative;z-index:1;}
+
+/* REFERRAL CARD */
+.ref-card{background:linear-gradient(145deg,#081428 0%,#050e1e 100%);border:1px solid rgba(201,162,39,0.22);border-radius:22px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(201,162,39,0.06),0 8px 32px rgba(0,0,0,0.4);}
+.ref-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a227,#f0d060,#c9a227,transparent);}
+.ref-card::after{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(201,162,39,0.10) 0%,transparent 65%);}
+
+.ref-top-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.ref-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;}
+.ref-id{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:4px;background:linear-gradient(135deg,#c9a227,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.copy-code-btn{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,#b8891e,#e8c547);color:#06100d;border:none;border-radius:11px;padding:10px 16px;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:.5px;font-family:'Nunito',sans-serif;box-shadow:0 4px 18px rgba(201,162,39,0.3);transition:.2s;flex-shrink:0;}
+.copy-code-btn:active{transform:scale(.95);}
+
+.link-box{background:rgba(4,12,26,0.8);border:1px solid rgba(201,162,39,0.18);border-radius:13px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.link-text{flex:1;font-size:11px;color:rgba(201,162,39,0.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;}
+.link-copy-btn{background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.25);color:var(--gold);border-radius:9px;padding:7px 12px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;transition:.2s;}
+.link-copy-btn:active{transform:scale(.94);}
+
+.share-row{display:flex;gap:8px;}
+.sh-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 6px;border-radius:12px;border:1px solid var(--border);font-size:11.5px;font-weight:800;cursor:pointer;transition:.2s;font-family:'Nunito',sans-serif;text-decoration:none;}
+.sh-btn:active{transform:scale(.95);}
+.sh-wa{background:rgba(37,211,102,0.07);color:#25d366;border-color:rgba(37,211,102,0.2);}
+.sh-tg{background:rgba(42,171,238,0.07);color:#29abe2;border-color:rgba(42,171,238,0.2);}
+.sh-cp{background:rgba(201,162,39,0.07);color:var(--gold2);border-color:rgba(201,162,39,0.2);}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.stat-box{background:linear-gradient(145deg,#081428,#050e1e);border:1px solid var(--border);border-radius:16px;padding:14px 6px;text-align:center;position:relative;overflow:hidden;}
+.stat-box::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:50%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,162,39,0.5),transparent);}
+.stat-val{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;color:var(--gold2);line-height:1;margin-bottom:5px;}
+.stat-val.green{color:var(--green);}
+.stat-val.red{color:var(--red);}
+.stat-val.purple{color:var(--purple);}
+.stat-lbl{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;}
+
+/* COMMISSION BOX */
+.commission-box{background:linear-gradient(135deg,rgba(201,162,39,0.09),rgba(201,162,39,0.03));border:1px solid rgba(201,162,39,0.22);border-radius:16px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.comm-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:5px;}
+.comm-val{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#c9a227,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.comm-icon{width:46px;height:46px;border-radius:13px;background:rgba(201,162,39,0.10);border:1px solid rgba(201,162,39,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;}
+
+/* RATE CARD */
+.rate-card{background:rgba(201,162,39,0.04);border:1px solid rgba(201,162,39,0.10);border-radius:14px;padding:12px 16px;margin-bottom:18px;}
+.rate-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(201,162,39,0.07);}
+.rate-row:last-child{border-bottom:none;}
+.rate-lbl{font-size:11px;color:var(--muted);font-weight:700;display:flex;align-items:center;gap:7px;}
+.rate-lbl i{color:var(--gold);font-size:10px;}
+.rate-val{font-size:12px;font-weight:800;color:var(--gold2);}
+
+/* SECTION HEADER */
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.sec-ico{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.sec-ico.gold{background:rgba(201,162,39,0.1);color:var(--gold2);}
+.sec-ico.purple{background:rgba(176,133,245,0.1);color:var(--purple);}
+.sec-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);flex:1;}
+.sec-cnt{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.2);color:var(--gold);padding:3px 10px;border-radius:20px;}
+.sec-cnt.p{background:rgba(176,133,245,0.1);border-color:rgba(176,133,245,0.2);color:var(--purple);}
+
+/* MEMBER LIST */
+.member-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;}
+.member-card{background:linear-gradient(145deg,#081428 0%,#050e1e 100%);border:1px solid var(--border);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;animation:slideUp .35s ease both;transition:border-color .2s;}
+.member-card:active{transform:scale(.99);}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.lv1-card{border-left:2px solid rgba(201,162,39,0.5);}
+.lv2-card{border-left:2px solid rgba(176,133,245,0.5);}
+
+.avatar{width:44px;height:44px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;color:#fff;}
+.lv1-card .avatar{background:linear-gradient(135deg,#9b6e14,#c9a227,#f0d060);}
+.lv2-card .avatar{background:linear-gradient(135deg,#6b3fa0,#9b6ed4,#b085f5);}
+
+.member-info{flex:1;min-width:0;}
+.m-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#e0eeff;margin-bottom:2px;}
+.m-id{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted);}
+.m-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap;}
+.m-date{font-size:9px;color:#3d527a;display:flex;align-items:center;gap:3px;}
+.m-date i{font-size:8px;}
+.lv-badge{font-size:8px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+.lv1-bd{background:rgba(201,162,39,0.12);color:var(--gold);border:1px solid rgba(201,162,39,0.2);}
+.lv2-bd{background:rgba(176,133,245,0.12);color:var(--purple);border:1px solid rgba(176,133,245,0.2);}
+
+.status-pill{font-size:10px;font-weight:800;padding:5px 10px;border-radius:20px;flex-shrink:0;display:flex;align-items:center;gap:4px;}
+.s-on{background:rgba(0,230,118,0.10);color:var(--green);border:1px solid rgba(0,230,118,0.2);}
+.s-off{background:rgba(255,61,113,0.10);color:var(--red);border:1px solid rgba(255,61,113,0.15);}
+.dot{width:5px;height:5px;border-radius:50%;}
+.s-on .dot{background:var(--green);box-shadow:0 0 6px rgba(0,230,118,0.8);}
+.s-off .dot{background:var(--red);}
+
+/* SKELETON */
+.skel-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;}
+.skel-card{background:#071020;border:1px solid var(--border);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px;}
+.sk{background:#0d1e35;border-radius:8px;animation:skPulse 1.5s ease-in-out infinite;}
+@keyframes skPulse{0%,100%{opacity:1;}50%{opacity:.2;}}
+.sk-av{width:44px;height:44px;border-radius:13px;flex-shrink:0;}
+.sk-col{flex:1;display:flex;flex-direction:column;gap:7px;}
+.sk-a{height:13px;width:48%;}
+.sk-b{height:10px;width:32%;}
+.sk-c{height:9px;width:22%;}
+
+/* EMPTY */
+.empty-wrap{display:none;text-align:center;padding:44px 20px;background:#071020;border:1px solid var(--border);border-radius:18px;margin-bottom:16px;}
+.empty-ico{font-size:48px;margin-bottom:12px;opacity:.2;}
+.empty-wrap h3{font-size:16px;font-weight:800;margin-bottom:6px;}
+.empty-wrap p{font-size:12px;color:var(--muted);line-height:1.7;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+  <div class="topbar-brand">
+    <div class="topbar-title">My Network</div>
+    <div class="topbar-sub">Referral &amp; Commission</div>
+  </div>
+  <div class="refresh-btn" id="refreshBtn" onclick="loadTeam()">
+    <i class="fas fa-rotate-right"></i>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- REFERRAL CARD -->
+  <div class="ref-card">
+    <div class="ref-top-row">
+      <div>
+        <div class="ref-lbl">Your Referral Code</div>
+        <div class="ref-id" id="myRefCode">——</div>
+      </div>
+      <button class="copy-code-btn" onclick="copyCode()">
+        <i class="fas fa-copy"></i> Copy Code
+      </button>
+    </div>
+    <div class="link-box">
+      <span class="link-text" id="refLinkText">Loading...</span>
+      <button class="link-copy-btn" onclick="copyLink()">
+        <i class="fas fa-link"></i>&nbsp;Copy Link
+      </button>
+    </div>
+    <div class="share-row">
+      <a class="sh-btn sh-wa" id="waBtn" href="#" target="_blank">
+        <i class="fa-brands fa-whatsapp" style="font-size:15px;"></i> WhatsApp
+      </a>
+      <a class="sh-btn sh-tg" id="tgBtn" href="#" target="_blank">
+        <i class="fa-brands fa-telegram" style="font-size:15px;"></i> Telegram
+      </a>
+      <button class="sh-btn sh-cp" onclick="copyLink()">
+        <i class="fas fa-share-nodes" style="font-size:13px;"></i> Share
+      </button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="stat-val" id="totalCount">—</div>
+      <div class="stat-lbl">Total Team</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val green" id="l1Count">—</div>
+      <div class="stat-lbl">Level 1</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val purple" id="l2Count">—</div>
+      <div class="stat-lbl">Level 2</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="activeCount">—</div>
+      <div class="stat-lbl">Active</div>
+    </div>
+  </div>
+
+  <!-- COMMISSION -->
+  <div class="commission-box">
+    <div>
+      <div class="comm-lbl">Total Commission Earned</div>
+      <div class="comm-val" id="commEarned">Rs. 0.00</div>
+    </div>
+    <div class="comm-icon">💰</div>
+  </div>
+
+  <!-- RATE INFO -->
+  <div class="rate-card">
+    <div class="rate-row">
+      <div class="rate-lbl"><i class="fas fa-star"></i> Level 1 Commission</div>
+      <div class="rate-val">5% per earning</div>
+    </div>
+    <div class="rate-row">
+      <div class="rate-lbl"><i class="fas fa-layer-group"></i> Level 2 Commission</div>
+      <div class="rate-val">2% per earning</div>
+    </div>
+    <div class="rate-row">
+      <div class="rate-lbl"><i class="fas fa-bolt"></i> Payment Type</div>
+      <div class="rate-val">Auto · Instant</div>
+    </div>
+  </div>
+
+  <!-- LEVEL 1 -->
+  <div class="sec-hdr">
+    <div class="sec-ico gold"><i class="fas fa-star"></i></div>
+    <div class="sec-lbl">Level 1 — Direct Referrals</div>
+    <div class="sec-cnt" id="l1Badge">0</div>
+  </div>
+  <div class="skel-list" id="skel1">
+    <div class="skel-card"><div class="sk sk-av"></div><div class="sk-col"><div class="sk sk-a"></div><div class="sk sk-b"></div><div class="sk sk-c"></div></div></div>
+    <div class="skel-card"><div class="sk sk-av"></div><div class="sk-col"><div class="sk sk-a"></div><div class="sk sk-b"></div></div></div>
+  </div>
+  <div class="member-list" id="list1"></div>
+  <div class="empty-wrap" id="empty1">
+    <div class="empty-ico">🌱</div>
+    <h3>No Direct Referrals Yet</h3>
+    <p>Share your referral link<br>and earn 5% from their earnings!</p>
+  </div>
+
+  <!-- LEVEL 2 -->
+  <div class="sec-hdr">
+    <div class="sec-ico purple"><i class="fas fa-layer-group"></i></div>
+    <div class="sec-lbl">Level 2 — Indirect Referrals</div>
+    <div class="sec-cnt p" id="l2Badge">0</div>
+  </div>
+  <div class="skel-list" id="skel2">
+    <div class="skel-card"><div class="sk sk-av"></div><div class="sk-col"><div class="sk sk-a"></div><div class="sk sk-b"></div></div></div>
+  </div>
+  <div class="member-list" id="list2"></div>
+  <div class="empty-wrap" id="empty2">
+    <div class="empty-ico">🔗</div>
+    <h3>No Level 2 Members Yet</h3>
+    <p>When your Level 1 members<br>refer others, they appear here!</p>
+  </div>
+
+</div>
+
+<script>
+const GAS_URL  = "https://script.google.com/macros/s/AKfycbwuDQABehGm14hy_PBoIauJYiTPljCKu44pQ88Ua5QDG2bUZ-PX5NbIwLr4hDnAlIzxfw/exec";
+const userId   = window.CU.user_id || "";
+const siteBase = "http://vexorainternational.online/auth.html";
+const refLink  = siteBase + "?ref=" + userId;
+
+document.getElementById("myRefCode").textContent  = userId || "—";
+document.getElementById("refLinkText").textContent = refLink;
+document.getElementById("waBtn").href = "https://wa.me/?text=" + encodeURIComponent("🚀 Join Vexora Pro! Watch Ads & Earn Daily!\n" + refLink);
+document.getElementById("tgBtn").href = "https://t.me/share/url?url=" + encodeURIComponent(refLink) + "&text=" + encodeURIComponent("🚀 Join Vexora Pro & Earn Daily!");
+
+function copyCode() {
+  navigator.clipboard.writeText(userId).then(function() {
+    Swal.fire({ icon:"success", title:"Code Copied! ✅", text:userId, timer:1400, showConfirmButton:false, background:"#071020", color:"#d0e4ff" });
+  });
+}
+function copyLink() {
+  navigator.clipboard.writeText(refLink).then(function() {
+    Swal.fire({ icon:"success", title:"Link Copied! 🔗", text:"Share karo aur kamao!", timer:1400, showConfirmButton:false, background:"#071020", color:"#d0e4ff" });
+  });
+}
+
+async function loadTeam() {
+  var btn = document.getElementById("refreshBtn");
+  btn.classList.add("spinning");
+  ["skel1","skel2"].forEach(function(id){ document.getElementById(id).style.display = "flex"; });
+  ["list1","list2"].forEach(function(id){ document.getElementById(id).innerHTML = ""; });
+  ["empty1","empty2"].forEach(function(id){ document.getElementById(id).style.display = "none"; });
+  ["totalCount","l1Count","l2Count","activeCount"].forEach(function(id){ document.getElementById(id).textContent = "—"; });
+
+  try {
+    var res  = await fetch(GAS_URL + "?type=get_team&userId=" + encodeURIComponent(userId));
+    var data = await res.json();
+
+    ["skel1","skel2"].forEach(function(id){ document.getElementById(id).style.display = "none"; });
+    btn.classList.remove("spinning");
+
+    if (data.status !== "success") {
+      Swal.fire({ title:"Error", text:data.message || "Team load nahi hui.", icon:"error", background:"#071020", color:"#d0e4ff" });
+      return;
+    }
+
+    // Support both old (data.team) and new (data.level1/level2) format
+    var l1 = data.level1 || (data.team ? data.team.filter(function(m){ return (m.level||1) === 1; }) : []);
+    var l2 = data.level2 || (data.team ? data.team.filter(function(m){ return m.level === 2; }) : []);
+    var total     = data.total_team || (l1.length + l2.length);
+    var totalComm = data.total_commission || 0;
+    var activeAll = l1.filter(function(m){ return !m.status || m.status.toLowerCase() === "active"; }).length;
+
+    document.getElementById("totalCount").textContent = total;
+    document.getElementById("l1Count").textContent    = l1.length;
+    document.getElementById("l2Count").textContent    = l2.length;
+    document.getElementById("activeCount").textContent= activeAll;
+    document.getElementById("l1Badge").textContent    = l1.length;
+    document.getElementById("l2Badge").textContent    = l2.length;
+    document.getElementById("commEarned").textContent = "Rs. " + parseFloat(totalComm).toFixed(2);
+
+    renderMembers("list1","empty1", l1, 1);
+    renderMembers("list2","empty2", l2, 2);
+
+  } catch(err) {
+    ["skel1","skel2"].forEach(function(id){ document.getElementById(id).style.display = "none"; });
+    btn.classList.remove("spinning");
+    Swal.fire({ title:"Connection Error", text:"Internet check karein.", icon:"error", background:"#071020", color:"#d0e4ff" });
+  }
+}
+
+function renderMembers(listId, emptyId, members, level) {
+  var list = document.getElementById(listId);
+  list.innerHTML = "";
+  if (!members || members.length === 0) {
+    document.getElementById(emptyId).style.display = "block"; return;
+  }
+  var isLv1   = level === 1;
+  var bdCls   = isLv1 ? "lv1-bd" : "lv2-bd";
+  var cardCls = isLv1 ? "lv1-card" : "lv2-card";
+
+  members.forEach(function(m, i) {
+    var initial  = (m.name || "?").charAt(0).toUpperCase();
+    var isActive = !m.status || m.status.toLowerCase() === "active";
+    var joined   = fmtDate(m.joined_at || m.joined || "");
+
+    var card = document.createElement("div");
+    card.className = "member-card " + cardCls;
+    card.style.animationDelay = (i * 0.06) + "s";
+    card.innerHTML =
+      '<div class="avatar">' + initial + '</div>' +
+      '<div class="member-info">' +
+        '<div class="m-name">' + esc(m.name || "Unknown") + '</div>' +
+        '<div class="m-id">' + esc(m.user_id || "") + '</div>' +
+        '<div class="m-meta">' +
+          '<span class="m-date"><i class="fas fa-calendar-alt"></i>' + joined + '</span>' +
+          '<span class="lv-badge ' + bdCls + '">Level ' + level + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<span class="status-pill ' + (isActive ? 's-on' : 's-off') + '">' +
+        '<span class="dot"></span>' + (isActive ? 'Active' : 'Inactive') +
+      '</span>';
+    list.appendChild(card);
+  });
+}
+
+function fmtDate(iso) {
+  if (!iso) return "—";
+  try { return new Date(iso).toLocaleDateString("en-PK",{day:"2-digit",month:"short",year:"numeric"}); }
+  catch(e) { return "—"; }
+}
+function esc(s) {
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+window.addEventListener("load", loadTeam);
+</script>
+</body>
+</html>
