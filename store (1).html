@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Digital Reseller Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070e;--card:#0c1120;--card2:#0f1628;--card3:#111d32;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --gold:#f5c842;--goldd:#c9991a;--gold2:#fde68a;
+  --green:#22c55e;--blue:#3b82f6;--purple:#a855f7;--red:#ef4444;
+  --sub:#64748b;--sub2:#94a3b8;--text:#e2e8f0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{min-height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 50% at 50% -5%,rgba(245,200,66,0.12) 0%,transparent 65%),
+             radial-gradient(ellipse 50% 40% at 90% 85%,rgba(59,130,246,0.07) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 35% at 5% 70%,rgba(168,85,247,0.06) 0%,transparent 50%);}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .5s;}
+.ld-icon{width:68px;height:68px;border-radius:20px;background:linear-gradient(135deg,var(--gold),var(--goldd));display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 0 35px rgba(245,200,66,0.4);animation:ldP 1.6s infinite;}
+@keyframes ldP{0%,100%{box-shadow:0 0 20px rgba(245,200,66,0.3);}50%{box-shadow:0 0 50px rgba(245,200,66,0.65);}}
+.ld-title{font-size:20px;font-weight:900;color:#fff;}.ld-title span{color:var(--gold);}
+.ld-dots{display:flex;gap:7px;}
+.ld-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);opacity:.2;animation:ldB 1.3s infinite;}
+.ld-dot:nth-child(2){animation-delay:.18s;}.ld-dot:nth-child(3){animation-delay:.36s;}
+@keyframes ldB{0%,80%,100%{opacity:.15;transform:scale(.75);}40%{opacity:1;transform:scale(1.3);}}
+
+/* TOAST */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(16px);background:rgba(12,18,36,0.96);backdrop-filter:blur(16px);border:1px solid var(--border2);color:#fff;font-size:13px;font-weight:700;padding:13px 26px;border-radius:40px;opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1);z-index:99999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 0 80px;}
+
+/* HEADER */
+.hdr{padding:28px 20px 22px;text-align:center;border-bottom:1px solid var(--border);}
+.hdr-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);color:var(--gold);font-size:10px;font-weight:800;padding:5px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:1.5px;}
+.hdr-logo{width:62px;height:62px;border-radius:18px;margin:0 auto 14px;background:linear-gradient(135deg,var(--gold),var(--goldd));display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 0 26px rgba(245,200,66,0.32);}
+.hdr-title{font-size:25px;font-weight:900;color:#fff;line-height:1.15;}
+.hdr-title span{color:transparent;background:linear-gradient(135deg,var(--gold),#fbbf24,var(--gold2));-webkit-background-clip:text;background-clip:text;}
+.hdr-sub{font-size:12px;color:var(--sub2);margin-top:6px;}
+.status-pill{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.22);color:var(--green);font-size:11px;font-weight:700;padding:6px 16px;border-radius:20px;}
+.s-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.8s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.15;}}
+
+/* BANNERS */
+.upline-banner{margin:14px 14px 0;background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(99,102,241,0.05));border:1px solid rgba(168,85,247,0.25);border-radius:16px;padding:13px 16px;display:none;align-items:center;gap:12px;}
+.upline-banner.show{display:flex;}
+.ubl-icon{font-size:24px;flex-shrink:0;}
+.ubl-info small{font-size:10px;color:var(--sub);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.ubl-info b{display:block;font-size:13px;color:#c084fc;font-weight:800;margin-top:1px;}
+.ubl-info span{display:block;font-size:11px;color:var(--sub2);margin-top:1px;}
+
+.user-badge{margin:12px 14px 0;background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.18);border-radius:14px;padding:11px 15px;display:none;align-items:center;gap:11px;}
+.user-badge.show{display:flex;}
+.ub-av{width:36px;height:36px;border-radius:10px;background:rgba(59,130,246,0.15);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.ub-info2 small{font-size:10px;color:var(--sub);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.ub-info2 b{display:block;font-size:13px;color:#93c5fd;font-weight:800;margin-top:1px;}
+
+.pending-bar{margin:12px 14px 0;background:rgba(245,200,66,0.07);border:1px solid rgba(245,200,66,0.2);border-radius:14px;padding:12px 15px;display:none;align-items:center;gap:10px;}
+.pending-bar.show{display:flex;}
+.pb-text small{font-size:10px;color:var(--sub);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.pb-text b{display:block;font-size:12px;color:var(--gold2);font-weight:700;margin-top:1px;}
+
+/* SECTION LABEL */
+.sec-lbl{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--sub);padding:22px 20px 13px;display:flex;align-items:center;gap:10px;}
+.sec-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
+
+/* ══════════════════════════════════
+   ATM CARDS
+══════════════════════════════════ */
+.cards-wrap{display:flex;flex-direction:column;gap:20px;padding:0 14px;}
+.atm-card{border-radius:24px;padding:22px 22px 18px;position:relative;overflow:hidden;min-height:200px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .2s,box-shadow .2s;}
+.atm-card:active{transform:scale(.982);}
+.card-blue{background:linear-gradient(135deg,#0f1f4a 0%,#1a3a7a 55%,#0d2860 100%);border:1px solid rgba(59,130,246,0.3);box-shadow:0 12px 40px rgba(14,31,80,0.55),inset 0 1px 0 rgba(255,255,255,0.07);}
+.card-purple{background:linear-gradient(135deg,#1a0d3d 0%,#3b1a7a 55%,#220d55 100%);border:1px solid rgba(168,85,247,0.3);box-shadow:0 12px 40px rgba(26,13,61,0.55),inset 0 1px 0 rgba(255,255,255,0.07);}
+.card-gold{background:linear-gradient(135deg,#1a1200 0%,#3d2d00 55%,#241800 100%);border:1px solid rgba(245,200,66,0.32);box-shadow:0 12px 40px rgba(30,20,0,0.65),inset 0 1px 0 rgba(245,200,66,0.1);}
+.atm-card::before{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.04) 50%,transparent 60%);pointer-events:none;}
+.atm-card::after{content:'';position:absolute;right:-40px;bottom:-40px;width:180px;height:180px;border-radius:50%;opacity:.12;pointer-events:none;}
+.card-blue::after{background:radial-gradient(circle,#3b82f6,transparent);}
+.card-purple::after{background:radial-gradient(circle,#a855f7,transparent);}
+.card-gold::after{background:radial-gradient(circle,var(--gold),transparent);}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;z-index:1;position:relative;}
+.card-brand{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:.55;color:#fff;}
+.card-badge{font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:20px;}
+.card-blue .card-badge{background:rgba(59,130,246,0.25);color:#93c5fd;border:1px solid rgba(59,130,246,0.4);}
+.card-purple .card-badge{background:rgba(168,85,247,0.25);color:#d8b4fe;border:1px solid rgba(168,85,247,0.4);}
+.card-gold .card-badge{background:rgba(245,200,66,0.18);color:var(--gold);border:1px solid rgba(245,200,66,0.4);}
+
+/* Chip */
+.card-chip{width:38px;height:28px;border-radius:6px;margin:12px 0 8px;background:linear-gradient(135deg,#d4a843,#f0c44a,#b8901a);position:relative;z-index:1;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+.card-chip::before{content:'';position:absolute;inset:0;border-radius:6px;background:repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(0,0,0,0.12) 4px,rgba(0,0,0,0.12) 5px),repeating-linear-gradient(90deg,transparent,transparent 8px,rgba(0,0,0,0.08) 8px,rgba(0,0,0,0.08) 9px);}
+
+.card-mid{position:relative;z-index:1;}
+.card-name{font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;}
+.card-desc{font-size:11px;color:rgba(255,255,255,0.48);line-height:1.5;}
+
+/* Perks */
+.card-perks{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;position:relative;z-index:1;}
+.c-perk{font-size:9px;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.07);}
+
+/* Bottom row */
+.card-bottom{display:flex;align-items:flex-end;justify-content:space-between;position:relative;z-index:1;margin-top:12px;}
+.card-price-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;opacity:.5;color:#fff;margin-bottom:2px;}
+.card-price{font-size:28px;font-weight:900;line-height:1;}
+.card-blue .card-price{color:#93c5fd;}.card-purple .card-price{color:#d8b4fe;}.card-gold .card-price{color:var(--gold);}
+
+/* Active tag */
+.active-tag{display:none;align-items:center;gap:5px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.35);color:var(--green);font-size:10px;font-weight:800;padding:5px 12px;border-radius:20px;}
+.active-tag.show{display:flex;}
+.active-dot{width:5px;height:5px;border-radius:50%;background:var(--green);}
+
+/* Status tags on card */
+.pending-tag{display:none;width:100%;margin-top:10px;z-index:1;position:relative;background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.22);border-radius:12px;padding:9px 13px;font-size:11px;color:var(--gold2);font-weight:700;align-items:center;gap:7px;}
+.pending-tag.show{display:flex;}
+.locked-note{display:none;width:100%;margin-top:10px;z-index:1;position:relative;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.18);border-radius:12px;padding:9px 13px;font-size:11px;color:#fca5a5;font-weight:700;align-items:center;gap:7px;}
+.locked-note.show{display:flex;}
+.upgrade-tag{display:none;width:100%;margin-top:10px;z-index:1;position:relative;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.22);border-radius:12px;padding:8px 13px;font-size:11px;color:#93c5fd;font-weight:700;align-items:center;gap:6px;}
+.upgrade-tag.show{display:flex;}
+
+/* Buttons row on card */
+.card-btns{display:flex;flex-direction:column;gap:8px;margin-top:14px;position:relative;z-index:1;}
+.btn-buy{width:100%;border:none;font-weight:800;font-size:13px;letter-spacing:.3px;padding:13px;border-radius:13px;cursor:pointer;font-family:'Outfit',sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .15s,transform .15s;}
+.btn-buy:active{transform:scale(.96);opacity:.85;}
+.card-blue  .btn-buy{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;box-shadow:0 5px 16px rgba(59,130,246,0.35);}
+.card-purple .btn-buy{background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;box-shadow:0 5px 16px rgba(168,85,247,0.35);}
+.card-gold  .btn-buy{background:linear-gradient(135deg,var(--gold),var(--goldd));color:#000;box-shadow:0 5px 16px rgba(245,200,66,0.3);}
+.btn-upgrade{width:100%;border:none;font-weight:800;font-size:13px;padding:13px;border-radius:13px;cursor:pointer;font-family:'Outfit',sans-serif;display:none;align-items:center;justify-content:center;gap:7px;transition:opacity .15s,transform .15s;background:rgba(59,130,246,0.15);border:1.5px solid rgba(59,130,246,0.35);color:#93c5fd;}
+.btn-upgrade.show{display:flex;}
+.btn-upgrade:active{transform:scale(.96);}
+.btn-portal{width:100%;border:none;font-weight:800;font-size:13px;padding:13px;border-radius:13px;cursor:pointer;font-family:'Outfit',sans-serif;display:none;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;box-shadow:0 5px 16px rgba(34,197,94,0.28);}
+.btn-portal.show{display:flex;}
+.btn-portal:active{transform:scale(.96);opacity:.85;}
+
+/* Secondary action buttons */
+.card-actions2{display:flex;gap:8px;margin-top:8px;position:relative;z-index:1;}
+.btn-wa{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(37,211,102,0.1);border:1.5px solid rgba(37,211,102,0.3);color:#4ade80;font-size:12px;font-weight:700;padding:10px;border-radius:12px;cursor:pointer;font-family:'Outfit',sans-serif;text-decoration:none;transition:opacity .15s;}
+.btn-wa:active{opacity:.7;}
+.btn-details{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.05);border:1.5px solid var(--border2);color:var(--sub2);font-size:12px;font-weight:700;padding:10px;border-radius:12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:opacity .15s;}
+.btn-details:active{opacity:.7;}
+
+/* Card locked */
+.card-locked{opacity:.35;filter:saturate(0.2);}
+.card-locked .btn-buy,.card-locked .card-actions2{pointer-events:none;}
+
+/* ══════════════════════════════════
+   MODALS
+══════════════════════════════════ */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(6px);z-index:9000;align-items:flex-end;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal-sheet{background:#0f1628;border-radius:28px 28px 0 0;border-top:1px solid var(--border2);width:100%;max-width:480px;padding:22px 20px 44px;animation:slideUp .32s cubic-bezier(.34,1.3,.64,1);max-height:92vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.m-handle{width:38px;height:4px;background:rgba(255,255,255,0.1);border-radius:4px;margin:0 auto 18px;}
+.m-title{font-size:18px;font-weight:800;color:#fff;margin-bottom:3px;}
+.m-sub{font-size:12px;color:var(--sub2);margin-bottom:16px;line-height:1.5;}
+
+/* Payment receiver indicator */
+.receiver-box{border-radius:14px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:11px;}
+.receiver-box.upline{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.28);}
+.receiver-box.admin{background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.22);}
+.receiver-icon{font-size:24px;flex-shrink:0;}
+.receiver-info small{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.receiver-box.upline .receiver-info small{color:var(--sub);}
+.receiver-box.admin  .receiver-info small{color:var(--sub);}
+.receiver-info b{display:block;font-size:13px;font-weight:800;margin-top:2px;}
+.receiver-box.upline .receiver-info b{color:#c084fc;}
+.receiver-box.admin  .receiver-info b{color:var(--gold);}
+.receiver-info span{display:block;font-size:11px;margin-top:1px;}
+.receiver-box.upline .receiver-info span{color:var(--sub2);}
+.receiver-box.admin  .receiver-info span{color:var(--sub2);}
+
+.amount-box{background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(245,200,66,0.03));border:1px solid rgba(245,200,66,0.22);border-radius:16px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.ab-left small{font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;}
+.ab-left b{display:block;font-size:28px;font-weight:900;color:var(--gold);line-height:1.1;}
+.ab-left span{font-size:11px;color:var(--sub2);margin-top:2px;display:block;}
+
+.acc-card{background:var(--card3);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:14px;}
+.acc-head{padding:8px 15px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border);font-size:10px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:1px;}
+.acc-row{display:flex;justify-content:space-between;align-items:center;padding:11px 15px;}
+.acc-row:not(:last-child){border-bottom:1px solid var(--border);}
+.acc-key{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;}
+.acc-val{font-size:14px;font-weight:800;color:#fff;}
+.acc-num{color:var(--green);font-size:17px;letter-spacing:1.5px;}
+.copy-btn{background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);color:var(--gold);font-size:10px;font-weight:700;padding:5px 11px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;}
+.copy-btn:active{opacity:.6;}
+
+.info-note{background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.18);border-radius:12px;padding:10px 13px;font-size:12px;color:#93c5fd;line-height:1.7;margin-bottom:14px;display:flex;gap:9px;align-items:flex-start;}
+.info-note.green{background:rgba(34,197,94,0.07);border-color:rgba(34,197,94,0.18);color:#86efac;}
+.info-note.gold{background:rgba(245,200,66,0.07);border-color:rgba(245,200,66,0.2);color:var(--gold2);}
+.info-note.orange{background:rgba(249,115,22,0.07);border-color:rgba(249,115,22,0.22);color:#fdba74;}
+
+.form-group{margin-bottom:13px;}
+.form-label{font-size:11px;font-weight:700;color:var(--sub2);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:7px;}
+.form-inp{width:100%;background:var(--card3);border:1.5px solid var(--border2);color:#fff;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;padding:12px 15px;border-radius:13px;outline:none;transition:border-color .2s;}
+.form-inp::placeholder{color:var(--sub);}
+.form-inp:focus{border-color:rgba(245,200,66,0.4);box-shadow:0 0 0 3px rgba(245,200,66,0.07);}
+.upload-box{width:100%;border:2px dashed var(--border2);border-radius:14px;background:var(--card3);padding:20px;text-align:center;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color .2s;}
+.upload-box:hover{border-color:rgba(245,200,66,0.35);}
+.upload-box input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-icon{font-size:28px;}.upload-text{font-size:13px;font-weight:700;color:var(--sub2);}.upload-sub{font-size:11px;color:var(--sub);}
+.upload-preview{width:100%;border-radius:12px;overflow:hidden;margin-top:4px;display:none;position:relative;}
+.upload-preview img{width:100%;max-height:160px;object-fit:cover;border-radius:12px;}
+.upload-preview .remove-img{position:absolute;top:8px;right:8px;background:rgba(239,68,68,0.85);border:none;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;}
+
+.btn-primary{width:100%;border:none;font-weight:800;font-size:15px;padding:15px;border-radius:16px;cursor:pointer;font-family:'Outfit',sans-serif;display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .15s,transform .15s;}
+.btn-primary:active{opacity:.85;transform:scale(.98);}
+.btn-primary.gold{background:linear-gradient(135deg,var(--gold),var(--goldd));color:#000;box-shadow:0 6px 20px rgba(245,200,66,0.28);}
+.btn-primary:disabled{background:var(--card3);color:var(--sub);cursor:not-allowed;box-shadow:none;}
+.btn-ghost{width:100%;background:none;border:1px solid var(--border2);color:var(--sub);font-weight:700;font-size:13px;padding:12px;border-radius:14px;cursor:pointer;font-family:'Outfit',sans-serif;margin-top:10px;}
+
+/* PRODUCT DETAILS MODAL */
+.detail-hero{text-align:center;padding:16px 0 12px;}
+.detail-icon{font-size:48px;margin-bottom:8px;}
+.detail-name{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px;}
+.detail-price{font-size:24px;font-weight:900;color:var(--gold);}
+.detail-divider{height:1px;background:var(--border);margin:14px 0;}
+.detail-section{margin-bottom:14px;}
+.detail-section h4{font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.detail-feature{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.detail-feature:last-child{border-bottom:none;}
+.df-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.df-text{font-size:13px;color:var(--sub2);font-weight:500;line-height:1.4;}
+
+.footer{text-align:center;padding:28px 20px 10px;font-size:11px;color:var(--sub);line-height:1.8;}
+.footer b{color:var(--sub2);}
+
+/* ACCOUNT SETUP MODAL */
+.setup-banner{margin:12px 14px 0;background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(34,197,94,0.03));border:1px solid rgba(34,197,94,0.28);border-radius:14px;padding:13px 16px;display:none;align-items:center;gap:11px;cursor:pointer;}
+.setup-banner.show{display:flex;}
+.setup-banner .sb-icon{font-size:24px;flex-shrink:0;}
+.setup-banner .sb-text small{font-size:10px;color:var(--sub);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.setup-banner .sb-text b{display:block;font-size:13px;color:var(--green);font-weight:800;margin-top:1px;}
+.setup-select{width:100%;background:var(--card3);border:1.5px solid var(--border2);color:#fff;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;padding:12px 15px;border-radius:13px;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;}
+.setup-select:focus{border-color:rgba(34,197,94,0.4);box-shadow:0 0 0 3px rgba(34,197,94,0.07);}
+.setup-select option{background:#0f1628;}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-icon">🏪</div>
+  <div class="ld-title">Digital <span>Reseller</span></div>
+  <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<div class="page">
+
+  <div class="hdr">
+    <div class="hdr-eyebrow">⚡ Official Store</div>
+    <div class="hdr-logo">🏪</div>
+    <h1 class="hdr-title">Digital <span>Reseller</span> Store</h1>
+    <p class="hdr-sub">Choose a plan · Get verified · Start earning</p>
+    <div class="status-pill"><span class="s-dot"></span><span id="status-txt">Checking...</span></div>
+  </div>
+
+  <!-- UPLINE BANNER -->
+  <div class="upline-banner" id="upline-banner">
+    <div class="ubl-icon">🔗</div>
+    <div class="ubl-info">
+      <small>Your Upline / Seller</small>
+      <b id="upline-id-txt">---</b>
+      <span id="upline-plan-txt"></span>
+    </div>
+  </div>
+
+  <!-- USER BADGE -->
+  <div class="user-badge" id="user-badge">
+    <div class="ub-av">👤</div>
+    <div class="ub-info2">
+      <small>Logged In As</small>
+      <b id="user-id-display">---</b>
+    </div>
+  </div>
+
+  <!-- PENDING BANNER -->
+  <div class="pending-bar" id="pending-bar">
+    <span style="font-size:22px;">⏳</span>
+    <div class="pb-text">
+      <small>Application Status</small>
+      <b id="pending-bar-msg">Payment under review — please wait</b>
+    </div>
+  </div>
+
+  <!-- ACCOUNT SETUP BANNER (shows after Approval if no account saved) -->
+  <div class="setup-banner" id="setup-banner" onclick="openModal('account-modal')">
+    <div class="sb-icon">🏦</div>
+    <div class="sb-text">
+      <small>Action Required</small>
+      <b>✅ Approved! Tap to set your payment account</b>
+    </div>
+  </div>
+
+  <div class="sec-lbl">Choose Your Plan</div>
+  <div class="cards-wrap">
+
+    <!-- ══ CARD 1: Rs.200 Starter ══ -->
+    <div class="atm-card card-blue" id="card-200"
+         data-product="Basic Canva Bundle" data-price="200"
+         data-portal="https://YOUR-PORTAL-LINK-200.com" data-portal2="https://YOUR-DASHBOARD-LINK.com">
+      <div>
+        <div class="card-top">
+          <div class="card-brand">Reseller Plan</div>
+          <span class="card-badge">Starter</span>
+        </div>
+        <div class="card-chip"></div>
+        <div class="card-mid">
+          <div class="card-name">Basic Canva Bundle</div>
+          <div class="card-desc">200+ premium Canva templates — social media, posters, stories & thumbnails</div>
+        </div>
+        <div class="card-perks">
+          <span class="c-perk">📁 200+ Templates</span>
+          <span class="c-perk">🎨 Fully Editable</span>
+          <span class="c-perk">📱 Social Ready</span>
+        </div>
+      </div>
+      <div>
+        <div class="card-bottom">
+          <div>
+            <div class="card-price-lbl">Plan Price</div>
+            <div class="card-price">Rs. 200</div>
+          </div>
+          <div class="active-tag" id="active-200"><span class="active-dot"></span> Active</div>
+        </div>
+        <div class="card-btns">
+          <button class="btn-buy" id="buy-200" onclick="openBuyModal('Basic Canva Bundle',200,false)">🛒 Buy Now</button>
+          <button class="btn-upgrade" id="upgrade-200" onclick="openBuyModal('Basic Canva Bundle',200,true)">⬆️ Upgrade to This Plan</button>
+          <button class="btn-portal" id="portal-200" onclick="openPortal('card-200','portal1')">🚀 Product Access</button>
+        </div>
+        <div class="card-actions2">
+          <a class="btn-wa" id="wa-200" href="#" onclick="return false;">💬 WhatsApp Seller</a>
+          <button class="btn-details" onclick="openDetails('Basic Canva Bundle',200)">ℹ️ View Details</button>
+        </div>
+        <div class="pending-tag" id="pending-200">⏳ Waiting for verification...</div>
+        <div class="upgrade-tag" id="upgrd-200">⬆️ Upgrade available</div>
+        <div class="locked-note" id="lock-200">🔒 Not available</div>
+      </div>
+    </div>
+
+    <!-- ══ CARD 2: Rs.300 Popular ══ -->
+    <div class="atm-card card-purple" id="card-300"
+         data-product="Marketing Master Guide" data-price="300"
+         data-portal="https://YOUR-PORTAL-LINK-300.com" data-portal2="https://YOUR-DASHBOARD-LINK.com">
+      <div>
+        <div class="card-top">
+          <div class="card-brand">Reseller Plan</div>
+          <span class="card-badge">🔥 Popular</span>
+        </div>
+        <div class="card-chip"></div>
+        <div class="card-mid">
+          <div class="card-name">Marketing Master Guide</div>
+          <div class="card-desc">Complete digital marketing course — Facebook, Instagram, WhatsApp ads & funnels</div>
+        </div>
+        <div class="card-perks">
+          <span class="c-perk">📘 Full Course</span>
+          <span class="c-perk">📲 Social Ads</span>
+          <span class="c-perk">💡 Sales Funnels</span>
+        </div>
+      </div>
+      <div>
+        <div class="card-bottom">
+          <div>
+            <div class="card-price-lbl">Plan Price</div>
+            <div class="card-price">Rs. 300</div>
+          </div>
+          <div class="active-tag" id="active-300"><span class="active-dot"></span> Active</div>
+        </div>
+        <div class="card-btns">
+          <button class="btn-buy" id="buy-300" onclick="openBuyModal('Marketing Master Guide',300,false)">🛒 Buy Now</button>
+          <button class="btn-upgrade" id="upgrade-300" onclick="openBuyModal('Marketing Master Guide',300,true)">⬆️ Upgrade to This Plan</button>
+          <button class="btn-portal" id="portal-300" onclick="openPortal('card-300','portal1')">🚀 Product Access</button>
+        </div>
+        <div class="card-actions2">
+          <a class="btn-wa" id="wa-300" href="#" onclick="return false;">💬 WhatsApp Seller</a>
+          <button class="btn-details" onclick="openDetails('Marketing Master Guide',300)">ℹ️ View Details</button>
+        </div>
+        <div class="pending-tag" id="pending-300">⏳ Waiting for verification...</div>
+        <div class="upgrade-tag" id="upgrd-300">⬆️ Upgrade available</div>
+        <div class="locked-note" id="lock-300">🔒 Not available</div>
+      </div>
+    </div>
+
+    <!-- ══ CARD 3: Rs.500 Best Value ══ -->
+    <div class="atm-card card-gold" id="card-500"
+         data-product="Master Reseller Rights" data-price="500"
+         data-portal="https://YOUR-PORTAL-LINK-500.com" data-portal2="https://YOUR-DASHBOARD-LINK.com">
+      <div>
+        <div class="card-top">
+          <div class="card-brand">Reseller Plan</div>
+          <span class="card-badge">⭐ Best Value</span>
+        </div>
+        <div class="card-chip"></div>
+        <div class="card-mid">
+          <div class="card-name">Master Reseller Rights</div>
+          <div class="card-desc">Resell all products with unlimited earning potential, full rights & support</div>
+        </div>
+        <div class="card-perks">
+          <span class="c-perk">♾️ Unlimited Earn</span>
+          <span class="c-perk">🔑 Full Rights</span>
+          <span class="c-perk">🤝 Support</span>
+        </div>
+      </div>
+      <div>
+        <div class="card-bottom">
+          <div>
+            <div class="card-price-lbl">Plan Price</div>
+            <div class="card-price">Rs. 500</div>
+          </div>
+          <div class="active-tag" id="active-500"><span class="active-dot"></span> Active</div>
+        </div>
+        <div class="card-btns">
+          <button class="btn-buy" id="buy-500" onclick="openBuyModal('Master Reseller Rights',500,false)">🛒 Buy Now</button>
+          <button class="btn-upgrade" id="upgrade-500" onclick="openBuyModal('Master Reseller Rights',500,true)">⬆️ Upgrade to This Plan</button>
+          <button class="btn-portal" id="portal-500" onclick="openPortal('card-500','portal1')">🚀 Product Access</button>
+        </div>
+        <div class="card-actions2">
+          <a class="btn-wa" id="wa-500" href="#" onclick="return false;">💬 WhatsApp Seller</a>
+          <button class="btn-details" onclick="openDetails('Master Reseller Rights',500)">ℹ️ View Details</button>
+        </div>
+        <div class="pending-tag" id="pending-500">⏳ Waiting for verification...</div>
+        <div class="upgrade-tag" id="upgrd-500">⬆️ Upgrade available</div>
+        <div class="locked-note" id="lock-500">🔒 Not available</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SINGLE MY DASHBOARD BUTTON (shows only when Approved) -->
+  <div id="my-dashboard-wrap" style="display:none;padding:0 14px;margin-top:16px;">
+    <a href="upline.html" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,#334155,#1e293b);border:1.5px solid rgba(255,255,255,0.12);color:#e2e8f0;font-size:14px;font-weight:800;padding:15px;border-radius:16px;text-decoration:none;box-shadow:0 5px 16px rgba(0,0,0,0.3);font-family:'Outfit',sans-serif;">
+      📋 My Dashboard
+    </a>
+  </div>
+
+  <div class="footer">© 2026 <b>Digital Reseller Platform</b><br>Powered by Google Apps Script</div>
+</div>
+
+<!-- ══ BUY MODAL ══ -->
+<div class="modal-backdrop" id="buy-modal">
+  <div class="modal-sheet">
+    <div class="m-handle"></div>
+    <div class="m-title" id="m-product-name">Plan Purchase</div>
+    <div class="m-sub" id="m-modal-sub">Send payment then submit your proof below</div>
+
+    <!-- Who receives payment -->
+    <div class="receiver-box" id="m-receiver-box">
+      <div class="receiver-icon" id="m-receiver-icon">🔗</div>
+      <div class="receiver-info">
+        <small id="m-receiver-label">Send Payment To</small>
+        <b id="m-receiver-name">---</b>
+        <span id="m-receiver-id">---</span>
+      </div>
+    </div>
+
+    <!-- Admin fallback notice -->
+    <div class="info-note orange" id="m-admin-notice" style="display:none;">
+      ⚡ Aapka koi registered upline nahi hai. Payment directly <b>Admin</b> ko jayegi.
+    </div>
+
+    <!-- Amount -->
+    <div class="amount-box">
+      <div class="ab-left">
+        <small>Total Amount</small>
+        <b id="m-amount">Rs. 0</b>
+        <span id="m-product-sub"></span>
+      </div>
+      <div style="font-size:36px;">💳</div>
+    </div>
+
+    <!-- Account details -->
+    <div class="acc-card">
+      <div class="acc-head" id="m-acc-head">💼 Payment Account</div>
+      <div class="acc-row">
+        <span class="acc-key">Account Title</span>
+        <span class="acc-val" id="m-acc-title">---</span>
+      </div>
+      <div class="acc-row">
+        <span class="acc-key">Account No.</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="acc-val acc-num" id="m-acc-num">---</span>
+          <button class="copy-btn" onclick="copyNum()">📋 Copy</button>
+        </div>
+      </div>
+      <div class="acc-row">
+        <span class="acc-key">Wallet</span>
+        <span class="acc-val" id="m-acc-type">EasyPaisa</span>
+      </div>
+    </div>
+
+    <!-- WhatsApp in modal -->
+    <a class="btn-wa" id="m-wa-btn" href="#" target="_blank" style="display:flex;margin-bottom:14px;border-radius:13px;padding:12px;">
+      💬 Contact on WhatsApp before sending payment
+    </a>
+
+    <div class="info-note gold">⚡ After payment, enter your Transaction ID and upload a screenshot.</div>
+
+    <div class="form-group">
+      <label class="form-label">Transaction ID (Trx ID)</label>
+      <input type="text" class="form-inp" id="f-trx" placeholder="e.g. AA1234567890" style="text-transform:uppercase;">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Payment Screenshot</label>
+      <div class="upload-box" id="upload-box">
+        <input type="file" accept="image/*" id="f-img" onchange="previewImage(this)">
+        <div class="upload-icon">📸</div>
+        <div class="upload-text">Tap to upload screenshot</div>
+        <div class="upload-sub">JPG, PNG · Max 5MB</div>
+      </div>
+      <div class="upload-preview" id="img-preview">
+        <img id="preview-img" src="" alt="Proof">
+        <button class="remove-img" onclick="removeImage()">✕ Remove</button>
+      </div>
+    </div>
+
+    <div class="info-note green">✅ Request will be sent for verification. Plan activates after approval.</div>
+    <button class="btn-primary gold" id="submit-btn" onclick="submitPurchase()">📤 Submit for Verification</button>
+    <button class="btn-ghost" onclick="closeModal('buy-modal')">Cancel</button>
+  </div>
+</div>
+
+<!-- ══ PRODUCT DETAILS MODAL ══ -->
+<div class="modal-backdrop" id="detail-modal">
+  <div class="modal-sheet">
+    <div class="m-handle"></div>
+    <div class="detail-hero">
+      <div class="detail-icon" id="d-icon">📦</div>
+      <div class="detail-name" id="d-name">Product</div>
+      <div class="detail-price" id="d-price">Rs. 0</div>
+    </div>
+    <div class="detail-divider"></div>
+    <div id="d-content"></div>
+    <button class="btn-ghost" onclick="closeModal('detail-modal')">Close</button>
+  </div>
+</div>
+
+<!-- ══ ACCOUNT SETUP MODAL ══ -->
+<div class="modal-backdrop" id="account-modal">
+  <div class="modal-sheet">
+    <div class="m-handle"></div>
+    <div class="m-title">🏦 Set Your Payment Account</div>
+    <div class="m-sub">Your downliners will pay you on this account. Fill carefully.</div>
+
+    <div class="info-note green">✅ You are an Approved Reseller! Set your account so downliners can pay you directly.</div>
+
+    <div class="form-group">
+      <label class="form-label">Account Title (Aapka Naam)</label>
+      <input type="text" class="form-inp" id="acc-title-inp" placeholder="e.g. Muhammad Ali">
+    </div>
+    <div class="form-group">
+      <label class="form-label">EasyPaisa / JazzCash Number</label>
+      <input type="tel" class="form-inp" id="acc-number-inp" placeholder="03XXXXXXXXX" maxlength="11" inputmode="numeric">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Account Type</label>
+      <select class="setup-select" id="acc-type-inp">
+        <option value="EasyPaisa">EasyPaisa</option>
+        <option value="JazzCash">JazzCash</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+      </select>
+    </div>
+
+    <div class="info-note gold">⚡ Once saved, your payment details will appear on the store for your referrals.</div>
+
+    <button class="btn-primary gold" id="save-acc-btn" onclick="saveAccountInfo()">💾 Save Account Info</button>
+    <button class="btn-ghost" onclick="closeModal('account-modal')">Cancel</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//   CONFIG — replace YOUR_SCRIPT_ID_HERE
+// ══════════════════════════════════════════
+const GAS = "https://script.google.com/macros/s/AKfycbzHpga1Hq30ISpsYmsvwj4_UKlp2x4ZoGw_NnCyB149mzbnrTtaDsZllCcR7jvAatdOeg/exec";
+
+// Plan price hierarchy (for upgrade checks)
+var PLAN_PRICES = {
+  "Basic Canva Bundle"     : 200,
+  "Marketing Master Guide" : 300,
+  "Master Reseller Rights" : 500
+};
+
+// Product detail data
+var PRODUCT_DETAILS = {
+  "Basic Canva Bundle": {
+    icon:"📦", price:200,
+    desc:"200+ premium, fully editable Canva templates for all your social media needs.",
+    features:[
+      {icon:"📁", text:"200+ premium Canva templates"},
+      {icon:"🎨", text:"Fully editable colors, fonts and layouts"},
+      {icon:"📱", text:"Instagram, Facebook, Stories & Thumbnails"},
+      {icon:"🖨️", text:"Print-ready poster & flyer designs"},
+      {icon:"♾️", text:"Lifetime access — download once, use forever"},
+      {icon:"🤝", text:"Commercial use allowed for resellers"}
+    ]
+  },
+  "Marketing Master Guide": {
+    icon:"📚", price:300,
+    desc:"Complete digital marketing course covering Facebook, Instagram & WhatsApp.",
+    features:[
+      {icon:"📘", text:"Complete Facebook & Instagram Ads course"},
+      {icon:"📲", text:"WhatsApp marketing & broadcast strategy"},
+      {icon:"💡", text:"Sales funnel creation step-by-step"},
+      {icon:"🎯", text:"Audience targeting & retargeting techniques"},
+      {icon:"📊", text:"Analytics & performance tracking guide"},
+      {icon:"🔄", text:"Lifetime updates included"}
+    ]
+  },
+  "Master Reseller Rights": {
+    icon:"👑", price:500,
+    desc:"Full reseller rights to all digital products with unlimited earning potential.",
+    features:[
+      {icon:"♾️", text:"Resell all 3 plans — unlimited earning"},
+      {icon:"🔑", text:"Full commercial reseller rights"},
+      {icon:"💳", text:"Your own payment details on store page"},
+      {icon:"👥", text:"Build your own downliner network"},
+      {icon:"📈", text:"Upline dashboard access (upline.html)"},
+      {icon:"🤝", text:"Priority admin support"}
+    ]
+  }
+};
+
+// UID extraction (same as original)
+function getLocalUID() {
+  try {
+    var u = JSON.parse(localStorage.getItem("anUser") || localStorage.getItem("an_user") || "null");
+    if (u && u.user_id) return String(u.user_id).trim();
+  } catch(e) {}
+  return localStorage.getItem("anID") || "";
+}
+const localUID = getLocalUID();
+
+var currentProduct  = "";
+var currentPrice    = 0;
+var currentIsUpgrade = false;
+var imgBase64       = "";
+
+// Payment receiver (changes per plan based on hybrid logic)
+var uplineUID    = "";
+var uplineName   = "";
+var uplinePhone  = "";
+var uplinePlan   = "";
+var uplineAmount = 0;     // Upliner ka paid amount (200/300/500)
+var uplineAccTitle  = "";  // Upliner ka saved account title
+var uplineAccNumber = "";  // Upliner ka saved account number
+var uplineAccType   = "";  // EasyPaisa / JazzCash
+var adminTitle   = "Muhammad Hussain";
+var adminPhone   = "03412049729";
+var adminType    = "EasyPaisa";
+
+// Current payment receiver for the selected plan
+var payToUID     = "";
+var payToName    = "";
+var payToPhone   = "";
+var payToIsAdmin = false;
+
+// User's own reseller info
+var myStatus     = "";
+var myProduct    = "";
+var myAmount     = 0;
+var myAccTitle   = "";   // Current user's saved account title
+var myAccNumber  = "";   // Current user's saved account number
+var myAccType    = "";
+var myAllPlans   = [];   // ✅ Sab plans (multiple active plans support)
+
+// ✅ FIX: Sheet se aane wale phone number mein leading 0 ensure karo
+function normalizePhone(num) {
+  var n = String(num || "").trim().replace(/\s+/g,"");
+  if (!n) return "";
+  // +92XXXXXXXXXX → 0XXXXXXXXXX
+  if (n.startsWith("+92") && n.length === 13) return "0" + n.substring(3);
+  // 92XXXXXXXXXX → 0XXXXXXXXXX
+  if (n.startsWith("92") && n.length === 12) return "0" + n.substring(2);
+  // 10 digits without 0 → add 0
+  if (!n.startsWith("0") && n.length === 10) return "0" + n;
+  return n;
+}
+
+// ══════════════════════════════════════════
+//   INIT
+// ══════════════════════════════════════════
+async function init() {
+  // Upline from URL or localStorage
+  var params = new URLSearchParams(window.location.search);
+  var refUID  = params.get("ref") || "";
+  if (refUID) localStorage.setItem("ds_ref", refUID);
+  else refUID = localStorage.getItem("ds_ref") || "";
+  uplineUID = refUID || "admin";
+
+  if (!localUID) {
+    showToast("⚠️ Please login first!");
+    setTimeout(function(){ window.location.href = "auth.html"; }, 1800);
+    hideLdr(); return;
+  }
+
+  document.getElementById("user-badge").classList.add("show");
+  document.getElementById("user-id-display").innerText = localUID;
+
+  try {
+    // Validate upline
+    var upRes  = await fetch(GAS + "?action=validate_user&uid=" + encodeURIComponent(uplineUID));
+    var upData = await upRes.json();
+
+    // Get admin info from response
+    if (upData.admin) {
+      adminTitle = upData.admin.title || "Muhammad Hussain";
+      adminPhone = upData.admin.phone || "03412049729";
+      adminType  = upData.admin.type  || "EasyPaisa";
+    }
+
+    if (upData.valid && upData.reseller && upData.reseller.status === "Approved") {
+      uplineName      = upData.name  || uplineUID;
+      uplinePhone     = upData.phone || "";
+      uplinePlan      = upData.reseller.product || "";
+      uplineAmount    = Number(upData.reseller.amount) || 0;
+      uplineAccTitle  = upData.reseller.acc_title  || "";
+      uplineAccNumber = normalizePhone(upData.reseller.acc_number || "");
+      uplineAccType   = upData.reseller.acc_type   || "EasyPaisa";
+
+      document.getElementById("upline-banner").classList.add("show");
+      document.getElementById("upline-id-txt").innerText   = uplineUID + (uplineName ? "  —  " + uplineName : "");
+      document.getElementById("upline-plan-txt").innerText = uplinePlan ? "Plan: " + uplinePlan : "";
+    } else {
+      // Upline not valid/not approved — reset to admin
+      uplineUID   = "admin";   // ← IMPORTANT: getReceiver() ko admin milega
+      uplineName  = "Admin";
+      uplinePhone = adminPhone;
+      uplinePlan  = "";
+    }
+
+    // Validate current user
+    var myRes  = await fetch(GAS + "?action=validate_user&uid=" + encodeURIComponent(localUID));
+    var myData = await myRes.json();
+
+    document.getElementById("status-txt").innerText = "System Active ✓";
+
+    if (myData.valid) {
+      // ✅ MAIN FIX: users sheet ke Column I (referrer_id) se upline lo
+      // Yeh Vexora registration system ka native referral field hai
+      var sheetReferrerID = String(myData.referrer_id || "").trim();
+
+      // Priority: URL ref > sheet referrer_id > sellers upline_uid
+      if ((uplineUID === "admin" || !uplineUID) && sheetReferrerID && sheetReferrerID !== "admin") {
+        // Sheet se mila referrer — validate karo
+        var upRes2  = await fetch(GAS + "?action=validate_user&uid=" + encodeURIComponent(sheetReferrerID));
+        var upData2 = await upRes2.json();
+        if (upData2.valid && upData2.reseller && upData2.reseller.status === "Approved") {
+          uplineUID       = sheetReferrerID;
+          uplineName      = upData2.name  || sheetReferrerID;
+          uplinePhone     = upData2.phone || "";
+          uplinePlan      = upData2.reseller.product    || "";
+          uplineAmount    = Number(upData2.reseller.amount) || 0;
+          uplineAccTitle  = upData2.reseller.acc_title  || "";
+          uplineAccNumber = normalizePhone(upData2.reseller.acc_number || "");
+          uplineAccType   = upData2.reseller.acc_type   || "EasyPaisa";
+          document.getElementById("upline-banner").classList.add("show");
+          document.getElementById("upline-id-txt").innerText   = uplineUID + (uplineName ? "  —  " + uplineName : "");
+          document.getElementById("upline-plan-txt").innerText = uplinePlan ? "Plan: " + uplinePlan : "";
+        }
+      }
+
+    if (myData.reseller) {
+      myStatus    = myData.reseller.status  || "";
+      myProduct   = myData.reseller.product || "";
+      myAmount    = Number(PLAN_PRICES[myProduct]) || 0;
+      myAccTitle  = myData.reseller.acc_title  || "";
+      myAccNumber = normalizePhone(myData.reseller.acc_number || "");
+      myAccType   = myData.reseller.acc_type   || "";
+      myAllPlans  = myData.all_plans || [];
+
+      // ✅ Highest approved plan ko myProduct/myAmount set karo
+      myAllPlans.forEach(function(pl) {
+        if (pl.status === "Approved") {
+          var amt = Number(PLAN_PRICES[pl.product]) || 0;
+          if (amt > myAmount) { myAmount = amt; myProduct = pl.product; }
+        }
+      });
+
+      var hasApproved = myAllPlans.some(function(pl){ return pl.status === "Approved"; });
+
+      if (hasApproved) {
+        applyApprovedState();
+      } else if (myStatus) {
+        applyPendingState();
+      }
+    } else {
+      // Fresh user — apply upline plan lock
+      applyUplineLock();
+    }
+
+    } // end if (myData.valid)
+
+    // Set WhatsApp links on all cards (will be updated per plan in openBuyModal)
+    setDefaultWhatsApp();
+
+  } catch(e) {
+    document.getElementById("status-txt").innerText = "Offline Mode";
+  } finally {
+    hideLdr();
+  }
+}
+
+// ══════════════════════════════════════════
+//   CARD STATE FUNCTIONS
+// ══════════════════════════════════════════
+
+function applyUplineLock() {
+  document.querySelectorAll(".atm-card").forEach(function(card) {
+    var p   = card.getAttribute("data-product");
+    var key = card.getAttribute("data-price");
+    var buy = document.getElementById("buy-"  + key);
+    var lck = document.getElementById("lock-" + key);
+    var wa  = document.getElementById("wa-"   + key);
+    card.classList.remove("card-locked");
+    if (buy) buy.style.display = "flex";
+    if (lck) lck.classList.remove("show");
+    if (wa)  setWaLink(wa, getReceiver(p).phone, p, key);
+  });
+  var notice = document.getElementById("plan-lock-notice");
+  if (notice) notice.classList.remove("show");
+}
+
+function applyApprovedState() {
+  document.getElementById("pending-bar").classList.remove("show");
+
+  // Show global My Dashboard button
+  var dashWrap = document.getElementById("my-dashboard-wrap");
+  if (dashWrap) dashWrap.style.display = "block";
+
+  // Account setup banner
+  if (myAccTitle && myAccNumber) {
+    document.getElementById("setup-banner").classList.remove("show");
+  } else {
+    document.getElementById("setup-banner").classList.add("show");
+  }
+
+  document.querySelectorAll(".atm-card").forEach(function(card) {
+    var p         = card.getAttribute("data-product");
+    var key       = card.getAttribute("data-price");
+    var cardPrice = Number(key);
+
+    var buy    = document.getElementById("buy-"     + key);
+    var act    = document.getElementById("active-"  + key);
+    var pnd    = document.getElementById("pending-" + key);
+    var lck    = document.getElementById("lock-"    + key);
+    var upg    = document.getElementById("upgrade-" + key);
+    var upgTag = document.getElementById("upgrd-"   + key);
+    var portal = document.getElementById("portal-"  + key);
+    var wa     = document.getElementById("wa-"      + key);
+
+    // Step 1: Reset everything on this card first
+    card.classList.remove("card-locked");
+    if (buy)    { buy.style.display    = "none"; }
+    if (upg)    { upg.style.display    = "none"; upg.classList.remove("show"); }
+    if (portal) { portal.style.display = "none"; portal.classList.remove("show"); }
+    if (act)    { act.classList.remove("show"); }
+    if (pnd)    { pnd.classList.remove("show"); }
+    if (lck)    { lck.classList.remove("show"); }
+    if (upgTag) { upgTag.classList.remove("show"); }
+
+    // Step 2: Set WhatsApp link
+    if (wa) setWaLink(wa, getReceiver(p).phone, p, key);
+
+    // Step 3: Apply correct state
+    var isThisPlanApproved = myAllPlans.some(function(pl){ return pl.product === p && pl.status === "Approved"; });
+    var isThisPlanPending  = myAllPlans.some(function(pl){ return pl.product === p && (pl.status === "Pending" || pl.status === "Payment Confirmed by Upline"); });
+
+    if (isThisPlanApproved) {
+      // ✅ YEH PLAN APPROVED HAI
+      if (act)    { act.classList.add("show"); }
+      if (portal)  { portal.style.display  = "flex"; }
+
+    } else if (isThisPlanPending) {
+      // ⏳ Yeh plan pending hai
+      if (pnd) { pnd.innerText = "⏳ Verification pending..."; pnd.classList.add("show"); }
+
+    } else if (cardPrice > myAmount) {
+      // ⬆️ Higher plan — upgrade available
+      if (upg)    { upg.style.display = "flex"; }
+      if (upgTag) { upgTag.classList.add("show"); }
+
+    } else {
+      // Lower plan — surpassed
+      if (lck) { lck.innerText = "✅ Already surpassed"; lck.classList.add("show"); }
+    }
+  });
+}
+
+function applyPendingState() {
+  document.getElementById("pending-bar").classList.add("show");
+  document.getElementById("pending-bar-msg").innerText = "⏳ Your request is under review — please wait";
+
+  document.querySelectorAll(".atm-card").forEach(function(card) {
+    var p         = card.getAttribute("data-product");
+    var key       = card.getAttribute("data-price");
+    var cardPrice = Number(key); // ✅ FIX: price comparison ke liye
+    var buy = document.getElementById("buy-"     + key);
+    var act = document.getElementById("active-"  + key);
+    var pnd = document.getElementById("pending-" + key);
+    var lck = document.getElementById("lock-"    + key);
+    var upg = document.getElementById("upgrade-" + key);
+
+    card.classList.remove("card-locked");
+    if (upg) upg.style.display = "none";
+    if (buy) buy.style.display = "none";
+    if (act) act.classList.remove("show");
+
+    if (p === myProduct) {
+      // ✅ Current pending plan — show pending status
+      if (lck) lck.classList.remove("show");
+      if (pnd) {
+        pnd.innerText = "⏳ Waiting for verification...";
+        pnd.classList.add("show");
+      }
+    } else if (cardPrice < myAmount) {
+      // ✅ FIX BUG 1: Lower plan — upgrade ho chuka, "surpassed" dikhao
+      // Upgrade 200→500 ya 300→500 pe yeh cards properly close ho jayenge
+      if (pnd) pnd.classList.remove("show");
+      if (lck) {
+        lck.innerText = "✅ Already surpassed this plan";
+        lck.classList.add("show");
+      }
+      // card-locked mat lagao — sirf informational note hai
+    } else {
+      // Higher plan — pending hote hue lock rakho
+      if (pnd) pnd.classList.remove("show");
+      if (lck) { lck.innerText = "🔒 Complete your pending request first"; lck.classList.add("show"); }
+      card.classList.add("card-locked");
+    }
+  });
+}
+
+// ══════════════════════════════════════════
+//   HYBRID REFERRAL LOGIC
+//   Decides who receives payment for a plan
+// ══════════════════════════════════════════
+function getReceiver(product) {
+  // Koi valid upline nahi → Admin
+  if (!uplineUID || uplineUID === "admin") {
+    return { uid:"admin", name:adminTitle, phone:adminPhone, type:adminType, isAdmin:true };
+  }
+  // ✅ PRICE MATCH: Upliner sirf apne plan ka hi receiver banega
+  var selectedPrice = Number(PLAN_PRICES[product]) || 0;
+  if (selectedPrice > 0 && selectedPrice <= uplineAmount) {
+    // ✅ ACCOUNT CHECK: Upliner ne account info save ki hui honi chahiye
+    // Agar acc_number empty hai → Admin ko payment (upliner ne setup nahi kiya)
+    var accNum = (uplineAccNumber || "").trim();
+    if (!accNum) {
+      return { uid:"admin", name:adminTitle, phone:adminPhone, type:adminType, isAdmin:true };
+    }
+    return {
+      uid    : uplineUID,
+      name   : (uplineAccTitle||"").trim()  || uplineName  || uplineUID,
+      phone  : accNum,
+      type   : (uplineAccType||"").trim()   || "EasyPaisa",
+      isAdmin: false
+    };
+  }
+  // Plan mismatch → Admin ko payment
+  return { uid:"admin", name:adminTitle, phone:adminPhone, type:adminType, isAdmin:true };
+}
+
+function setDefaultWhatsApp() {
+  document.querySelectorAll(".atm-card").forEach(function(card) {
+    var p   = card.getAttribute("data-product");
+    var key = card.getAttribute("data-price");
+    var wa  = document.getElementById("wa-" + key);
+    if (wa) setWaLink(wa, getReceiver(p).phone, p, key);
+  });
+}
+
+function setWaLink(el, phone, product, price) {
+  if (!el) return;
+  var num = String(phone || "").replace(/\D/g,"");
+  if (num.startsWith("0")) num = "92" + num.substring(1);
+  var msg = encodeURIComponent("Hi, I want to buy the " + product + " plan for Rs. " + price + ". Please guide me.");
+  el.href = num ? "https://wa.me/" + num + "?text=" + msg : "#";
+  el.onclick = num ? null : function(){ showToast("⚠️ WhatsApp number not set."); return false; };
+}
+
+// ══════════════════════════════════════════
+//   BUY MODAL
+// ══════════════════════════════════════════
+function openBuyModal(product, price, isUpgrade) {
+  currentProduct   = product;
+  currentPrice     = price;
+  currentIsUpgrade = isUpgrade;
+  imgBase64        = "";
+
+  // Determine who receives payment
+  var receiver    = getReceiver(product);
+  payToUID        = receiver.uid;
+  payToName       = receiver.name;
+  payToPhone      = receiver.phone;
+  payToIsAdmin    = receiver.isAdmin;
+  var payToType   = receiver.type || "EasyPaisa";
+
+  // Update modal header
+  document.getElementById("m-product-name").innerText = (isUpgrade ? "⬆️ Upgrade: " : "") + product;
+  document.getElementById("m-modal-sub").innerText    = isUpgrade
+    ? "Upgrading your plan — submit new payment proof"
+    : "Send payment to the account below, then submit your proof";
+  document.getElementById("m-amount").innerText       = "Rs. " + price;
+  document.getElementById("m-product-sub").innerText  = product;
+
+  // Receiver box
+  var box = document.getElementById("m-receiver-box");
+  box.className = "receiver-box " + (payToIsAdmin ? "admin" : "upline");
+  document.getElementById("m-receiver-icon").innerText  = payToIsAdmin ? "🏛️" : "🔗";
+  document.getElementById("m-receiver-label").innerText = payToIsAdmin ? "Payment Goes to Admin" : "Payment Goes to Upline";
+  document.getElementById("m-receiver-name").innerText  = payToName || "---";
+  document.getElementById("m-receiver-id").innerText    = payToUID  || "---";
+
+  // Admin notice
+  document.getElementById("m-admin-notice").style.display = payToIsAdmin ? "flex" : "none";
+
+  // Account details
+  document.getElementById("m-acc-title").innerText = payToName  || "---";
+  document.getElementById("m-acc-num").innerText   = payToPhone || "---";
+  document.getElementById("m-acc-type").innerText  = payToType  || "EasyPaisa";
+  document.getElementById("m-acc-head").innerText  = payToIsAdmin ? "🏛️ Admin Account" : "🔗 Upline Account";
+
+  // WhatsApp in modal
+  var mWa = document.getElementById("m-wa-btn");
+  setWaLink(mWa, payToPhone, product, price);
+
+  // Reset form
+  document.getElementById("f-trx").value = "";
+  removeImage();
+  var btn = document.getElementById("submit-btn");
+  btn.disabled  = false;
+  btn.innerHTML = "📤 Submit for Verification";
+
+  openModal("buy-modal");
+}
+
+function copyNum() {
+  var num = document.getElementById("m-acc-num").innerText;
+  navigator.clipboard.writeText(num).then(function(){ showToast("✅ Number copied!"); });
+}
+
+// ══════════════════════════════════════════
+//   PRODUCT DETAILS MODAL
+// ══════════════════════════════════════════
+function openDetails(product, price) {
+  var d = PRODUCT_DETAILS[product];
+  if (!d) return;
+  document.getElementById("d-icon").innerText  = d.icon;
+  document.getElementById("d-name").innerText  = product;
+  document.getElementById("d-price").innerText = "Rs. " + price;
+
+  var html = '<div class="detail-section"><h4>What\'s Included</h4>';
+  d.features.forEach(function(f){
+    html += '<div class="detail-feature"><span class="df-icon">' + f.icon + '</span><span class="df-text">' + f.text + '</span></div>';
+  });
+  html += '</div>';
+
+  // Add buy button inside details modal
+  html += '<div style="margin-top:16px;">' +
+    '<button class="btn-primary gold" onclick="closeModal(\'detail-modal\');openBuyModal(\'' + product + '\',' + price + ',false);" style="margin-bottom:0;">' +
+    '🛒 Buy Now — Rs. ' + price + '</button></div>';
+
+  document.getElementById("d-content").innerHTML = html;
+  openModal("detail-modal");
+}
+
+// ══════════════════════════════════════════
+//   PRODUCT PORTAL
+// ══════════════════════════════════════════
+function openPortal(cardId, which) {
+  var card = document.getElementById(cardId);
+  var attr = (which === "portal2") ? "data-portal2" : "data-portal";
+  var url  = card ? card.getAttribute(attr) : "";
+  if (url && url !== "" && url.indexOf("YOUR-PORTAL") === -1 && url.indexOf("YOUR-DASHBOARD") === -1) {
+    window.open(url, "_blank");
+  } else {
+    showToast(which === "portal2" ? "⚠️ Dashboard link set nahi hua abhi." : "⚠️ Portal link not configured yet.");
+  }
+}
+
+// ══════════════════════════════════════════
+//   IMAGE UPLOAD
+// ══════════════════════════════════════════
+function previewImage(input) {
+  var file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { showToast("⚠️ Max 5MB!"); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    imgBase64 = e.target.result;
+    document.getElementById("preview-img").src          = imgBase64;
+    document.getElementById("img-preview").style.display = "block";
+    document.getElementById("upload-box").style.display  = "none";
+  };
+  reader.readAsDataURL(file);
+}
+function removeImage() {
+  imgBase64 = "";
+  document.getElementById("f-img").value               = "";
+  document.getElementById("preview-img").src            = "";
+  document.getElementById("img-preview").style.display  = "none";
+  document.getElementById("upload-box").style.display   = "flex";
+}
+
+// ══════════════════════════════════════════
+//   SUBMIT
+// ══════════════════════════════════════════
+async function submitPurchase() {
+  var trx = document.getElementById("f-trx").value.trim().toUpperCase();
+  if (!trx)       { showToast("⚠️ Enter Transaction ID!"); return; }
+  if (!imgBase64) { showToast("⚠️ Upload payment screenshot!"); return; }
+
+  var btn = document.getElementById("submit-btn");
+  btn.disabled  = true;
+  btn.innerHTML = "⏳ Submitting...";
+
+  // upline_uid  = payment receiver (admin ya upline, plan-match pe)
+  // referrer_uid = actual referrer (URL ?ref= ya localStorage se)
+  // ✅ FIX BUG 2: Dono alag bhejo taake Column H mein sahi referrer
+  //              store ho aur downliner tracking sahi kaam kare
+  var body = {
+    action       : "register",
+    uid          : localUID,
+    upline_uid   : payToUID,   // payment receiver (display ke liye)
+    referrer_uid : uplineUID,  // actual referrer (Column H ke liye)
+    trx          : trx,
+    product      : currentProduct,
+    amount       : currentPrice,
+    proof        : imgBase64,
+    is_upgrade   : currentIsUpgrade
+  };
+
+  try {
+    var resp   = await fetch(GAS, {
+      method  : "POST",
+      headers : { "Content-Type": "text/plain" },
+      body    : JSON.stringify(body)
+    });
+    var result = {};
+    try { result = await resp.json(); } catch(je) {}
+
+    if (result.status === "error") {
+      showToast("⚠️ " + (result.message || "Error occurred."));
+      btn.disabled  = false;
+      btn.innerHTML = "📤 Submit for Verification";
+      return;
+    }
+
+    // Update local state
+    myProduct = currentProduct;
+    myAmount  = currentPrice;
+    myStatus  = "Pending";
+    // ✅ myAllPlans mein bhi naya plan add karo
+    myAllPlans.push({ product: currentProduct, status: "Pending", amount: String(currentPrice) });
+    localStorage.setItem("ds_product", currentProduct);
+
+    showToast(currentIsUpgrade
+      ? "✅ Upgrade request submitted! Pending verification."
+      : "✅ Request submitted! Waiting for verification.");
+
+    applyPendingState();
+    setTimeout(function(){ closeModal("buy-modal"); }, 2000);
+
+  } catch(e) {
+    showToast("❌ Network error! Please try again.");
+    btn.disabled  = false;
+    btn.innerHTML = "📤 Submit for Verification";
+  }
+}
+
+// ══════════════════════════════════════════
+//   HELPERS
+// ══════════════════════════════════════════
+function hideLdr() {
+  var l = document.getElementById("loader");
+  l.style.opacity = "0";
+  setTimeout(function(){ l.style.display = "none"; }, 500);
+}
+function openModal(id)  { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+document.querySelectorAll(".modal-backdrop").forEach(function(el){
+  el.addEventListener("click", function(e){ if(e.target===el) el.classList.remove("open"); });
+});
+var toastTimer;
+function showToast(msg) {
+  var t = document.getElementById("toast");
+  t.innerText = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 3200);
+}
+
+// ══════════════════════════════════════════
+//   SAVE ACCOUNT INFO (Approved resellers)
+// ══════════════════════════════════════════
+async function saveAccountInfo() {
+  var title  = document.getElementById("acc-title-inp").value.trim();
+  var number = document.getElementById("acc-number-inp").value.trim();
+  var type   = document.getElementById("acc-type-inp").value;
+
+  if (!title)  { showToast("⚠️ Enter Account Title!"); return; }
+  if (!number || number.length < 10) { showToast("⚠️ Enter valid phone number!"); return; }
+
+  var btn = document.getElementById("save-acc-btn");
+  btn.disabled  = true;
+  btn.innerHTML = "⏳ Saving...";
+
+  var body = {
+    action     : "save_account",
+    uid        : localUID,
+    acc_title  : title,
+    acc_number : number,
+    acc_type   : type
+  };
+
+  try {
+    var resp   = await fetch(GAS, {
+      method  : "POST",
+      headers : { "Content-Type": "text/plain" },
+      body    : JSON.stringify(body)
+    });
+    var result = {};
+    try { result = await resp.json(); } catch(je) {}
+
+    if (result.status === "error") {
+      showToast("❌ " + (result.message || "Error occurred."));
+      btn.disabled  = false;
+      btn.innerHTML = "💾 Save Account Info";
+      return;
+    }
+
+    // Update local vars
+    myAccTitle  = title;
+    myAccNumber = number;
+    myAccType   = type;
+    showToast("✅ Account info saved! Your downliners will now see your details.");
+    document.getElementById("setup-banner").classList.remove("show");
+    closeModal("account-modal");
+
+  } catch(e) {
+    showToast("❌ Network error! Please try again.");
+    btn.disabled  = false;
+    btn.innerHTML = "💾 Save Account Info";
+  }
+}
+
+window.addEventListener("load", init);
+</script>
+</body>
+</html>
