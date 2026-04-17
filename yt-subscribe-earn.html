@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Subscribe & Earn – Rs. 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #050709;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  /* Ambient background blobs */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -120px; right: -120px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,0,0,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -100px; left: -100px;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,60,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Card ── */
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: #0d1117;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 32px 28px 28px;
+    overflow: hidden;
+    animation: cardIn 0.7s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(30px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* gloss top line */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,80,80,0.6), transparent);
+  }
+
+  /* ── Badge ── */
+  .reward-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,0,0,0.12);
+    border: 1px solid rgba(255,0,0,0.25);
+    color: #ff5555;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    padding: 4px 14px 2px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    animation: badgePop 0.5s 0.4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes badgePop {
+    from { opacity: 0; transform: scale(0.7); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .reward-badge .coin { font-size: 16px; }
+
+  /* ── Heading ── */
+  .card-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    animation: fadeUp 0.5s 0.2s both;
+  }
+  .card-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    animation: fadeUp 0.5s 0.3s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Steps indicator ── */
+  .steps-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 28px;
+    direction: ltr;
+    animation: fadeUp 0.5s 0.35s both;
+  }
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.4s;
+  }
+  .step-dot.active {
+    background: #ff2222;
+    box-shadow: 0 0 8px rgba(255,34,34,0.7);
+    transform: scale(1.3);
+  }
+  .step-dot.done {
+    background: rgba(255,100,100,0.4);
+  }
+
+  /* ── Main CTA Button ── */
+  .btn-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #ff2222 0%, #cc0000 50%, #990000 100%);
+    box-shadow: 0 8px 32px rgba(255,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeUp 0.5s 0.45s both;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-main::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -60%;
+    width: 40%; height: 200%;
+    background: rgba(255,255,255,0.1);
+    transform: skewX(-20deg);
+    transition: left 0.5s;
+  }
+  .btn-main:hover::after { left: 120%; }
+  .btn-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .btn-main:active { transform: scale(0.98); }
+  .btn-main:disabled {
+    background: #2a2a2a;
+    box-shadow: none;
+    cursor: not-allowed;
+    color: rgba(255,255,255,0.4);
+  }
+  .btn-main i { font-size: 20px; }
+
+  #loadMsg {
+    text-align: center;
+    color: rgba(255,255,255,0.35);
+    font-size: 13px;
+    margin-top: 10px;
+    min-height: 18px;
+  }
+
+  /* ── Step 2: Timer ── */
+  #step2 { display: none; animation: fadeUp 0.4s both; }
+  .timer-wrap {
+    text-align: center;
+    padding: 24px 0 16px;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,200,100,0.1);
+    border: 1px solid rgba(0,200,100,0.25);
+    color: #00cc66;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+  }
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #00cc66;
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .timer-ring-wrap {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto 16px;
+  }
+  .timer-ring {
+    transform: rotate(-90deg);
+  }
+  .ring-bg { stroke: rgba(255,255,255,0.07); }
+  .ring-fill {
+    stroke: #ff2222;
+    stroke-dasharray: 220;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgba(255,34,34,0.6));
+    transition: stroke-dashoffset 1s linear;
+  }
+  .timer-num {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: #fff;
+    letter-spacing: 2px;
+  }
+  .timer-hint {
+    color: rgba(255,255,255,0.4);
+    font-size: 13px;
+  }
+
+  /* ── Step 3: Proof form ── */
+  #step3 { display: none; animation: fadeUp 0.4s both; }
+  .proof-label {
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 6px;
+  }
+  .imgbb-link {
+    color: #ff6666;
+    font-size: 13px;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(255,100,100,0.3);
+    transition: color 0.2s;
+    direction: ltr;
+    display: inline-block;
+  }
+  .imgbb-link:hover { color: #ff9999; }
+
+  .proof-input {
+    width: 100%;
+    padding: 13px 16px;
+    margin: 14px 0 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: #fff;
+    font-size: 13px;
+    font-family: monospace;
+    direction: ltr;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .proof-input:focus {
+    border-color: rgba(255,50,50,0.45);
+    box-shadow: 0 0 0 3px rgba(255,30,30,0.12);
+  }
+  .proof-input::placeholder { color: rgba(255,255,255,0.2); }
+
+  .btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #ff2222 0%, #cc0000 100%);
+    box-shadow: 0 6px 24px rgba(255,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+    transition: all 0.2s;
+  }
+  .btn-submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(255,0,0,0.4);
+  }
+  .btn-submit:active:not(:disabled) { transform: scale(0.98); }
+  .btn-submit:disabled {
+    background: #2a2a2a;
+    box-shadow: none;
+    cursor: not-allowed;
+    color: rgba(255,255,255,0.35);
+  }
+
+  #proofMsg {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: center;
+    min-height: 20px;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    margin: 24px 0;
+  }
+
+  /* ── Info row ── */
+  .info-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    direction: ltr;
+    animation: fadeUp 0.5s 0.55s both;
+  }
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .info-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .info-key {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    font-family: sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .info-sep {
+    width: 1px; height: 32px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* ── Success overlay ── */
+  .success-wrap {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 0 10px;
+    animation: fadeUp 0.5s both;
+  }
+  .success-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(0,200,100,0.12);
+    border: 2px solid rgba(0,200,100,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    animation: iconBounce 0.6s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes iconBounce {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .success-title {
+    font-size: 18px; font-weight: 700; color: #00cc66;
+  }
+  .success-sub {
+    font-size: 13px; color: rgba(255,255,255,0.4);
+    text-align: center; line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<div class="card" id="ytTaskCard">
+
+  <!-- Reward Badge -->
+  <div>
+    <span class="reward-badge">
+      <span class="coin">🪙</span> Rs. 5 کمائیں
+    </span>
+  </div>
+
+  <!-- Heading -->
+  <h2 class="card-title">YouTube Subscribe کریں</h2>
+  <p class="card-sub">ہمارے چینل کو Subscribe کریں، screenshot لیں اور Rs. 5 حاصل کریں</p>
+
+  <!-- Steps Dots -->
+  <div class="steps-row">
+    <div class="step-dot active" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+  </div>
+
+  <!-- ══ Step 1: Subscribe Button ══ -->
+  <div id="step1">
+    <button class="btn-main" id="mainBtn" onclick="startTask()">
+      <i class="fab fa-youtube"></i>
+      Subscribe &amp; Earn
+    </button>
+    <p id="loadMsg">⏳ Task لوڈ ہو رہا ہے...</p>
+  </div>
+
+  <!-- ══ Step 2: Timer ══ -->
+  <div id="step2">
+    <div class="timer-wrap">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        YouTube کھل گیا — Subscribe کریں
+      </div>
+
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring" width="90" height="90" viewBox="0 0 90 90">
+          <circle class="ring-bg" cx="45" cy="45" r="35" stroke-width="6" fill="none"/>
+          <circle class="ring-fill" id="ringFill" cx="45" cy="45" r="35" stroke-width="6" fill="none"/>
+        </svg>
+        <div class="timer-num" id="timerBox">30</div>
+      </div>
+
+      <p class="timer-hint" id="timerMsg">30 سیکنڈ بعد proof form آئے گا</p>
+    </div>
+  </div>
+
+  <!-- ══ Step 3: Proof Form ══ -->
+  <div id="step3">
+    <p class="proof-label">
+      📸 ImgBB پر screenshot upload کریں اور link یہاں paste کریں
+    </p>
+    <a href="https://imgbb.com" target="_blank" class="imgbb-link">
+      ↗ imgbb.com پر جائیں
+    </a>
+
+    <input
+      type="url"
+      id="proofUrl"
+      class="proof-input"
+      placeholder="https://i.ibb.co/..."
+    />
+
+    <button class="btn-submit" id="submitBtn" onclick="submitProof()">
+      📤 Proof Submit کریں
+    </button>
+
+    <p id="proofMsg"></p>
+
+    <!-- Success State -->
+    <div class="success-wrap" id="successWrap">
+      <div class="success-icon">✅</div>
+      <p class="success-title">Proof Submit ہو گیا!</p>
+      <p class="success-sub">Admin verify کے بعد آپ کے اکاؤنٹ میں<br><strong style="color:#00cc66;">Rs. 5</strong> شامل ہو جائے گا</p>
+    </div>
+  </div>
+
+  <!-- Divider + Info -->
+  <div class="divider"></div>
+  <div class="info-row">
+    <div class="info-item">
+      <span class="info-val">Rs. 5</span>
+      <span class="info-key">Reward</span>
+    </div>
+    <div class="info-sep"></div>
+    <div class="info-item">
+      <span class="info-val">~1 Min</span>
+      <span class="info-key">Time</span>
+    </div>
+    <div class="info-sep"></div>
+    <div class="info-item">
+      <span class="info-val">1x</span>
+      <span class="info-key">Per User</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  var GAS_URL = "https://script.google.com/macros/s/YOUR_GAS_ID/exec";
+  var ytChannelUrl = "";
+  var RING_CIRC = 2 * Math.PI * 35; // ≈ 220
+
+  // ── Page Load ──
+  window.addEventListener("load", function () {
+    document.getElementById("mainBtn").disabled = true;
+    document.getElementById("loadMsg").textContent = "⏳ Task لوڈ ہو رہا ہے...";
+
+    fetch(GAS_URL + "?action=get_yt_config")
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.status === "success") {
+          ytChannelUrl = d.channelUrl;
+          document.getElementById("mainBtn").disabled = false;
+          document.getElementById("loadMsg").textContent = "";
+        } else {
+          document.getElementById("loadMsg").textContent = "⚠️ Task لوڈ نہیں ہوا، refresh کریں";
+        }
+      })
+      .catch(function () {
+        document.getElementById("loadMsg").textContent = "⚠️ Connection error، refresh کریں";
+      });
+  });
+
+  // ── Subscribe ──
+  function startTask() {
+    if (!ytChannelUrl) {
+      document.getElementById("loadMsg").textContent = "⚠️ Channel URL نہیں ملا";
+      return;
+    }
+    window.open("https://omg10.com/4/10885505", "_blank");
+    setTimeout(function () { window.open(ytChannelUrl, "_blank"); }, 500);
+
+    setDot(2);
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+
+    var total = 30;
+    var seconds = total;
+    var ringFill = document.getElementById("ringFill");
+    ringFill.style.strokeDasharray = RING_CIRC;
+    ringFill.style.strokeDashoffset = 0;
+
+    var interval = setInterval(function () {
+      seconds--;
+      document.getElementById("timerBox").textContent = seconds;
+      document.getElementById("timerMsg").textContent = seconds + " سیکنڈ بعد proof form آئے گا";
+
+      var offset = RING_CIRC * (1 - seconds / total);
+      ringFill.style.strokeDashoffset = offset;
+
+      if (seconds <= 10) {
+        ringFill.style.stroke = "#ff6600";
+      }
+      if (seconds <= 0) {
+        clearInterval(interval);
+        setDot(3);
+        document.getElementById("step2").style.display = "none";
+        document.getElementById("step3").style.display = "block";
+      }
+    }, 1000);
+  }
+
+  // ── Proof Submit ──
+  function submitProof() {
+    var url = document.getElementById("proofUrl").value.trim();
+    var msg = document.getElementById("proofMsg");
+    var btn = document.getElementById("submitBtn");
+
+    if (!url || !url.startsWith("http")) {
+      msg.style.color = "#ff6666";
+      msg.textContent = "❌ صحیح ImgBB link paste کریں";
+      return;
+    }
+
+    var userId = localStorage.getItem("userId") ||
+                 localStorage.getItem("user_id") || "unknown";
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submit ہو رہا ہے...';
+    msg.style.color = "rgba(255,255,255,.4)";
+    msg.textContent = "Please wait...";
+
+    fetch(GAS_URL + "?action=yt_subscribe_proof&userId=" +
+      encodeURIComponent(userId) + "&proof=" + encodeURIComponent(url))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.status === "success") {
+          msg.textContent = "";
+          btn.style.display = "none";
+          document.getElementById("proofUrl").style.display = "none";
+          document.querySelector(".proof-label").style.display = "none";
+          document.querySelector(".imgbb-link").style.display = "none";
+          var sw = document.getElementById("successWrap");
+          sw.style.display = "flex";
+        } else if (d.status === "duplicate") {
+          msg.style.color = "#ffaa00";
+          msg.textContent = "⚠️ آپ یہ task پہلے ہی کر چکے ہیں۔";
+          btn.disabled = false;
+          btn.innerHTML = "📤 Proof Submit کریں";
+        } else {
+          throw new Error(d.message || "Error");
+        }
+      })
+      .catch(function () {
+        msg.style.color = "#ff6666";
+        msg.textContent = "❌ Error آیا، دوبارہ کوشش کریں۔";
+        btn.disabled = false;
+        btn.innerHTML = "📤 Proof Submit کریں";
+      });
+  }
+
+  // ── Dots helper ──
+  function setDot(active) {
+    [1,2,3].forEach(function(n) {
+      var d = document.getElementById("dot" + n);
+      d.className = "step-dot";
+      if (n < active) d.classList.add("done");
+      if (n === active) d.classList.add("active");
+    });
+  }
+</script>
+</body>
+</html>
