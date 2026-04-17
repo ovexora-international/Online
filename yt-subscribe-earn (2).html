@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Subscribe & Earn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: #050709;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -120px; right: -120px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,0,0,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -100px; left: -100px;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,60,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Card ── */
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: #0d1117;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 32px 28px 28px;
+    overflow: hidden;
+    animation: cardIn 0.7s cubic-bezier(.22,1,.36,1) both;
+    z-index: 1;
+    margin-top: 10px;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(30px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,80,80,0.6), transparent);
+  }
+
+  /* ── Badge ── */
+  .reward-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,0,0,0.12);
+    border: 1px solid rgba(255,0,0,0.25);
+    color: #ff5555;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+    padding: 4px 14px 2px;
+    border-radius: 100px;
+    margin-bottom: 18px;
+    animation: badgePop 0.5s 0.4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes badgePop {
+    from { opacity: 0; transform: scale(0.7); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* ── Heading ── */
+  .card-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    animation: fadeUp 0.5s 0.2s both;
+  }
+  .card-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+    margin-bottom: 22px;
+    animation: fadeUp 0.5s 0.3s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Loading State ── */
+  #loadingState {
+    text-align: center;
+    padding: 30px 0;
+  }
+  .loading-spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: #ff2222;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    color: rgba(255,255,255,0.4);
+    font-size: 14px;
+  }
+
+  /* ── Links List ── */
+  #linksList { display: none; }
+  .section-title {
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    font-family: sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    direction: ltr;
+  }
+
+  .channel-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    transition: border-color 0.25s, background 0.25s;
+    animation: fadeUp 0.4s both;
+  }
+  .channel-card:hover {
+    border-color: rgba(255,50,50,0.3);
+    background: rgba(255,30,30,0.04);
+  }
+  .channel-card.done {
+    border-color: rgba(0,200,100,0.25);
+    background: rgba(0,200,100,0.04);
+    opacity: 0.7;
+  }
+
+  .channel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    direction: rtl;
+  }
+  .channel-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .channel-name i { color: #ff2222; font-size: 16px; }
+  .channel-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: #ff5555;
+    letter-spacing: 1px;
+    background: rgba(255,0,0,0.1);
+    border: 1px solid rgba(255,0,0,0.2);
+    padding: 2px 10px;
+    border-radius: 100px;
+  }
+  .channel-price.earned {
+    color: #00cc66;
+    background: rgba(0,200,100,0.1);
+    border-color: rgba(0,200,100,0.2);
+  }
+
+  /* Subscribe Button */
+  .btn-subscribe {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #ff2222 0%, #cc0000 100%);
+    box-shadow: 0 6px 24px rgba(255,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+    transition: all 0.2s;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-subscribe::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -60%;
+    width: 40%; height: 200%;
+    background: rgba(255,255,255,0.1);
+    transform: skewX(-20deg);
+    transition: left 0.5s;
+  }
+  .btn-subscribe:hover::after { left: 120%; }
+  .btn-subscribe:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(255,0,0,0.4);
+  }
+  .btn-subscribe:disabled {
+    background: #2a2a2a;
+    box-shadow: none;
+    cursor: not-allowed;
+    color: rgba(255,255,255,0.35);
+  }
+  .btn-subscribe.watching {
+    background: linear-gradient(135deg, #ff6600, #cc4400);
+  }
+
+  /* Timer inside card */
+  .mini-timer {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: rgba(255,102,0,0.1);
+    border: 1px solid rgba(255,102,0,0.2);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .mini-timer.show { display: flex; }
+  .mini-timer-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #ff6600;
+    letter-spacing: 1px;
+    direction: ltr;
+  }
+  .mini-timer-txt {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* Proof Section */
+  .proof-section {
+    display: none;
+    margin-top: 4px;
+  }
+  .proof-section.show { display: block; }
+
+  .proof-label {
+    color: rgba(255,255,255,0.55);
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 6px;
+  }
+  /* Upload Area */
+  .upload-area {
+    border: 2px dashed rgba(255,100,100,0.35);
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: border-color 0.25s, background 0.25s;
+    background: rgba(255,255,255,0.02);
+    position: relative;
+  }
+  .upload-area:hover, .upload-area.dragover {
+    border-color: rgba(255,50,50,0.7);
+    background: rgba(255,30,30,0.06);
+  }
+  .upload-area input[type=file] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 28px; margin-bottom: 6px; }
+  .upload-txt {
+    color: rgba(255,255,255,0.55);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .upload-txt strong { color: #ff6666; }
+
+  /* Preview */
+  .img-preview {
+    display: none;
+    width: 100%;
+    max-height: 140px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .img-preview.show { display: block; }
+
+  /* Upload progress */
+  .upload-progress {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(255,102,0,0.1);
+    border: 1px solid rgba(255,102,0,0.2);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+  .upload-progress.show { display: flex; }
+  .upload-ok {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0,200,100,0.08);
+    border: 1px solid rgba(0,200,100,0.2);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #00cc66;
+    direction: ltr;
+    word-break: break-all;
+  }
+  .upload-ok.show { display: flex; }
+
+  .btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #ff2222 0%, #cc0000 100%);
+    box-shadow: 0 4px 16px rgba(255,0,0,0.25);
+    transition: all 0.2s;
+  }
+  .btn-submit:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn-submit:disabled {
+    background: #2a2a2a;
+    box-shadow: none;
+    cursor: not-allowed;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .proof-msg {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.7;
+    text-align: center;
+    min-height: 18px;
+  }
+
+  /* Done Badge */
+  .done-badge {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background: rgba(0,200,100,0.1);
+    border: 1px solid rgba(0,200,100,0.2);
+    border-radius: 10px;
+    color: #00cc66;
+    font-size: 14px;
+  }
+  .done-badge.show { display: flex; }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    margin: 22px 0;
+  }
+
+  /* ── Info row ── */
+  .info-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    direction: ltr;
+  }
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .info-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .info-key {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    font-family: sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .info-sep {
+    width: 1px; height: 28px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* ── Error State ── */
+  #errorState {
+    display: none;
+    text-align: center;
+    padding: 30px 0;
+    color: #ff6666;
+    font-size: 14px;
+    line-height: 2;
+  }
+  .retry-btn {
+    margin-top: 14px;
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,100,100,0.3);
+    background: rgba(255,0,0,0.1);
+    color: #ff5555;
+    cursor: pointer;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .retry-btn:hover { background: rgba(255,0,0,0.18); }
+</style>
+</head>
+<body>
+
+<div class="card" id="ytTaskCard">
+
+  <!-- Badge -->
+  <div>
+    <span class="reward-badge">
+      <span>🪙</span> Subscribe & Earn
+    </span>
+  </div>
+
+  <!-- Heading -->
+  <h2 class="card-title">YouTube Subscribe کریں</h2>
+  <p class="card-sub">چینل subscribe کریں، screenshot لیں اور reward حاصل کریں</p>
+
+  <!-- Loading -->
+  <div id="loadingState">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">⏳ Channels لوڈ ہو رہے ہیں...</p>
+  </div>
+
+  <!-- Error -->
+  <div id="errorState">
+    <div style="font-size:32px;margin-bottom:10px">⚠️</div>
+    <div id="errorMsg">کچھ غلط ہوا، دوبارہ کوشش کریں</div>
+    <button class="retry-btn" onclick="loadConfig()">🔄 Retry کریں</button>
+  </div>
+
+  <!-- Links List -->
+  <div id="linksList">
+    <div class="section-title">Available Channels</div>
+    <div id="channelsContainer"></div>
+  </div>
+
+  <!-- Divider + Info -->
+  <div class="divider"></div>
+  <div class="info-row">
+    <div class="info-item">
+      <span class="info-val" id="totalRewardVal">—</span>
+      <span class="info-key">Total Reward</span>
+    </div>
+    <div class="info-sep"></div>
+    <div class="info-item">
+      <span class="info-val">~1 Min</span>
+      <span class="info-key">Per Task</span>
+    </div>
+    <div class="info-sep"></div>
+    <div class="info-item">
+      <span class="info-val" id="totalChannels">—</span>
+      <span class="info-key">Channels</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  var GAS_URL = "https://script.google.com/macros/s/YOUR_GAS_ID/exec";
+  var IMGBB_API_KEY = "YOUR_IMGBB_API_KEY"; // 🔑 imgbb.com پر free account بنائیں → API key یہاں ڈالیں
+  var RING_CIRC = 2 * Math.PI * 35;
+
+  // ── Per-task state ──
+  var taskStates = {}; // index -> { phase: 'idle'|'timing'|'proof'|'done', timer, proofUrl }
+
+  // ── Load Config ──
+  function loadConfig() {
+    document.getElementById("loadingState").style.display = "block";
+    document.getElementById("errorState").style.display   = "none";
+    document.getElementById("linksList").style.display    = "none";
+
+    fetch(GAS_URL + "?action=get_yt_config")
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        document.getElementById("loadingState").style.display = "none";
+        if (d.status === "success" && d.links && d.links.length > 0) {
+          renderChannels(d.links);
+        } else {
+          showError(d.message || "Channels نہیں ملے");
+        }
+      })
+      .catch(function() {
+        document.getElementById("loadingState").style.display = "none";
+        showError("Connection error — refresh کریں");
+      });
+  }
+
+  // ── Render Channels ──
+  function renderChannels(links) {
+    var container = document.getElementById("channelsContainer");
+    container.innerHTML = "";
+
+    // Total reward
+    var total = 0;
+    links.forEach(function(l) {
+      var n = parseInt(l.price.replace(/[^0-9]/g, ""));
+      if (!isNaN(n)) total += n;
+    });
+    document.getElementById("totalRewardVal").textContent = "Rs. " + total;
+    document.getElementById("totalChannels").textContent  = links.length + "x";
+
+    links.forEach(function(link, i) {
+      taskStates[link.index] = { phase: "idle", proofUrl: "" };
+
+      var card = document.createElement("div");
+      card.className = "channel-card";
+      card.id        = "chCard_" + link.index;
+      card.style.animationDelay = (i * 0.08) + "s";
+
+      card.innerHTML = `
+        <div class="channel-header">
+          <span class="channel-name">
+            <i class="fab fa-youtube"></i>
+            ${link.name}
+          </span>
+          <span class="channel-price" id="priceTag_${link.index}">${link.price}</span>
+        </div>
+
+        <!-- Step 1: Subscribe Button -->
+        <div id="step1_${link.index}">
+          <button class="btn-subscribe" id="subBtn_${link.index}"
+                  onclick="startTask(${link.index}, '${link.url}', '${link.price}')">
+            <i class="fab fa-youtube"></i>
+            Subscribe کریں — ${link.price}
+          </button>
+        </div>
+
+        <!-- Step 2: Timer -->
+        <div class="mini-timer" id="timer_${link.index}">
+          <span style="font-size:16px">⏱</span>
+          <span class="mini-timer-num" id="timerNum_${link.index}">30</span>
+          <span class="mini-timer-txt">سیکنڈ بعد proof form آئے گا</span>
+        </div>
+
+        <!-- Step 3: Proof Form -->
+        <div class="proof-section" id="proof_${link.index}">
+          <p class="proof-label">
+            📸 Screenshot لیں اور نیچے upload کریں
+          </p>
+
+          <!-- Image Preview -->
+          <img class="img-preview" id="imgPreview_${link.index}" src="" alt="preview" />
+
+          <!-- Upload Area -->
+          <div class="upload-area" id="uploadArea_${link.index}">
+            <input type="file" accept="image/*"
+                   onchange="handleFileSelect(${link.index}, this)" />
+            <div class="upload-icon">📁</div>
+            <div class="upload-txt">
+              <strong>یہاں tap کریں</strong> اور screenshot select کریں<br>
+              <span style="font-size:11px;color:rgba(255,255,255,0.3)">(JPG, PNG, WEBP)</span>
+            </div>
+          </div>
+
+          <!-- Upload Progress -->
+          <div class="upload-progress" id="uploadProg_${link.index}">
+            <i class="fas fa-spinner fa-spin" style="color:#ff6600"></i>
+            <span>Image upload ہو رہی ہے...</span>
+          </div>
+
+          <!-- Upload OK -->
+          <div class="upload-ok" id="uploadOk_${link.index}">
+            <span>✅</span>
+            <span id="uploadOkUrl_${link.index}"></span>
+          </div>
+
+          <button class="btn-submit" id="submitBtn_${link.index}"
+                  onclick="submitProof(${link.index})" disabled>
+            📤 Proof Submit کریں
+          </button>
+          <p class="proof-msg" id="proofMsg_${link.index}"></p>
+        </div>
+
+        <!-- Done -->
+        <div class="done-badge" id="done_${link.index}">
+          ✅ Proof submit ہو گیا — verification pending
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+    document.getElementById("linksList").style.display = "block";
+  }
+
+  // ── Start Task ──
+  function startTask(idx, url, price) {
+    if (taskStates[idx].phase !== "idle") return;
+    taskStates[idx].phase = "timing";
+
+    // Open ad + channel
+    window.open("https://omg10.com/4/10885505", "_blank");
+    setTimeout(function() { window.open(url, "_blank"); }, 500);
+
+    // Hide subscribe btn, show timer
+    document.getElementById("step1_" + idx).style.display = "none";
+    var timerEl = document.getElementById("timer_" + idx);
+    timerEl.classList.add("show");
+
+    var total = 30, seconds = total;
+    document.getElementById("timerNum_" + idx).textContent = seconds;
+
+    taskStates[idx].timer = setInterval(function() {
+      seconds--;
+      document.getElementById("timerNum_" + idx).textContent = seconds;
+
+      if (seconds <= 0) {
+        clearInterval(taskStates[idx].timer);
+        taskStates[idx].phase = "proof";
+        timerEl.classList.remove("show");
+        document.getElementById("proof_" + idx).classList.add("show");
+      }
+    }, 1000);
+  }
+
+  // ── Handle File Select → Auto Upload to ImgBB ──
+  function handleFileSelect(idx, input) {
+    var file = input.files[0];
+    if (!file) return;
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      // Show preview
+      var prev = document.getElementById("imgPreview_" + idx);
+      prev.src = e.target.result;
+      prev.classList.add("show");
+
+      // Hide upload area, show progress
+      document.getElementById("uploadArea_" + idx).style.display = "none";
+      document.getElementById("uploadProg_" + idx).classList.add("show");
+      document.getElementById("submitBtn_" + idx).disabled = true;
+
+      // Upload to ImgBB
+      uploadToImgBB(idx, e.target.result.split(",")[1]);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ── Upload Base64 to ImgBB ──
+  function uploadToImgBB(idx, base64Data) {
+    var formData = new FormData();
+    formData.append("key", IMGBB_API_KEY);
+    formData.append("image", base64Data);
+
+    fetch("https://api.imgbb.com/1/upload", {
+      method: "POST",
+      body: formData
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      document.getElementById("uploadProg_" + idx).classList.remove("show");
+
+      if (d.success && d.data && d.data.url) {
+        var imgUrl = d.data.url;
+        taskStates[idx].proofUrl = imgUrl;
+
+        // Show success
+        document.getElementById("uploadOkUrl_" + idx).textContent =
+          "✔ Upload ہو گئی";
+        document.getElementById("uploadOk_" + idx).classList.add("show");
+
+        // Enable submit button
+        document.getElementById("submitBtn_" + idx).disabled = false;
+      } else {
+        // Failed — show upload area again
+        document.getElementById("uploadArea_" + idx).style.display = "";
+        document.getElementById("imgPreview_" + idx).classList.remove("show");
+        var msg = document.getElementById("proofMsg_" + idx);
+        msg.style.color = "#ff6666";
+        msg.textContent = "❌ Upload نہیں ہوئی، دوبارہ کوشش کریں";
+      }
+    })
+    .catch(function() {
+      document.getElementById("uploadProg_" + idx).classList.remove("show");
+      document.getElementById("uploadArea_" + idx).style.display = "";
+      document.getElementById("imgPreview_" + idx).classList.remove("show");
+      var msg = document.getElementById("proofMsg_" + idx);
+      msg.style.color = "#ff6666";
+      msg.textContent = "❌ Network error — دوبارہ try کریں";
+    });
+  }
+
+  // ── Submit Proof ──
+  function submitProof(idx) {
+    var url  = taskStates[idx].proofUrl;
+    var msg  = document.getElementById("proofMsg_" + idx);
+    var btn  = document.getElementById("submitBtn_" + idx);
+
+    if (!url || !url.startsWith("http")) {
+      msg.style.color = "#ff6666";
+      msg.textContent = "❌ پہلے screenshot upload کریں";
+      return;
+    }
+
+    var userId = localStorage.getItem("userId") ||
+                 localStorage.getItem("user_id") || "unknown";
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submit ہو رہا ہے...';
+    msg.style.color = "rgba(255,255,255,.4)";
+    msg.textContent = "Please wait...";
+
+    fetch(GAS_URL +
+          "?action=yt_subscribe_proof" +
+          "&userId="    + encodeURIComponent(userId) +
+          "&proof="     + encodeURIComponent(url) +
+          "&linkIndex=" + encodeURIComponent(idx))
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.status === "success" || d.status === "duplicate") {
+          msg.textContent = "";
+          // Hide proof section, show done
+          document.getElementById("proof_" + idx).classList.remove("show");
+          document.getElementById("done_" + idx).classList.add("show");
+          document.getElementById("chCard_" + idx).classList.add("done");
+          // Price tag green
+          var pt = document.getElementById("priceTag_" + idx);
+          pt.classList.add("earned");
+          pt.textContent = d.status === "duplicate" ? "✔ پہلے ہوا" : "✔ Pending";
+          taskStates[idx].phase = "done";
+        } else {
+          throw new Error(d.message || "Error");
+        }
+      })
+      .catch(function(err) {
+        msg.style.color = "#ff6666";
+        msg.textContent = "❌ Error آیا، دوبارہ کوشش کریں";
+        btn.disabled = false;
+        btn.innerHTML = "📤 Proof Submit کریں";
+      });
+  }
+
+  function showError(txt) {
+    document.getElementById("errorMsg").textContent = txt;
+    document.getElementById("errorState").style.display = "block";
+  }
+
+  // ── Init ──
+  window.addEventListener("load", loadConfig);
+</script>
+</body>
+</html>
