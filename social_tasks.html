@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Social Tasks & Earn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --yt:   #ff2222;
+  --yt-bg:rgba(255,34,34,0.12);
+  --yt-br:rgba(255,34,34,0.28);
+  --fb:   #1877f2;
+  --fb-bg:rgba(24,119,242,0.12);
+  --fb-br:rgba(24,119,242,0.28);
+  --tk:   #00f2ea;
+  --tk-bg:rgba(0,242,234,0.10);
+  --tk-br:rgba(0,242,234,0.28);
+  --surface:#0d1117;
+  --card:#111820;
+  --border:rgba(255,255,255,0.07);
+  --text:rgba(255,255,255,0.85);
+  --muted:rgba(255,255,255,0.38);
+  --green:#00cc66;
+  --green-bg:rgba(0,200,100,0.08);
+  --green-br:rgba(0,200,100,0.22);
+}
+
+body{
+  min-height:100vh;
+  background:var(--surface);
+  font-family:'Noto Nastaliq Urdu',serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px 16px 60px;
+  overflow-x:hidden;
+}
+
+/* ── Glow blobs ── */
+.blob{
+  position:fixed;pointer-events:none;border-radius:50%;z-index:0;
+  filter:blur(60px);opacity:.45;
+}
+.blob-yt{width:340px;height:340px;top:-100px;right:-100px;
+  background:radial-gradient(circle,rgba(255,34,34,.35),transparent 70%);}
+.blob-fb{width:300px;height:300px;bottom:60px;left:-80px;
+  background:radial-gradient(circle,rgba(24,119,242,.28),transparent 70%);}
+.blob-tk{width:260px;height:260px;bottom:0;right:-60px;
+  background:radial-gradient(circle,rgba(0,242,234,.2),transparent 70%);}
+
+/* ── Header ── */
+.header{
+  position:relative;z-index:2;
+  width:100%;max-width:460px;
+  text-align:center;
+  margin-bottom:20px;
+  animation:fadeUp .6s .1s both;
+}
+.header-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--muted);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:14px;letter-spacing:2px;
+  padding:4px 16px 2px;border-radius:100px;
+  margin-bottom:10px;
+}
+.header-title{
+  font-size:22px;font-weight:700;
+  color:#fff;line-height:1.4;
+  margin-bottom:4px;
+}
+.header-sub{
+  font-size:13px;color:var(--muted);line-height:1.8;
+}
+
+/* ── Platform Tabs ── */
+.tabs{
+  position:relative;z-index:2;
+  display:flex;gap:8px;
+  width:100%;max-width:460px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:6px;
+  margin-bottom:18px;
+  animation:fadeUp .6s .2s both;
+}
+.tab-btn{
+  flex:1;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 8px;
+  border:none;border-radius:12px;
+  background:transparent;
+  color:var(--muted);
+  font-family:'Noto Nastaliq Urdu',serif;
+  font-size:14px;font-weight:600;
+  cursor:pointer;
+  transition:all .25s;
+  position:relative;
+}
+.tab-btn .tab-icon{font-size:15px;transition:all .25s;}
+
+.tab-btn.active-yt{background:var(--yt-bg);color:var(--yt);
+  border:1px solid var(--yt-br);box-shadow:0 4px 16px rgba(255,34,34,.2);}
+.tab-btn.active-fb{background:var(--fb-bg);color:var(--fb);
+  border:1px solid var(--fb-br);box-shadow:0 4px 16px rgba(24,119,242,.2);}
+.tab-btn.active-tk{background:var(--tk-bg);color:var(--tk);
+  border:1px solid var(--tk-br);box-shadow:0 4px 16px rgba(0,242,234,.2);}
+
+/* Done dot on tab */
+.tab-done-dot{
+  display:none;
+  width:7px;height:7px;
+  border-radius:50%;
+  background:var(--green);
+  position:absolute;top:6px;right:8px;
+  box-shadow:0 0 6px var(--green);
+}
+.tab-done-dot.show{display:block;}
+
+/* ── Card ── */
+.card{
+  position:relative;z-index:2;
+  width:100%;max-width:460px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:28px 22px 24px;
+  animation:cardIn .55s cubic-bezier(.22,1,.36,1) both;
+  overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;
+  top:0;left:12%;right:12%;height:1px;
+}
+.card-yt::before{background:linear-gradient(90deg,transparent,rgba(255,34,34,.5),transparent);}
+.card-fb::before{background:linear-gradient(90deg,transparent,rgba(24,119,242,.5),transparent);}
+.card-tk::before{background:linear-gradient(90deg,transparent,rgba(0,242,234,.4),transparent);}
+
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(22px) scale(.97)}
+  to  {opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+.platform-hidden{display:none !important;}
+
+/* ── Loading / Error ── */
+.loading-wrap{text-align:center;padding:36px 0}
+.spinner{
+  width:38px;height:38px;
+  border:3px solid rgba(255,255,255,.08);
+  border-top-color:var(--yt);
+  border-radius:50%;
+  animation:spin .75s linear infinite;
+  margin:0 auto 12px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{font-size:13px;color:var(--muted)}
+
+.error-wrap{text-align:center;padding:28px 0;display:none}
+.error-msg{font-size:13px;color:#ff6666;line-height:2}
+.retry-btn{
+  margin-top:12px;padding:9px 22px;
+  border-radius:10px;border:1px solid rgba(255,100,100,.3);
+  background:rgba(255,0,0,.1);color:#ff5555;
+  cursor:pointer;font-family:'Noto Nastaliq Urdu',serif;
+  font-size:14px;transition:background .2s;
+}
+.retry-btn:hover{background:rgba(255,0,0,.18)}
+
+/* ── Tasks Container ── */
+.tasks-container{display:none}
+
+.section-lbl{
+  font-size:11px;color:var(--muted);
+  font-family:sans-serif;letter-spacing:1.2px;
+  text-transform:uppercase;
+  direction:ltr;margin-bottom:12px;
+}
+
+/* ── Task Card ── */
+.task-card{
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px 16px;
+  margin-bottom:12px;
+  transition:border-color .25s,background .25s;
+}
+.task-card:hover{border-color:rgba(255,255,255,.12)}
+.task-card.done-card{
+  border-color:var(--green-br);
+  background:var(--green-bg);
+  opacity:.8;
+}
+
+/* Card header */
+.task-header{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;direction:rtl;
+}
+.task-name{
+  font-size:14px;font-weight:600;color:#fff;
+  display:flex;align-items:center;gap:8px;
+}
+.task-name i{font-size:16px;}
+.task-yt i{color:var(--yt)}
+.task-fb i{color:var(--fb)}
+.task-tk i{color:var(--tk)}
+
+.price-badge{
+  font-family:'Bebas Neue',sans-serif;font-size:17px;
+  letter-spacing:1px;padding:2px 10px;border-radius:100px;
+}
+.price-yt{color:var(--yt);background:var(--yt-bg);border:1px solid var(--yt-br)}
+.price-fb{color:var(--fb);background:var(--fb-bg);border:1px solid var(--fb-br)}
+.price-tk{color:var(--tk);background:var(--tk-bg);border:1px solid var(--tk-br)}
+.price-earned{color:var(--green)!important;background:var(--green-bg)!important;border-color:var(--green-br)!important}
+
+/* ── Action Button ── */
+.btn-action{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:11px 16px;
+  border-radius:12px;border:none;cursor:pointer;
+  font-family:'Noto Nastaliq Urdu',serif;
+  font-size:15px;font-weight:600;color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+  transition:all .2s;margin-bottom:10px;
+  position:relative;overflow:hidden;
+}
+.btn-action::after{
+  content:'';position:absolute;
+  top:-50%;left:-60%;width:35%;height:200%;
+  background:rgba(255,255,255,.1);
+  transform:skewX(-20deg);transition:left .45s;
+}
+.btn-action:hover::after{left:120%}
+.btn-action:hover:not(:disabled){transform:translateY(-1px)}
+.btn-action:disabled{background:#222!important;box-shadow:none!important;
+  cursor:not-allowed;color:rgba(255,255,255,.3)}
+
+.btn-yt{background:linear-gradient(135deg,#ff2222,#cc0000);
+  box-shadow:0 5px 20px rgba(255,0,0,.28),inset 0 1px 0 rgba(255,255,255,.1)}
+.btn-fb{background:linear-gradient(135deg,#1877f2,#0a52d0);
+  box-shadow:0 5px 20px rgba(24,119,242,.28),inset 0 1px 0 rgba(255,255,255,.1)}
+.btn-tk{background:linear-gradient(135deg,#00c7c0,#008f8a);
+  box-shadow:0 5px 20px rgba(0,242,234,.2),inset 0 1px 0 rgba(255,255,255,.1)}
+
+/* ── Timer ── */
+.mini-timer{
+  display:none;align-items:center;justify-content:center;gap:10px;
+  padding:8px 12px;
+  background:rgba(255,160,0,.08);border:1px solid rgba(255,160,0,.2);
+  border-radius:10px;margin-bottom:10px;
+}
+.mini-timer.show{display:flex}
+.timer-num{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff9900;
+  letter-spacing:1px;direction:ltr;
+}
+.timer-txt{font-size:12px;color:rgba(255,255,255,.5)}
+
+/* ── Proof Section ── */
+.proof-sec{display:none;margin-top:4px}
+.proof-sec.show{display:block}
+
+.proof-lbl{
+  color:rgba(255,255,255,.55);font-size:12px;
+  line-height:1.9;margin-bottom:8px;
+}
+
+.upload-area{
+  border:2px dashed rgba(255,255,255,.15);
+  border-radius:12px;padding:18px 12px;
+  text-align:center;cursor:pointer;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.02);
+  position:relative;transition:all .25s;
+}
+.upload-area:hover,.upload-area.drag{
+  border-color:rgba(255,255,255,.35);
+  background:rgba(255,255,255,.05);
+}
+.upload-area input[type=file]{
+  position:absolute;inset:0;opacity:0;
+  cursor:pointer;width:100%;height:100%;
+}
+.upload-icon{font-size:26px;margin-bottom:6px}
+.upload-txt{color:rgba(255,255,255,.5);font-size:12px;line-height:1.8}
+.upload-txt strong{color:#fff}
+
+.img-prev{
+  display:none;width:100%;max-height:130px;
+  object-fit:cover;border-radius:10px;
+  margin-bottom:10px;border:1px solid var(--border);
+}
+.img-prev.show{display:block}
+
+.prog-row{
+  display:none;align-items:center;gap:10px;
+  padding:8px 12px;
+  background:rgba(255,160,0,.08);border:1px solid rgba(255,160,0,.2);
+  border-radius:10px;margin-bottom:10px;
+  font-size:12px;color:rgba(255,255,255,.6);
+}
+.prog-row.show{display:flex}
+
+.ok-row{
+  display:none;align-items:center;gap:8px;
+  padding:8px 12px;
+  background:var(--green-bg);border:1px solid var(--green-br);
+  border-radius:10px;margin-bottom:10px;
+  font-size:12px;color:var(--green);
+}
+.ok-row.show{display:flex}
+
+.btn-submit{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:11px;border-radius:10px;
+  border:none;cursor:pointer;
+  font-family:'Noto Nastaliq Urdu',serif;
+  font-size:14px;font-weight:600;color:#fff;
+  background:linear-gradient(135deg,#2ecc71,#27ae60);
+  box-shadow:0 4px 16px rgba(46,204,113,.25);
+  transition:all .2s;
+}
+.btn-submit:hover:not(:disabled){transform:translateY(-1px)}
+.btn-submit:disabled{
+  background:#222;box-shadow:none;
+  cursor:not-allowed;color:rgba(255,255,255,.3);
+}
+.proof-msg{
+  margin-top:8px;font-size:12px;
+  text-align:center;min-height:16px;line-height:1.8;
+}
+
+/* ── Done Badge ── */
+.done-badge{
+  display:none;align-items:center;justify-content:center;gap:8px;
+  padding:10px;
+  background:var(--green-bg);border:1px solid var(--green-br);
+  border-radius:10px;color:var(--green);font-size:13px;
+}
+.done-badge.show{display:flex}
+
+/* ── Info row bottom ── */
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
+  margin:20px 0;
+}
+.info-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:18px;direction:ltr;
+}
+.info-item{display:flex;flex-direction:column;align-items:center;gap:3px}
+.info-val{
+  font-family:'Bebas Neue',sans-serif;font-size:17px;
+  color:#fff;letter-spacing:1px;
+}
+.info-key{
+  font-size:9px;color:var(--muted);
+  font-family:sans-serif;letter-spacing:.5px;text-transform:uppercase;
+}
+.info-sep{width:1px;height:26px;background:rgba(255,255,255,.07)}
+
+/* ── ID Modal ── */
+.id-overlay{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.id-overlay.show{display:flex;}
+.id-modal{
+  background:#111820;border:1px solid rgba(255,255,255,.1);
+  border-radius:22px;padding:28px 24px;width:100%;max-width:380px;
+  position:relative;animation:modalIn .35s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.id-modal::before{
+  content:'';position:absolute;top:0;left:15%;right:15%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,175,55,.5),transparent);
+}
+.id-modal-icon{
+  width:60px;height:60px;border-radius:50%;
+  background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin:0 auto 16px;
+}
+.id-modal-title{
+  font-size:18px;font-weight:700;color:#fff;
+  text-align:center;margin-bottom:6px;line-height:1.5;
+}
+.id-modal-sub{
+  font-size:12px;color:rgba(255,255,255,.45);
+  text-align:center;line-height:1.8;margin-bottom:20px;
+}
+.id-input-wrap{position:relative;margin-bottom:12px;}
+.id-input{
+  width:100%;padding:13px 16px;
+  background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:12px;color:#fff;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:20px;letter-spacing:2px;
+  text-align:center;text-transform:uppercase;
+  outline:none;transition:border-color .2s;
+  direction:ltr;
+}
+.id-input::placeholder{color:rgba(255,255,255,.25);font-size:14px;letter-spacing:1px;}
+.id-input:focus{border-color:rgba(212,175,55,.6);}
+.id-input.err-inp{border-color:rgba(255,100,100,.6);}
+.id-input.ok-inp{border-color:rgba(0,200,100,.6);}
+.id-err-msg{
+  font-size:12px;color:#ff6666;text-align:center;
+  min-height:16px;margin-bottom:10px;line-height:1.7;
+}
+.id-confirm-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:13px;border-radius:12px;border:none;cursor:pointer;
+  font-family:'Noto Nastaliq Urdu',serif;font-size:15px;font-weight:700;
+  color:#000;background:linear-gradient(135deg,#d4af37,#b8960c);
+  box-shadow:0 5px 20px rgba(212,175,55,.3);transition:all .2s;
+}
+.id-confirm-btn:hover:not(:disabled){transform:translateY(-1px);}
+.id-confirm-btn:disabled{background:#2a2a2a;color:rgba(255,255,255,.3);box-shadow:none;cursor:not-allowed;}
+.id-cancel{
+  display:block;text-align:center;margin-top:10px;
+  font-size:12px;color:rgba(255,255,255,.3);cursor:pointer;
+  font-family:sans-serif;
+}
+.id-cancel:hover{color:rgba(255,255,255,.6);}
+</style>
+</head>
+<body>
+
+<!-- Background blobs -->
+<div class="blob blob-yt"></div>
+<div class="blob blob-fb"></div>
+<div class="blob blob-tk"></div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-badge">🪙 SOCIAL TASKS & EARN</div>
+  <h1 class="header-title">Social Tasks کریں — Reward پائیں</h1>
+  <p class="header-sub">ہر task صرف ایک بار ہو سکتا ہے • Screenshot ضروری ہے</p>
+</div>
+
+<!-- Platform Tabs -->
+<div class="tabs" id="tabs">
+  <button class="tab-btn active-yt" id="tab_yt" onclick="switchPlatform('yt')">
+    <div class="tab-done-dot" id="tdot_yt"></div>
+    <i class="fab fa-youtube tab-icon"></i>
+    YouTube
+  </button>
+  <button class="tab-btn" id="tab_fb" onclick="switchPlatform('fb')">
+    <div class="tab-done-dot" id="tdot_fb"></div>
+    <i class="fab fa-facebook tab-icon"></i>
+    Facebook
+  </button>
+  <button class="tab-btn" id="tab_tk" onclick="switchPlatform('tk')">
+    <div class="tab-done-dot" id="tdot_tk"></div>
+    <i class="fab fa-tiktok tab-icon"></i>
+    TikTok
+  </button>
+</div>
+
+<!-- ═══════════ YOUTUBE CARD ═══════════ -->
+<div class="card card-yt" id="card_yt">
+  <div id="load_yt" class="loading-wrap">
+    <div class="spinner" style="border-top-color:var(--yt)"></div>
+    <p class="load-txt">⏳ YouTube Tasks لوڈ ہو رہے ہیں...</p>
+  </div>
+  <div id="err_yt" class="error-wrap">
+    <div style="font-size:30px;margin-bottom:8px">⚠️</div>
+    <div class="error-msg" id="errmsg_yt">کچھ غلط ہوا</div>
+    <button class="retry-btn" onclick="loadAllTasks()">🔄 دوبارہ کوشش کریں</button>
+  </div>
+  <div class="tasks-container" id="tasks_yt">
+    <div class="section-lbl">YouTube Channels</div>
+    <div id="list_yt"></div>
+    <div class="divider"></div>
+    <div class="info-row">
+      <div class="info-item">
+        <span class="info-val" id="total_yt">—</span>
+        <span class="info-key">Total Reward</span>
+      </div>
+      <div class="info-sep"></div>
+      <div class="info-item">
+        <span class="info-val">~1 Min</span>
+        <span class="info-key">Per Task</span>
+      </div>
+      <div class="info-sep"></div>
+      <div class="info-item">
+        <span class="info-val" id="cnt_yt">—</span>
+        <span class="info-key">Tasks</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FACEBOOK CARD ═══════════ -->
+<div class="card card-fb platform-hidden" id="card_fb">
+  <div id="load_fb" class="loading-wrap">
+    <div class="spinner" style="border-top-color:var(--fb)"></div>
+    <p class="load-txt">⏳ Facebook Tasks لوڈ ہو رہے ہیں...</p>
+  </div>
+  <div id="err_fb" class="error-wrap">
+    <div style="font-size:30px;margin-bottom:8px">⚠️</div>
+    <div class="error-msg" id="errmsg_fb">کچھ غلط ہوا</div>
+    <button class="retry-btn" onclick="loadAllTasks()">🔄 دوبارہ کوشش کریں</button>
+  </div>
+  <div class="tasks-container" id="tasks_fb">
+    <div class="section-lbl">Facebook Pages</div>
+    <div id="list_fb"></div>
+    <div class="divider"></div>
+    <div class="info-row">
+      <div class="info-item">
+        <span class="info-val" id="total_fb">—</span>
+        <span class="info-key">Total Reward</span>
+      </div>
+      <div class="info-sep"></div>
+      <div class="info-item">
+        <span class="info-val">~1 Min</span>
+        <span class="info-key">Per Task</span>
+      </div>
+      <div class="info-sep"></div>
+      <div class="info-item">
+        <span class="info-val" id="cnt_fb">—</span>
+        <span class="info-key">Tasks</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TIKTOK CARD ═══════════ -->
+<div class="card card-tk platform-hidden" id="card_tk">
+  <div id="load_tk" class="loading-wrap">
+    <div class="spinner" style="border-top-color:var(--tk)"></div>
+    <p class="load-txt">⏳ TikTok Tasks لوڈ ہو رہے ہیں...</p>
+  </div>
+  <div id="err_tk" class="error-wrap">
+    <div style="font-size:30px;margin-bottom:8px">⚠️</div>
+    <div class="error-msg" id="errmsg_tk">کچھ غلط ہوا</div>
+    <button class="retry-btn" onclick="loadAllTasks()">🔄 دوبارہ کوشش کریں</button>
+  </div>
+  <div class="tasks-container" id="tasks_tk">
+    <div class="section-lbl">TikTok Accounts</div>
+    <div id="list_tk"></div>
+    <div class="divider"></div>
+    <div class="info-row">
+      <div class="info-item">
+        <span class="info-val" id="total_tk">—</span>
+        <span class="info-key">Total Reward</span>
+      </div>
+      <div class="info-sep"></div>
+      <div class="info-item">
+        <span class="info-val">~1 Min</span>
+        <span class="info-key">Per Task</span>
+      </div>
+      <div class="info-sep"></div>
+      <div class="info-item">
+        <span class="info-val" id="cnt_tk">—</span>
+        <span class="info-key">Tasks</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// 🔑 CONFIG — یہاں اپنے values ڈالیں
+// ═══════════════════════════════════════════════════
+var GAS_URL     = "https://script.google.com/macros/s/AKfycbxdWkTfpcu_AJmvV0Km8F6BOcMl9_2Ay2xSK6sLjKUQVtm0hUYEjRWRQsIf-jjQFY_Fmw/exec";
+var IMGBB_KEY   = "b424622c1123239355915706283ad82e";
+var AD_URL      = "https://omg10.com/4/10885505";
+// ═══════════════════════════════════════════════════
+
+var PLATFORM_CFG = {
+  yt: { label:"YouTube",    icon:"fab fa-youtube",  btnClass:"btn-yt",
+        priceClass:"price-yt", taskClass:"task-yt",
+        action:["Subscribe","سبسکرائب"] },
+  fb: { label:"Facebook",   icon:"fab fa-facebook", btnClass:"btn-fb",
+        priceClass:"price-fb", taskClass:"task-fb",
+        action:["Like","Like"] },
+  tk: { label:"TikTok",     icon:"fab fa-tiktok",   btnClass:"btn-tk",
+        priceClass:"price-tk", taskClass:"task-tk",
+        action:["Follow","فالو"] }
+};
+
+var taskStates  = {}; // key: platform_taskId
+var currentPlatform = "yt";
+var userId = localStorage.getItem("userId") ||
+             localStorage.getItem("user_id") ||
+             localStorage.getItem("ps_uid") || "unknown";
+
+// ── Tab Switch ──
+function switchPlatform(p) {
+  currentPlatform = p;
+  ["yt","fb","tk"].forEach(function(x) {
+    document.getElementById("card_"+x).classList.toggle("platform-hidden", x !== p);
+    var tb = document.getElementById("tab_"+x);
+    tb.className = "tab-btn" + (x === p ? " active-"+x : "");
+  });
+}
+
+// ── Load All Tasks ──
+function loadAllTasks() {
+  ["yt","fb","tk"].forEach(function(p) {
+    document.getElementById("load_"+p).style.display = "block";
+    document.getElementById("err_"+p).style.display  = "none";
+    document.getElementById("tasks_"+p).style.display= "none";
+  });
+
+  var url = GAS_URL + "?action=get_tasks_config&userId=" + encodeURIComponent(userId);
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.status === "success" && d.platforms) {
+        ["yt","fb","tk"].forEach(function(p){
+          document.getElementById("load_"+p).style.display = "none";
+          var list = d.platforms[p] || [];
+          if (list.length > 0) {
+            renderPlatform(p, list);
+          } else {
+            showPlatformError(p, "ابھی کوئی task نہیں ہے");
+          }
+        });
+      } else {
+        ["yt","fb","tk"].forEach(function(p){
+          showPlatformError(p, d.message || "Load نہیں ہوا");
+        });
+      }
+    })
+    .catch(function(){
+      ["yt","fb","tk"].forEach(function(p){
+        showPlatformError(p, "Network error — دوبارہ try کریں");
+      });
+    });
+}
+
+function showPlatformError(p, msg) {
+  document.getElementById("load_"+p).style.display = "none";
+  document.getElementById("errmsg_"+p).textContent = msg;
+  document.getElementById("err_"+p).style.display  = "block";
+}
+
+// ── Render Platform Tasks ──
+function renderPlatform(p, tasks) {
+  var cfg  = PLATFORM_CFG[p];
+  var list = document.getElementById("list_"+p);
+  list.innerHTML = "";
+
+  var totalRs = 0, doneCount = 0;
+
+  tasks.forEach(function(t, i) {
+    var key = p + "_" + t.taskId;
+    taskStates[key] = { phase: t.done ? "done" : "idle", proofUrl: "" };
+
+    var num = parseInt((t.price || "0").replace(/[^0-9]/g,""));
+    if (!isNaN(num)) totalRs += num;
+    if (t.done) doneCount++;
+
+    var card = document.createElement("div");
+    card.className = "task-card" + (t.done ? " done-card" : "");
+    card.id = "tc_"+key;
+    card.style.animationDelay = (i * 0.08) + "s";
+
+    card.innerHTML =
+      '<div class="task-header">' +
+        '<span class="task-name '+cfg.taskClass+'">' +
+          '<i class="'+cfg.icon+'"></i> '+t.name+
+        '</span>' +
+        '<span class="price-badge '+cfg.priceClass+(t.done?" price-earned":"")+'" id="pb_'+key+'">' +
+          (t.done ? "✔ پہلے ہوا" : t.price) +
+        '</span>' +
+      '</div>' +
+
+      // Step 1 — Action button
+      '<div id="step1_'+key+'"'+(t.done?' style="display:none"':'')+'>'+
+        '<button class="btn-action '+cfg.btnClass+'" id="ab_'+key+'" '+
+                'onclick="startTask(\''+p+'\',\''+t.taskId+'\',\''+encodeURIComponent(t.url)+'\',\''+t.price+'\')">' +
+          '<i class="'+cfg.icon+'"></i> '+
+          cfg.action[1]+' کریں — '+t.price+
+        '</button>' +
+      '</div>' +
+
+      // Step 2 — Timer
+      '<div class="mini-timer" id="tmr_'+key+'">' +
+        '<span>⏱</span>' +
+        '<span class="timer-num" id="tnum_'+key+'">30</span>' +
+        '<span class="timer-txt">سیکنڈ بعد channel کھلے گا</span>' +
+      '</div>' +
+
+      // Step 3 — Proof
+      '<div class="proof-sec" id="psec_'+key+'">' +
+        '<p class="proof-lbl">📸 Screenshot لیں اور نیچے upload کریں</p>' +
+        '<img class="img-prev" id="iprev_'+key+'" src="" alt="preview"/>' +
+        '<div class="upload-area" id="ua_'+key+'">' +
+          '<input type="file" accept="image/*" onchange="onFileSelect(\''+key+'\',this)"/>' +
+          '<div class="upload-icon">📁</div>' +
+          '<div class="upload-txt"><strong>یہاں tap کریں</strong><br>screenshot select کریں<br>'+
+          '<span style="font-size:10px;color:rgba(255,255,255,.3)">(JPG · PNG · WEBP)</span></div>' +
+        '</div>' +
+        '<div class="prog-row" id="prog_'+key+'">'+
+          '<i class="fas fa-spinner fa-spin" style="color:#ff9900"></i>'+
+          '<span>Image upload ہو رہی ہے...</span>'+
+        '</div>' +
+        '<div class="ok-row" id="ok_'+key+'">'+
+          '<span>✅</span><span>Upload ہو گئی!</span>'+
+        '</div>' +
+        '<button class="btn-submit" id="sbtn_'+key+'" disabled '+
+                'onclick="submitProof(\''+p+'\',\''+t.taskId+'\',\''+key+'\')">' +
+          '📤 Proof Submit کریں' +
+        '</button>' +
+        '<p class="proof-msg" id="pmsg_'+key+'"></p>' +
+      '</div>' +
+
+      // Done badge
+      '<div class="done-badge'+(t.done?' show':'')+'" id="db_'+key+'">' +
+        '✅ Proof submit ہو گیا — verification pending' +
+      '</div>';
+
+    list.appendChild(card);
+  });
+
+  // Info row
+  document.getElementById("total_"+p).textContent = "Rs."+totalRs;
+  document.getElementById("cnt_"+p).textContent   = tasks.length + "x";
+  document.getElementById("tasks_"+p).style.display = "block";
+
+  // Tab done dot — if all done
+  if (doneCount === tasks.length && tasks.length > 0) {
+    document.getElementById("tdot_"+p).classList.add("show");
+  }
+}
+
+// ── Start Task ──
+function startTask(p, taskId, urlEnc, price) {
+  var key = p + "_" + taskId;
+  if (taskStates[key] && taskStates[key].phase !== "idle") return;
+  taskStates[key].phase = "timing";
+
+  var url = decodeURIComponent(urlEnc);
+
+  // ── Step 1: Pehle sirf Ad kholo ──
+  if (AD_URL) window.open(AD_URL, "_blank");
+
+  // ── Step 2: Button chhupao, Timer dikhao ──
+  document.getElementById("step1_"+key).style.display = "none";
+  var tmrEl = document.getElementById("tmr_"+key);
+  tmrEl.classList.add("show");
+
+  var secs = 30;
+  document.getElementById("tnum_"+key).textContent = secs;
+
+  taskStates[key].timer = setInterval(function() {
+    secs--;
+    document.getElementById("tnum_"+key).textContent = secs;
+
+    if (secs <= 0) {
+      clearInterval(taskStates[key].timer);
+
+      // ── Step 3: 30s baad Platform link kholo ──
+      window.open(url, "_blank");
+
+      // ── Step 4: Timer chhupao, Proof form dikhao ──
+      taskStates[key].phase = "proof";
+      tmrEl.classList.remove("show");
+      document.getElementById("psec_"+key).classList.add("show");
+    }
+  }, 1000);
+}
+
+// ── File Select → Auto ImgBB Upload ──
+function onFileSelect(key, inp) {
+  var file = inp.files[0];
+  if (!file) return;
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    // Preview
+    var prev = document.getElementById("iprev_"+key);
+    prev.src = e.target.result;
+    prev.classList.add("show");
+
+    document.getElementById("ua_"+key).style.display   = "none";
+    document.getElementById("prog_"+key).classList.add("show");
+    document.getElementById("sbtn_"+key).disabled = true;
+
+    uploadImgBB(key, e.target.result.split(",")[1]);
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadImgBB(key, b64) {
+  var fd = new FormData();
+  fd.append("key",   IMGBB_KEY);
+  fd.append("image", b64);
+
+  fetch("https://api.imgbb.com/1/upload", { method:"POST", body:fd })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      document.getElementById("prog_"+key).classList.remove("show");
+      if (d.success && d.data && d.data.url) {
+        taskStates[key].proofUrl = d.data.url;
+        document.getElementById("ok_"+key).classList.add("show");
+        document.getElementById("sbtn_"+key).disabled = false;
+      } else {
+        uploadFail(key, "ImgBB upload fail");
+      }
+    })
+    .catch(function(){ uploadFail(key, "Network error"); });
+}
+
+function uploadFail(key, msg) {
+  document.getElementById("prog_"+key).classList.remove("show");
+  document.getElementById("ua_"+key).style.display = "";
+  document.getElementById("iprev_"+key).classList.remove("show");
+  var m = document.getElementById("pmsg_"+key);
+  m.style.color = "#ff6666";
+  m.textContent = "❌ " + msg + " — دوبارہ try کریں";
+}
+
+// ── Submit Proof → GAS ──
+// Pending task store — modal ke liye
+var _pendingSubmit = null;
+
+function submitProof(p, taskId, key) {
+  var url = taskStates[key] ? taskStates[key].proofUrl : "";
+  var msg = document.getElementById("pmsg_"+key);
+  var btn = document.getElementById("sbtn_"+key);
+
+  if (!url || !url.startsWith("http")) {
+    msg.style.color = "#ff6666";
+    msg.textContent = "❌ پہلے screenshot upload کریں";
+    return;
+  }
+
+  // ── Agar userId nahi hai → ID modal dikhao ──
+  if (!userId || userId === "unknown") {
+    _pendingSubmit = { p:p, taskId:taskId, key:key };
+    openIdModal();
+    return;
+  }
+
+  // ── ID hai → seedha submit karo ──
+  doSubmit(p, taskId, key, userId);
+}
+
+function doSubmit(p, taskId, key, uid) {
+  var msg = document.getElementById("pmsg_"+key);
+  var btn = document.getElementById("sbtn_"+key);
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submit ہو رہا ہے...';
+  msg.style.color = "rgba(255,255,255,.4)";
+  msg.textContent = "Please wait...";
+
+  var gasUrl = GAS_URL +
+    "?action=submit_proof" +
+    "&platform="  + encodeURIComponent(p) +
+    "&taskId="    + encodeURIComponent(taskId) +
+    "&userId="    + encodeURIComponent(uid) +
+    "&proof="     + encodeURIComponent(taskStates[key].proofUrl);
+
+  fetch(gasUrl)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.status === "success" || d.status === "duplicate") {
+        msg.textContent = "";
+        document.getElementById("psec_"+key).classList.remove("show");
+        document.getElementById("db_"+key).classList.add("show");
+        document.getElementById("tc_"+key).classList.add("done-card");
+        var pb = document.getElementById("pb_"+key);
+        pb.classList.add("price-earned");
+        pb.textContent = d.status === "duplicate" ? "✔ پہلے ہوا" : "✔ Pending";
+        taskStates[key].phase = "done";
+        checkAllDone(p);
+      } else {
+        throw new Error(d.message || "Error");
+      }
+    })
+    .catch(function(){
+      msg.style.color = "#ff6666";
+      msg.textContent = "❌ Error آیا — دوبارہ try کریں";
+      btn.disabled = false;
+      btn.innerHTML = "📤 Proof Submit کریں";
+    });
+}
+
+// ── Modal Functions ──
+function openIdModal() {
+  document.getElementById("idInput").value = "";
+  document.getElementById("idInput").className = "id-input";
+  document.getElementById("idErrMsg").textContent = "";
+  document.getElementById("idConfirmBtn").disabled = false;
+  document.getElementById("idConfirmBtn").innerHTML = "✅ تصدیق کریں اور Submit کریں";
+  document.getElementById("idOverlay").classList.add("show");
+  setTimeout(function(){ document.getElementById("idInput").focus(); }, 300);
+}
+
+function cancelIdModal() {
+  document.getElementById("idOverlay").classList.remove("show");
+  _pendingSubmit = null;
+}
+
+function confirmId() {
+  var inp  = document.getElementById("idInput");
+  var raw  = inp.value.trim().toUpperCase();
+  var err  = document.getElementById("idErrMsg");
+  var btn  = document.getElementById("idConfirmBtn");
+
+  // Basic format check
+  if (!raw || !/^VX[0-9]+$/.test(raw)) {
+    inp.className = "id-input err-inp";
+    err.textContent = "❌ صحیح ID لکھیں — مثال: VX0001";
+    return;
+  }
+
+  // GAS se verify karo Users sheet mein
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> تصدیق ہو رہی ہے...';
+  err.textContent = "";
+
+  fetch(GAS_URL + "?action=validate_user&rawId=" + encodeURIComponent(raw))
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.status === "success") {
+        // ✅ Valid ID
+        userId = d.userId;
+        localStorage.setItem("user_id", userId); // future ke liye save
+        inp.className = "id-input ok-inp";
+        err.style.color = "#00cc66";
+        err.textContent = "✅ ID تصدیق ہو گئی — Submit ہو رہا ہے...";
+
+        // Modal band karo aur submit chalaao
+        setTimeout(function(){
+          document.getElementById("idOverlay").classList.remove("show");
+          if (_pendingSubmit) {
+            var ps = _pendingSubmit;
+            _pendingSubmit = null;
+            doSubmit(ps.p, ps.taskId, ps.key, userId);
+          }
+        }, 800);
+      } else {
+        // ❌ ID nahi mili
+        inp.className = "id-input err-inp";
+        err.style.color = "#ff6666";
+        err.textContent = "❌ یہ ID موجود نہیں — صحیح VX ID لکھیں";
+        btn.disabled = false;
+        btn.innerHTML = "✅ تصدیق کریں اور Submit کریں";
+      }
+    })
+    .catch(function(){
+      err.style.color = "#ff6666";
+      err.textContent = "❌ Network error — دوبارہ try کریں";
+      btn.disabled = false;
+      btn.innerHTML = "✅ تصدیق کریں اور Submit کریں";
+    });
+}
+
+function checkAllDone(p) {
+  var allDone = true;
+  Object.keys(taskStates).forEach(function(k){
+    if (k.startsWith(p+"_") && taskStates[k].phase !== "done") allDone = false;
+  });
+  if (allDone) document.getElementById("tdot_"+p).classList.add("show");
+}
+
+// ── Init ──
+window.addEventListener("load", loadAllTasks);
+</script>
+
+<!-- ══ User ID Modal ══ -->
+<div class="id-overlay" id="idOverlay">
+  <div class="id-modal">
+    <div class="id-modal-icon">🪪</div>
+    <div class="id-modal-title">اپنی User ID درج کریں</div>
+    <div class="id-modal-sub">
+      آپ کی Vexora Pro ID<br>
+      مثال: <span style="color:#d4af37;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">VX0001</span>
+    </div>
+    <div class="id-input-wrap">
+      <input type="text" class="id-input" id="idInput"
+             placeholder="VX0001" maxlength="10"
+             oninput="this.value=this.value.toUpperCase()"
+             onkeydown="if(event.key==='Enter')confirmId()"/>
+    </div>
+    <div class="id-err-msg" id="idErrMsg"></div>
+    <button class="id-confirm-btn" id="idConfirmBtn" onclick="confirmId()">
+      ✅ تصدیق کریں اور Submit کریں
+    </button>
+    <span class="id-cancel" onclick="cancelIdModal()">بند کریں</span>
+  </div>
+</div>
+</body>
+</html>
