@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Watch Videos | Vexora Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+(function(){
+  if(localStorage.getItem("anLoggedIn")!=="true"){window.location.replace("auth.html");return;}
+  try{window.CU=JSON.parse(localStorage.getItem("anUser")||localStorage.getItem("an_user")||"{}");}
+  catch(e){localStorage.clear();window.location.replace("auth.html");}
+})();
+</script>
+<style>
+:root{--bg:#020810;--card:#06101f;--dark:#030c18;--border:rgba(201,162,39,0.15);--gold:#c9a227;--gold2:#e8c547;--grad:linear-gradient(135deg,#9b6e14,#c9a227,#e8c547);--muted:#4a6080;--green:#00e676;--red:#ff3d71;--warn:#ff9d00;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 90% 50% at 50% -5%,rgba(14,40,90,0.6) 0%,transparent 65%);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(201,162,39,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,0.035) 1px,transparent 1px);
+  background-size:44px 44px;}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(2,8,16,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.back-btn{width:36px;height:36px;background:rgba(201,162,39,0.07);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold2);text-decoration:none;font-size:14px;flex-shrink:0;transition:.2s;}
+.back-btn:active{transform:scale(.92);}
+.topbar-info{flex:1;min-width:0;}
+.topbar-title{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;background:linear-gradient(135deg,#c9a227,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;letter-spacing:1px;}
+.topbar-sub{font-size:10.5px;color:var(--muted);margin-top:2px;font-weight:600;}
+.earn-pill{background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.22);border-radius:10px;padding:7px 12px;text-align:center;flex-shrink:0;}
+.ep-val{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:var(--gold2);line-height:1;}
+.ep-lbl{font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.5px;}
+
+/* PROGRESS */
+.prog-wrap{background:var(--card);border-bottom:1px solid var(--border);padding:10px 16px;position:relative;z-index:1;}
+.prog-meta{display:flex;justify-content:space-between;margin-bottom:7px;}
+.prog-meta span{font-size:11px;font-weight:700;color:var(--muted);}
+.prog-meta strong{font-family:'Orbitron',sans-serif;font-size:13px;color:var(--gold2);}
+.bar-bg{height:5px;background:rgba(255,255,255,0.06);border-radius:5px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#9b6e14,#c9a227,#e8c547);transition:width .5s;}
+
+.page{padding:14px;padding-bottom:100px;position:relative;z-index:1;}
+
+/* GEO BANNER */
+.geo-banner{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 15px;margin-bottom:14px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
+.geo-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a227,transparent);}
+.geo-flag{font-size:22px;flex-shrink:0;}
+.geo-info{flex:1;}
+.gi-country{font-size:13px;font-weight:800;color:var(--gold2);}
+.gi-rate{font-size:11px;color:var(--muted);font-weight:700;margin-top:2px;}
+.geo-earn{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;color:var(--gold2);}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;}
+.sv{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;line-height:1;}
+.sl{font-size:9.5px;color:var(--muted);font-weight:700;margin-top:3px;text-transform:uppercase;letter-spacing:.5px;}
+
+/* VIDEO CARD */
+.vcard{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:12px;transition:border-color .3s;}
+.vcard.v-done{border-color:rgba(0,230,118,.35);}
+.vcard.v-watching{border-color:rgba(201,162,39,.4);}
+.vthumb{position:relative;background:var(--dark);aspect-ratio:16/9;overflow:hidden;}
+.vthumb iframe{width:100%;height:100%;border:none;display:block;}
+.play-ov{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;}
+.play-ov:hover{background:rgba(0,0,0,.4);}
+.play-ring{width:58px;height:58px;background:rgba(201,162,39,.14);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px;box-shadow:0 0 20px rgba(201,162,39,0.3);}
+.play-ring i{color:var(--gold);font-size:20px;margin-left:3px;}
+.play-ov span{font-size:12px;color:rgba(255,255,255,.8);font-weight:700;letter-spacing:.5px;}
+.done-ov{position:absolute;inset:0;background:rgba(0,230,118,.1);display:none;flex-direction:column;align-items:center;justify-content:center;}
+.done-ov i{font-size:40px;color:var(--green);margin-bottom:7px;}
+.done-ov span{font-size:13px;font-weight:800;color:var(--green);}
+.vfooter{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.vtitle{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.vearns{font-size:10.5px;color:var(--muted);margin-top:1px;}
+.vstatus{font-size:10.5px;font-weight:800;padding:5px 11px;border-radius:20px;flex-shrink:0;white-space:nowrap;}
+.s-pend{background:rgba(255,157,0,.1);color:var(--warn);border:1px solid rgba(255,157,0,.25);}
+.s-watch{background:rgba(201,162,39,.1);color:var(--gold);border:1px solid rgba(201,162,39,.25);}
+.s-done{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25);}
+
+.ad-banner-wrap{padding:10px 14px 14px;background:var(--dark);border-top:1px solid rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;gap:7px;}
+.ad-banner-label{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1.2px;display:flex;align-items:center;gap:5px;align-self:flex-start;}
+.ad-banner-label::before{content:'';display:inline-block;width:5px;height:5px;background:var(--gold);border-radius:50%;animation:adpulse 1.5s infinite;}
+@keyframes adpulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.ad-banner-inner{width:100%;border-radius:10px;overflow:hidden;background:rgba(0,0,0,.25);border:1px solid rgba(201,162,39,.07);min-height:60px;display:flex;align-items:center;justify-content:center;}
+
+/* ✅ NO VIDEOS (not "buy plan") */
+.no-videos{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:44px 24px;text-align:center;}
+.no-videos i{font-size:50px;opacity:.18;display:block;margin-bottom:16px;color:var(--gold);}
+.no-videos h3{font-size:17px;font-weight:800;margin-bottom:8px;}
+.no-videos p{font-size:12.5px;color:var(--muted);line-height:1.7;}
+
+/* ALL DONE */
+.all-done{background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.2);border-radius:16px;padding:36px 24px;text-align:center;margin-top:10px;}
+.all-done i{font-size:48px;color:var(--green);opacity:.6;display:block;margin-bottom:12px;}
+.all-done h3{font-size:17px;font-weight:800;color:var(--green);margin-bottom:6px;}
+.all-done p{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* BOTTOM BAR */
+.btm{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(2,8,16,.97);backdrop-filter:blur(14px);border-top:1px solid var(--border);padding:11px 16px;display:flex;gap:10px;align-items:center;}
+.te-box{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px 12px;}
+.tel{font-size:9.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.tev{font-family:'Orbitron',sans-serif;font-size:19px;font-weight:700;color:var(--gold2);line-height:1.1;}
+.home-btn{background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.2);border-radius:12px;padding:11px 16px;color:var(--gold2);font-size:13px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:7px;text-decoration:none;transition:.2s;}
+.home-btn:active{transform:scale(.95);}
+.vid-timer-box{flex:1;background:rgba(201,162,39,.07);border:1px solid rgba(201,162,39,.28);border-radius:12px;padding:9px 12px;display:none;align-items:center;gap:10px;}
+.vid-timer-box.show{display:flex;}
+.vtb-icon{width:30px;height:30px;background:rgba(201,162,39,.12);border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.vtb-icon i{color:var(--gold);font-size:12px;}
+.vtbl{font-size:9.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.vtbv{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;color:var(--gold2);line-height:1.1;}
+
+/* YOUTUBE SHORTS */
+.shorts-section{margin-bottom:14px;}
+.shorts-heading{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;display:flex;align-items:center;gap:6px;}
+.shorts-heading::before{content:'▶';color:var(--gold);font-size:10px;}
+.shorts-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.shorts-row::-webkit-scrollbar{display:none;}
+.short-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;flex-shrink:0;width:140px;}
+.short-card iframe{width:140px;height:220px;border:none;display:block;}
+.short-label{padding:6px 8px;font-size:10px;font-weight:700;color:var(--gold2);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+#ad-overlay{position:fixed;inset:0;z-index:9999;background:#000;display:none;flex-direction:column;}
+#ad-overlay.show{display:flex;}
+#ad-frame{flex:1;width:100%;border:none;display:block;min-height:0;}
+.ad-btm{background:rgba(2,8,16,.98);border-top:2px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.ad-countdown{flex:1;}
+.ad-cd-label{font-size:9.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.ad-cd-row{display:flex;align-items:baseline;gap:5px;}
+.ad-cd-num{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:700;color:var(--gold);line-height:1;transition:color .4s;}
+.ad-cd-num.ready{color:var(--green);}
+.ad-cd-unit{font-size:12px;color:var(--muted);font-weight:700;}
+.ad-prog-bar{height:3px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-top:7px;}
+.ad-prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#9b6e14,#e8c547);width:0%;}
+.ad-note{font-size:9px;color:var(--muted);margin-top:5px;font-weight:700;}
+.ad-play-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 18px;color:var(--muted);font-size:13px;font-weight:800;cursor:not-allowed;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:8px;transition:all .35s;pointer-events:none;flex-shrink:0;opacity:.4;}
+.ad-play-btn.ready{border-color:var(--gold);color:#fff;background:rgba(201,162,39,0.15);cursor:pointer;pointer-events:all;opacity:1;box-shadow:0 0 20px rgba(201,162,39,.25);}
+.ad-play-btn.ready:active{transform:scale(.95);}
+
+.loader{text-align:center;padding:70px 20px;color:var(--muted);}
+.loader i{font-size:32px;margin-bottom:14px;display:block;color:var(--gold);}
+</style>
+</head>
+<body>
+
+<!-- FULL SCREEN AD OVERLAY -->
+<div id="ad-overlay">
+  <iframe id="ad-frame" src="" scrolling="yes"></iframe>
+  <div class="ad-btm">
+    <div class="ad-countdown">
+      <div class="ad-cd-label">⏳ Video shuru hogi</div>
+      <div class="ad-cd-row">
+        <div class="ad-cd-num" id="ad-cd-num">30</div>
+        <div class="ad-cd-unit">seconds mein</div>
+      </div>
+      <div class="ad-prog-bar"><div class="ad-prog-fill" id="ad-prog-fill"></div></div>
+      <div class="ad-note" id="ad-note">Intezaar karen, phir video play hogi...</div>
+    </div>
+    <button class="ad-play-btn" id="ad-play-btn" onclick="closeAdAndPlay()">
+      <i class="fas fa-play"></i><span>Play<br>Video</span>
+    </button>
+  </div>
+</div>
+
+<div class="topbar">
+  <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+  <div class="topbar-info">
+    <div class="topbar-title" id="ttl">Watch &amp; Earn</div>
+    <div class="topbar-sub" id="tsub">Loading videos...</div>
+  </div>
+  <div class="earn-pill">
+    <div class="ep-val">+<span id="per-earn">0</span></div>
+    <div class="ep-lbl">per video</div>
+  </div>
+</div>
+
+<div class="prog-wrap" id="prog-wrap" style="display:none;">
+  <div class="prog-meta">
+    <span>Today's Progress</span>
+    <strong><span id="dc">0</span> / <span id="tc">0</span></strong>
+  </div>
+  <div class="bar-bg"><div class="bar-fill" id="bar" style="width:0%"></div></div>
+</div>
+
+<div class="page">
+  <div class="loader" id="loader"><i class="fas fa-spinner fa-spin"></i><p style="font-weight:700;margin-top:4px;">Loading videos...</p></div>
+
+  <div class="geo-banner" id="geo-banner" style="display:none;">
+    <div class="geo-flag" id="geo-flag">🌍</div>
+    <div class="geo-info">
+      <div class="gi-country" id="geo-country">Detecting...</div>
+      <div class="gi-rate" id="geo-rate">Rate: —</div>
+    </div>
+    <div class="geo-earn" id="geo-earn-val">—</div>
+  </div>
+
+  <!-- ✅ FIXED: no plan required message, just "no videos yet" -->
+  <div id="no-videos" style="display:none;" class="no-videos">
+    <i class="fas fa-video-slash"></i>
+    <h3>Abhi Koi Video Nahi Hai</h3>
+    <p>Admin videos add kar raha hai.<br>Thodi der mein wapas check karen. 🙏</p>
+  </div>
+
+  <div class="stats-grid" id="stats" style="display:none;">
+    <div class="stat-box"><div class="sv" id="plan-stat" style="color:var(--gold2);">—</div><div class="sl">Status</div></div>
+    <div class="stat-box"><div class="sv" id="daily-stat" style="color:var(--green);">—</div><div class="sl">Today Earning</div></div>
+  </div>
+
+  <!-- YOUTUBE SHORTS AUTOPLAY -->
+  <div class="shorts-section" id="shorts-section" style="display:none;">
+    <div class="shorts-heading">YouTube Shorts</div>
+    <div class="shorts-row" id="shorts-row"></div>
+  </div>
+
+  <div id="vlist"></div>
+
+  <div id="all-done" class="all-done" style="display:none;">
+    <i class="fas fa-check-double"></i>
+    <h3>Sab Videos Dekh Li! 🎉</h3>
+    <p>Aaj ke tamam videos complete ho gaye.<br>Kal wapas aana naye videos ke liye.</p>
+  </div>
+</div>
+
+<div class="btm">
+  <div class="vid-timer-box" id="vid-timer-box">
+    <div class="vtb-icon"><i class="fas fa-clock"></i></div>
+    <div>
+      <div class="vtbl">Video Timer</div>
+      <div class="vtbv"><span id="btm-sec">60</span>s</div>
+    </div>
+  </div>
+  <div class="te-box" id="te-earn-box">
+    <div class="tel">Today Earned</div>
+    <div class="tev"><span id="te-currency">Rs.</span> <span id="te">0.00</span></div>
+  </div>
+  <a href="dashboard.html" class="home-btn"><i class="fas fa-house"></i> Home</a>
+</div>
+
+<script>
+// ====== YOUTUBE SHORTS — SHEET SE LOAD ======
+function renderShorts(shortsList){
+  var row = document.getElementById("shorts-row");
+  var sec = document.getElementById("shorts-section");
+  if(!row || !shortsList || shortsList.length === 0) return;
+  row.innerHTML = "";
+  shortsList.forEach(function(s){
+    var card = document.createElement("div");
+    card.className = "short-card";
+    card.innerHTML =
+      '<iframe src="https://www.youtube.com/embed/'+s.video_id+'?autoplay=1&mute=1&loop=1&playlist='+s.video_id+'&rel=0&controls=1" '+
+      'allow="autoplay; encrypted-media" allowfullscreen></iframe>'+
+      '<div class="short-label">▶ '+esc(s.title||"Short")+'</div>';
+    row.appendChild(card);
+  });
+  sec.style.display = "block";
+}
+
+async function loadShorts(){
+  try{
+    var res = await fetch(API_URL+"?type=get_shorts");
+    var data = await res.json();
+    if(data.shorts && data.shorts.length > 0){
+      renderShorts(data.shorts);
+    }
+  }catch(e){ /* shorts na ayen toh koi masla nahi */ }
+}
+
+const API_URL = "https://script.google.com/macros/s/AKfycbwuDQABehGm14hy_PBoIauJYiTPljCKu44pQ88Ua5QDG2bUZ-PX5NbIwLr4hDnAlIzxfw/exec";
+
+var GEO_RATES={
+  PK:{amount:2,currency:"PKR",label:"🇵🇰 Pakistan",flag:"🇵🇰",rate_label:"PKR 2 per video"},
+  IN:{amount:0.05,currency:"USDT",label:"🇮🇳 India",flag:"🇮🇳",rate_label:"0.05 USDT per video"},
+  BD:{amount:0.05,currency:"USDT",label:"🇧🇩 Bangladesh",flag:"🇧🇩",rate_label:"0.05 USDT per video"},
+  DEFAULT:{amount:0.30,currency:"USDT",label:"🌍 Other",flag:"🌍",rate_label:"0.30 USDT per video"}
+};
+
+var videos=[],total=0,perEarn=0,doneN=0,todayEarn=0,todayKey="",watched=[];
+var _pendingId=null,_pendingUrl=null,_adIv=null,_vidIv=null;
+var userCountry="PK",userRate=GEO_RATES.PK;
+
+window.addEventListener("DOMContentLoaded",function(){
+  if(!window.CU||!window.CU.user_id){window.location.replace("auth.html");return;}
+  todayKey="w_"+window.CU.user_id+"_"+new Date().toDateString();
+  watched=JSON.parse(localStorage.getItem(todayKey)||"[]");
+  detectGeoThenLoad();
+});
+
+async function detectGeoThenLoad(){
+  try{var r=await fetch("https://ipapi.co/json/");var d=await r.json();userCountry=(d.country_code||"PK").toUpperCase();}
+  catch(e){userCountry="PK";}
+  userRate=GEO_RATES[userCountry]||GEO_RATES.DEFAULT;
+  showGeoBanner();loadVideos();
+}
+
+function showGeoBanner(){
+  document.getElementById("geo-flag").textContent=userRate.flag;
+  document.getElementById("geo-country").textContent=userRate.label;
+  document.getElementById("geo-rate").textContent="Rate: "+userRate.rate_label;
+  document.getElementById("geo-earn-val").textContent=userRate.currency==="PKR"?"Rs. "+userRate.amount:userRate.amount+" "+userRate.currency;
+  document.getElementById("geo-banner").style.display="flex";
+}
+
+async function loadVideos(){
+  try{
+    var res=await fetch(API_URL+"?type=get_videos&userId="+encodeURIComponent(window.CU.user_id)+"&country="+encodeURIComponent(userCountry));
+    var data=await res.json();
+    document.getElementById("loader").style.display="none";
+
+    // ✅ FIXED: no_plan → show "no videos" not "buy plan"
+    if(data.status==="no_plan"||(!data.videos||data.videos.length===0)){
+      document.getElementById("no-videos").style.display="block"; return;
+    }
+
+    videos=data.videos; total=videos.length; perEarn=userRate.amount;
+    document.getElementById("ttl").textContent="Watch & Earn";
+    document.getElementById("tsub").textContent=total+" videos aaj ke liye";
+    document.getElementById("per-earn").textContent=perEarn.toFixed(userRate.currency==="PKR"?2:4);
+    document.getElementById("plan-stat").textContent="✅ Active";
+    document.getElementById("daily-stat").textContent=(userRate.currency==="PKR"?"Rs. ":"")+((perEarn*total).toFixed(2))+" "+(userRate.currency!=="PKR"?userRate.currency:"");
+    document.getElementById("te-currency").textContent=userRate.currency==="PKR"?"Rs.":"";
+    document.getElementById("stats").style.display="grid";
+    document.getElementById("prog-wrap").style.display="block";
+    renderAll();
+    // Shorts load karo sheet se
+    loadShorts();
+  }catch(e){
+    document.getElementById("loader").style.display="none";
+    Swal.fire({title:"Error",text:"Videos load nahi hue. Internet check karen.",icon:"error",confirmButtonColor:"#c9a227",background:"#06101f",color:"#d0e4ff"});
+  }
+}
+
+function renderAll(){
+  var list=document.getElementById("vlist"); list.innerHTML=""; doneN=0;
+  videos.forEach(function(vid){
+    var done=watched.includes(vid.id); if(done)doneN++;
+    var c=document.createElement("div");
+    c.className="vcard"+(done?" v-done":""); c.id="vc-"+vid.id;
+    var eLabel=userRate.currency==="PKR"?"Watch = Rs."+perEarn.toFixed(2):"Watch = "+perEarn.toFixed(4)+" "+userRate.currency;
+    c.innerHTML=
+      '<div class="vthumb">'+
+        '<iframe id="if-'+vid.id+'" src="" allowfullscreen allow="autoplay;encrypted-media"></iframe>'+
+        '<div class="play-ov" id="po-'+vid.id+'" onclick="startWatch(\''+vid.id+'\',\''+encodeURIComponent(vid.url)+'\')">'+
+          '<div class="play-ring"><i class="fas fa-play"></i></div>'+
+          '<span>Tap to Watch &amp; Earn</span>'+
+        '</div>'+
+        '<div class="done-ov" id="do-'+vid.id+'" style="display:'+(done?"flex":"none")+'">'+
+          '<i class="fas fa-check-circle"></i><span>Earned!</span>'+
+        '</div>'+
+      '</div>'+
+      
+      '<div class="vfooter">'+
+        '<div><div class="vtitle">'+esc(vid.title||"Video")+'</div><div class="vearns">'+eLabel+'</div></div>'+
+        '<div class="vstatus '+(done?"s-done":"s-pend")+'" id="vs-'+vid.id+'">'+(done?"✅ DONE":"⏳ PENDING")+'</div>'+
+      '</div>';
+    if(done){var po=c.querySelector(".play-ov");if(po)po.style.display="none";}
+    list.appendChild(c);
+  });
+  updProg(); checkDone();
+}
+
+function startWatch(id,enc){
+  _pendingId=id; _pendingUrl=decodeURIComponent(enc);
+  var overlay=document.getElementById("ad-overlay"),frame=document.getElementById("ad-frame");
+  var cdNum=document.getElementById("ad-cd-num"),progFill=document.getElementById("ad-prog-fill");
+  var playBtn=document.getElementById("ad-play-btn"),note=document.getElementById("ad-note");
+  cdNum.innerText="30"; cdNum.classList.remove("ready"); playBtn.classList.remove("ready");
+  note.innerText="Intezaar karen, phir video play hogi...";
+  progFill.style.transition="none"; progFill.style.width="0%";
+  frame.src="https://omg10.com/4/10896210";
+  overlay.classList.add("show");
+  requestAnimationFrame(function(){requestAnimationFrame(function(){progFill.style.transition="width 30s linear";progFill.style.width="100%";});});
+  var t=30; clearInterval(_adIv);
+  _adIv=setInterval(function(){
+    t--;
+    var el=document.getElementById("ad-cd-num"); if(el)el.innerText=t;
+    if(t<=0){clearInterval(_adIv);if(el){el.innerText="✓";el.classList.add("ready");}
+      document.getElementById("ad-play-btn").classList.add("ready");
+      document.getElementById("ad-note").innerText="✅ Ab 'Play Video' dabayein!";}
+  },1000);
+}
+
+function closeAdAndPlay(){
+  var overlay=document.getElementById("ad-overlay"),frame=document.getElementById("ad-frame");
+  overlay.classList.remove("show"); frame.src=""; clearInterval(_adIv);
+  var id=_pendingId,url=_pendingUrl; if(!id||!url)return;
+  document.getElementById("if-"+id).src=embed(url);
+  document.getElementById("po-"+id).style.display="none";
+  var vc=document.getElementById("vc-"+id),vs=document.getElementById("vs-"+id);
+  if(vc)vc.className="vcard v-watching"; if(vs){vs.className="vstatus s-watch";vs.innerText="👁 WATCHING";}
+  var vidBox=document.getElementById("vid-timer-box"),earnBox=document.getElementById("te-earn-box"),secEl=document.getElementById("btm-sec");
+  earnBox.style.display="none"; vidBox.classList.add("show");
+  var s=60; secEl.innerText=s; clearInterval(_vidIv);
+  _vidIv=setInterval(function(){
+    s--; if(secEl)secEl.innerText=s;
+    if(s<=0){clearInterval(_vidIv);vidBox.classList.remove("show");earnBox.style.display="block";finishVideo(id);}
+  },1000);
+}
+
+async function finishVideo(id){
+  var dv=document.getElementById("do-"+id); if(dv)dv.style.display="flex";
+  var vc=document.getElementById("vc-"+id); if(vc)vc.className="vcard v-done";
+  var vs=document.getElementById("vs-"+id); if(vs){vs.className="vstatus s-done";vs.innerText="✅ DONE";}
+  if(!watched.includes(id)){watched.push(id);localStorage.setItem(todayKey,JSON.stringify(watched));}
+  doneN++; todayEarn=Math.round((todayEarn+perEarn)*100)/100;
+  document.getElementById("te").innerText=todayEarn.toFixed(userRate.currency==="PKR"?2:4);
+  updProg(); checkDone();
+  if(userRate.currency==="PKR"){
+    try{var u=JSON.parse(localStorage.getItem("anUser")||"{}");u.balance=Math.round(((parseFloat(u.balance)||0)+perEarn)*100)/100;localStorage.setItem("anUser",JSON.stringify(u));localStorage.setItem("an_user",JSON.stringify(u));}catch(e){}
+  }
+  try{await fetch(API_URL,{method:"POST",body:JSON.stringify({action:"watch_video",user_id:window.CU.user_id,video_id:id,earn:perEarn,currency:userRate.currency,country:userCountry})});}catch(e){}
+}
+
+function updProg(){
+  document.getElementById("dc").innerText=doneN;
+  document.getElementById("tc").innerText=total;
+  document.getElementById("bar").style.width=(total>0?Math.round((doneN/total)*100):0)+"%";
+}
+function checkDone(){if(doneN>=total&&total>0)document.getElementById("all-done").style.display="block";}
+function embed(url){var y=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);return y?"https://www.youtube.com/embed/"+y[1]+"?autoplay=1&rel=0":url;}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+</script>
+</body>
+</html>
