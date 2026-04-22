@@ -1,210 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://upcomingperusehike.com/50/e5/57/50e557cf9cc1005d7bf547336eed1e00.js"></script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Vexora Pro — Loading...</title>
-
-<!-- OG tags -->
-<meta property="og:title"       content="Vexora Pro — Earn Money Online">
-<meta property="og:description" content="Watch videos & earn Rs. 2 per video. EasyPaisa / JazzCash / USDT. Join free!">
-<meta property="og:image"       content="https://ovexora-international.github.io/Online/logo.jpeg">
-<meta property="og:url"         content="https://ovexora-international.github.io/Online/click.html">
-<meta property="og:site_name"   content="Vexora Pro">
-<meta property="og:type"        content="website">
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Loading Reward… – Vexora Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;width:100%;font-family:'Nunito',sans-serif;background:#020810;color:#fff;overflow:hidden;-webkit-font-smoothing:antialiased;}
-
-body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 90% 55% at 50% -10%,rgba(14,40,90,.65) 0%,transparent 65%);}
-body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:linear-gradient(rgba(201,162,39,.04) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(201,162,39,.04) 1px,transparent 1px);background-size:44px 44px;}
-
-/* Phases */
-.ph{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;padding:24px;transition:opacity .35s;}
-.ph.off{opacity:0;pointer-events:none;}
-
-/* ── LOADING ── */
-#ph-load{z-index:20;}
-.logo-img{width:92px;height:92px;border-radius:22px;object-fit:cover;
-  border:2px solid rgba(201,162,39,.3);margin-bottom:18px;
-  box-shadow:0 0 40px rgba(201,162,39,.22);
-  animation:glow 2s ease-in-out infinite;}
-@keyframes glow{0%,100%{box-shadow:0 0 36px rgba(201,162,39,.22);}50%{box-shadow:0 0 58px rgba(201,162,39,.45);}}
-.v-name{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:800;letter-spacing:5px;
-  background:linear-gradient(135deg,#c9a227,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
-.v-pro{font-size:10px;color:#4a6080;letter-spacing:4px;text-transform:uppercase;margin-bottom:24px;}
-.spin{width:42px;height:42px;border-radius:50%;border:3px solid rgba(201,162,39,.12);
-  border-top-color:#c9a227;animation:spin 1s linear infinite;margin-bottom:12px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.load-txt{font-size:12px;color:#4a6080;font-weight:700;letter-spacing:.5px;}
-
-/* ── AD PHASE ── */
-#ph-ad{background:#000;z-index:50;}
-#ad-frame{position:fixed;inset:0;width:100%;height:100%;border:none;z-index:51;}
-
-.ad-bar{
-  position:fixed;bottom:0;left:0;right:0;z-index:52;
-  background:rgba(2,8,16,.97);backdrop-filter:blur(20px);
-  border-top:2px solid rgba(201,162,39,.18);
-  padding:12px 16px;
-  display:flex;align-items:center;gap:12px;
+:root{
+  --gold:#c9a227; --gold2:#e8c547; --gold3:#fff5b0;
+  --navy:#050a12; --navy2:#0a1628;
 }
-.ad-left{flex:1;min-width:0;}
-.ad-lbl{font-size:9px;color:#4a6080;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;}
-.ad-num{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:800;color:#c9a227;line-height:1;transition:color .4s;}
-.ad-num.done{color:#00e676;}
-.ad-bar-prog{height:3px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-top:5px;}
-.ad-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#9b6e14,#c9a227,#e8c547);width:0%;transition:width 30s linear;}
-.ad-hint{font-size:9.5px;color:#4a6080;margin-top:4px;font-weight:600;}
 
-.cont-btn{
-  flex-shrink:0;min-width:70px;text-align:center;
-  padding:12px 14px;border-radius:13px;
-  font-size:11px;font-weight:800;
-  cursor:not-allowed;pointer-events:none;opacity:.3;
-  font-family:'Nunito',sans-serif;transition:all .35s;
-  background:rgba(201,162,39,.08);
-  border:1.5px solid rgba(201,162,39,.2);
-  color:#c9a227;line-height:1.3;
+html,body{
+  height:100%; background:var(--navy);
+  font-family:'Rajdhani',sans-serif;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  overflow:hidden; position:relative;
 }
-.cont-btn.ready{
-  cursor:pointer;pointer-events:all;opacity:1;
-  background:linear-gradient(135deg,#9b6e14,#e8c547);
-  color:#060f0a;border-color:transparent;
-  box-shadow:0 4px 18px rgba(201,162,39,.4);
-}
-.cont-btn.ready:active{transform:scale(.96);}
 
-/* ── SUCCESS ── */
-#ph-ok{z-index:30;}
-.ok-ico{font-size:64px;margin-bottom:14px;animation:pop .5s cubic-bezier(.34,1.56,.64,1);}
-@keyframes pop{from{transform:scale(0);}to{transform:scale(1);}}
-.ok-title{font-family:'Orbitron',sans-serif;font-size:17px;font-weight:800;letter-spacing:2px;
-  background:linear-gradient(135deg,#c9a227,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:7px;}
-.ok-sub{font-size:12px;color:#4a6080;margin-bottom:20px;font-weight:700;}
-.ok-btn{padding:14px 32px;background:linear-gradient(135deg,#9b6e14,#e8c547);
-  border:none;border-radius:14px;color:#060f0a;font-size:14px;font-weight:800;
-  cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 4px 20px rgba(201,162,39,.35);}
-.ok-btn:active{transform:scale(.96);}
+/* Grid bg */
+body::before{
+  content:''; position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(201,162,39,0.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(201,162,39,0.055) 1px,transparent 1px);
+  background-size:40px 40px; animation:gm 10s linear infinite; z-index:0; pointer-events:none;
+}
+@keyframes gm{to{background-position:40px 40px;}}
+
+.orb{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;pointer-events:none;}
+.orb1{width:500px;height:500px;background:rgba(201,162,39,0.09);top:-200px;left:-150px;animation:op 8s ease-in-out infinite;}
+.orb2{width:400px;height:400px;background:rgba(232,197,71,0.06);bottom:-150px;right:-100px;animation:op 8s ease-in-out infinite reverse;}
+@keyframes op{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+
+/* Particles */
+.ptcl{position:fixed;border-radius:50%;pointer-events:none;z-index:1;box-shadow:0 0 6px var(--gold2);animation:fly linear infinite;}
+@keyframes fly{0%{transform:translateY(110vh);opacity:0;}5%{opacity:1;}90%{opacity:0.7;}100%{transform:translateY(-20px);opacity:0;}}
+
+/* ===== MAIN CARD ===== */
+.ad-card{
+  position:relative; z-index:10;
+  background:linear-gradient(135deg,rgba(10,22,40,0.97),rgba(13,27,46,0.97));
+  border:1px solid rgba(201,162,39,0.25);
+  border-radius:24px; padding:36px 30px 32px;
+  max-width:400px; width:92vw;
+  text-align:center;
+  box-shadow:0 0 0 1px rgba(201,162,39,0.08), 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(201,162,39,0.1);
+  backdrop-filter:blur(16px);
+  animation:scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.85);}to{opacity:1;transform:scale(1);}}
+
+/* Gold top strip */
+.card-strip{
+  position:absolute; top:0; left:0; right:0; height:4px;
+  background:linear-gradient(90deg,#7a5c00,var(--gold),var(--gold2),var(--gold3),var(--gold2),var(--gold),#7a5c00);
+  background-size:200% auto; animation:shine 2.5s linear infinite; border-radius:24px 24px 0 0;
+}
+@keyframes shine{to{background-position:200% center;}}
+
+/* Logo */
+.brand{
+  font-family:'Orbitron',monospace; font-size:22px; font-weight:900;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 10px rgba(201,162,39,0.5));
+  letter-spacing:3px; margin-bottom:6px;
+}
+.brand-sub{font-size:10px;color:rgba(201,162,39,0.45);letter-spacing:4px;text-transform:uppercase;margin-bottom:28px;}
+
+/* ===== CIRCULAR TIMER ===== */
+.timer-wrap{position:relative;width:160px;height:160px;margin:0 auto 28px;}
+
+.timer-svg{width:160px;height:160px;transform:rotate(-90deg);}
+.timer-track{fill:none;stroke:rgba(201,162,39,0.1);stroke-width:8;}
+.timer-arc{
+  fill:none; stroke-width:8; stroke-linecap:round;
+  stroke:url(#arcGrad);
+  stroke-dasharray:440; stroke-dashoffset:0;
+  transition:stroke-dashoffset 1s linear;
+}
+
+.timer-inner{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+.timer-num{
+  font-family:'Orbitron',monospace; font-size:48px; font-weight:900; line-height:1;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  text-shadow:none; filter:drop-shadow(0 0 12px rgba(201,162,39,0.5));
+}
+.timer-lbl{font-size:10px;color:rgba(201,162,39,0.5);letter-spacing:3px;text-transform:uppercase;margin-top:4px;}
+
+/* Pulse ring */
+.pulse-ring{
+  position:absolute; inset:-8px; border-radius:50%;
+  border:2px solid rgba(201,162,39,0.15);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.08);opacity:1;}}
+
+/* Message */
+.ad-message{
+  font-size:17px; color:rgba(255,255,255,0.8); line-height:1.6; margin-bottom:18px;
+}
+.ad-message strong{color:var(--gold2);}
+.ad-message .rs-badge{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy); font-family:'Orbitron',monospace;
+  font-size:14px; font-weight:700; padding:4px 16px; border-radius:20px;
+  letter-spacing:1px; margin:6px 4px;
+  box-shadow:0 0 20px rgba(201,162,39,0.4);
+}
+
+/* Progress bar */
+.prog-wrap{background:rgba(201,162,39,0.08);border-radius:30px;height:6px;overflow:hidden;margin-bottom:20px;}
+.prog-bar{
+  height:100%; border-radius:30px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  width:100%; transition:width 1s linear;
+  box-shadow:0 0 10px rgba(201,162,39,0.5);
+}
+
+/* Status text */
+.status-txt{font-size:13px;color:rgba(255,255,255,0.4);letter-spacing:2px;margin-bottom:24px;}
+
+/* Info pills */
+.info-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
+.ipill{
+  background:rgba(201,162,39,0.06);border:1px solid rgba(201,162,39,0.15);
+  border-radius:20px;padding:6px 14px;
+  font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:1px;
+}
+.ipill span{color:var(--gold2);font-weight:700;}
+
+/* Skip button (disabled until 30s) */
+.skip-btn{
+  display:inline-block; padding:14px 40px;
+  font-family:'Orbitron',monospace; font-size:13px; font-weight:700; letter-spacing:2px;
+  border-radius:50px; border:none; cursor:pointer;
+  transition:all 0.3s ease;
+}
+.skip-btn.disabled{
+  background:rgba(201,162,39,0.08);
+  border:1px solid rgba(201,162,39,0.15);
+  color:rgba(201,162,39,0.35); cursor:not-allowed;
+}
+.skip-btn.ready{
+  background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3),var(--gold2),var(--gold));
+  background-size:200% auto;
+  color:var(--navy);
+  box-shadow:0 0 30px rgba(201,162,39,0.5),0 8px 24px rgba(0,0,0,0.4);
+  animation:shine 2s linear infinite, btnPulse 2s ease-in-out infinite;
+}
+@keyframes btnPulse{0%,100%{box-shadow:0 0 30px rgba(201,162,39,0.5),0 8px 24px rgba(0,0,0,0.4);}50%{box-shadow:0 0 50px rgba(201,162,39,0.8),0 8px 24px rgba(0,0,0,0.4);}}
+.skip-btn.ready:hover{transform:scale(1.06) translateY(-2px);}
+
+/* Click recorded toast */
+.rec-toast{
+  position:fixed;top:24px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,rgba(10,22,40,0.95),rgba(13,27,46,0.95));
+  border:1px solid rgba(201,162,39,0.3);
+  color:rgba(255,255,255,0.85);
+  padding:10px 24px;border-radius:30px;
+  font-size:13px;letter-spacing:1px;
+  opacity:0;transition:opacity 0.4s;pointer-events:none;z-index:999;
+}
+.rec-toast .dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--gold2);margin-right:8px;
+  box-shadow:0 0 8px var(--gold2);
+  animation:blink 1s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.rec-toast.show{opacity:1;}
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div class="ph" id="ph-load">
-  <img src="logo.jpeg" class="logo-img" alt="V" onerror="this.style.display='none'">
-  <div class="v-name">VEXORA</div>
-  <div class="v-pro">P &nbsp; R &nbsp; O</div>
-  <div class="spin"></div>
-  <div class="load-txt" id="load-msg">Preparing...</div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<!-- Toast -->
+<div class="rec-toast" id="recToast">
+  <span class="dot"></span> Click Recorded Successfully!
 </div>
 
-<!-- AD -->
-<div class="ph off" id="ph-ad">
-  <iframe id="ad-frame" src=""
-    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"
-    scrolling="yes"></iframe>
-  <div class="ad-bar">
-    <div class="ad-left">
-      <div class="ad-lbl">⏳ Please wait</div>
-      <div class="ad-num" id="ad-num">30</div>
-      <div class="ad-bar-prog"><div class="ad-bar-fill" id="ad-fill"></div></div>
-      <div class="ad-hint" id="ad-hint">Loading Vexora Pro...</div>
+<!-- MAIN AD CARD -->
+<div class="ad-card">
+  <div class="card-strip"></div>
+
+  <div class="brand">VEXORA</div>
+  <div class="brand-sub">Pro · Earn Online</div>
+
+  <!-- Circular Timer -->
+  <div class="timer-wrap">
+    <div class="pulse-ring"></div>
+    <svg class="timer-svg" viewBox="0 0 160 160">
+      <defs>
+        <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#c9a227"/>
+          <stop offset="50%"  stop-color="#e8c547"/>
+          <stop offset="100%" stop-color="#fff5b0"/>
+        </linearGradient>
+      </defs>
+      <circle class="timer-track" cx="80" cy="80" r="70"/>
+      <circle class="timer-arc"   cx="80" cy="80" r="70" id="timerArc"/>
+    </svg>
+    <div class="timer-inner">
+      <div class="timer-num" id="timerNum">30</div>
+      <div class="timer-lbl">seconds</div>
     </div>
-    <button class="cont-btn" id="cont-btn" onclick="goSite()">
-      ▶<br>OPEN
-    </button>
   </div>
+
+  <!-- Message -->
+  <div class="ad-message">
+    🎉 Mubarak ho! Aapka Click<br>
+    <strong>Verify ho raha hai…</strong><br><br>
+    <span class="rs-badge">Rs 50 / 1000 Clicks</span><br>
+    Apna link share karo aur ghar baith kar kamao!
+  </div>
+
+  <!-- Progress bar -->
+  <div class="prog-wrap">
+    <div class="prog-bar" id="progBar"></div>
+  </div>
+
+  <!-- Status -->
+  <div class="status-txt" id="statusTxt">⏳ Please wait, ad loading…</div>
+
+  <!-- Info pills -->
+  <div class="info-pills">
+    <div class="ipill">Referral: <span id="refDisplay">—</span></div>
+    <div class="ipill">Status: <span id="statusPill" style="color:var(--gold2);">Verifying</span></div>
+  </div>
+
+  <!-- Skip / Continue button -->
+  <button class="skip-btn disabled" id="skipBtn" disabled>
+    ⏳ &nbsp;Please Wait (<span id="btnCount">30</span>s)
+  </button>
 </div>
 
-<!-- SUCCESS -->
-<div class="ph off" id="ph-ok">
-  <div class="ok-ico">✅</div>
-  <div class="ok-title">Opening Vexora!</div>
-  <div class="ok-sub">Redirecting to registration...</div>
-  <button class="ok-btn" onclick="goSite()">🚀 Open Now</button>
-</div>
-
+<!-- ============ SCRIPT ============ -->
 <script>
-var GAS_URL  = "https://script.google.com/macros/s/AKfycbwuDQABehGm14hy_PBoIauJYiTPljCKu44pQ88Ua5QDG2bUZ-PX5NbIwLr4hDnAlIzxfw/exec";
+// ============ CONFIG — FILL THESE ============
+const GAS_URL       = 'YOUR_GAS_DEPLOYMENT_URL';     // ← GAS URL yahan
+const REFERRAL_URL  = 'https://pk.win03.club/login?mode=register&i=VvtOD6eK';
+const TOTAL_SECONDS = 30;
+// ============================================
 
-/* ✅ NEW SITE URL */
-var SITE_URL = "https://ovexora-international.github.io/Online/auth.html";
+// Get ref from URL
+const params  = new URLSearchParams(window.location.search);
+const refId   = params.get('ref') || 'GUEST';
+document.getElementById('refDisplay').textContent = refId;
 
-/* ✅ ADSTERRA LINK */
-var AD_URL   = "https://upcomingperusehike.com/nw01tb4n?key=52f3e6faffbb1d0c5dc9800e3d63c6cd";
+// Circumference for r=70
+const CIRCUM = 2 * Math.PI * 70; // ≈ 439.8
+const arc = document.getElementById('timerArc');
+arc.style.strokeDasharray  = CIRCUM;
+arc.style.strokeDashoffset = 0;
 
-var p      = new URLSearchParams(window.location.search);
-var refId  = p.get("ref") || "";
-var destURL= SITE_URL + (refId ? "?ref=" + encodeURIComponent(refId) : "");
-var iv     = null;
+let timeLeft = TOTAL_SECONDS;
 
-window.addEventListener("DOMContentLoaded", function() {
-  setMsg("Registering click...");
-  /* Register click (fire & forget) */
+// Record click immediately (non-blocking)
+recordClick();
+
+// Start countdown
+const interval = setInterval(() => {
+  timeLeft--;
+  const pct = timeLeft / TOTAL_SECONDS;
+
+  // Update number
+  document.getElementById('timerNum').textContent = timeLeft;
+
+  // Update arc (fills from full → empty = timer counts down)
+  arc.style.strokeDashoffset = CIRCUM * (1 - pct);
+
+  // Update progress bar (fills up)
+  document.getElementById('progBar').style.width = ((1 - pct) * 100) + '%';
+
+  // Update button count
+  document.getElementById('btnCount').textContent = timeLeft;
+
+  // Update status
+  if(timeLeft <= 20 && timeLeft > 10){
+    document.getElementById('statusTxt').textContent = '⚡ Almost there… hang on!';
+  } else if(timeLeft <= 10 && timeLeft > 0){
+    document.getElementById('statusTxt').textContent = '🔥 Almost done! ' + timeLeft + 's remaining';
+  }
+
+  if(timeLeft <= 0){
+    clearInterval(interval);
+    unlockButton();
+  }
+}, 1000);
+
+function unlockButton(){
+  const btn = document.getElementById('skipBtn');
+  btn.classList.remove('disabled');
+  btn.classList.add('ready');
+  btn.disabled = false;
+  btn.innerHTML = '🚀 &nbsp;Proceed to Join Now!';
+  btn.onclick = () => { window.location.href = REFERRAL_URL; };
+  document.getElementById('statusTxt').textContent = '✅ Verified! Click to continue';
+  document.getElementById('statusPill').textContent = 'Verified ✓';
+  document.getElementById('statusPill').style.color = '#4ade80';
+
+  // Auto-redirect after 5s
+  setTimeout(() => { window.location.href = REFERRAL_URL; }, 5000);
+}
+
+// ===== RECORD CLICK via GAS =====
+async function recordClick(){
   try {
-    fetch(GAS_URL, {
-      method:"POST",
-      body:JSON.stringify({
-        action:"register_click",
-        ref_id:refId,
-        ua:navigator.userAgent,
-        ts:new Date().toISOString()
-      })
-    });
-  } catch(e){}
-  setMsg("Loading Vexora Pro...");
-  setTimeout(showAd, 900);
-});
+    // Get IP
+    let ip = 'unknown';
+    let vpn = false;
+    try {
+      const ipRes = await fetch('https://api.ipapi.is/?q&fields=ip,vpn,proxy', { signal: AbortSignal.timeout(5000) });
+      const ipData = await ipRes.json();
+      ip  = ipData.ip  || 'unknown';
+      vpn = ipData.vpn || ipData.proxy || false;
+    } catch(e){ ip = 'unknown'; }
 
-function setMsg(t){ var e=document.getElementById("load-msg"); if(e) e.textContent=t; }
-
-function show(id){
-  ["ph-load","ph-ad","ph-ok"].forEach(function(x){
-    document.getElementById(x).classList.toggle("off", x!==id);
-  });
-}
-
-function showAd(){
-  show("ph-ad");
-  document.getElementById("ad-frame").src = AD_URL;
-
-  var numEl  = document.getElementById("ad-num");
-  var fillEl = document.getElementById("ad-fill");
-  var hintEl = document.getElementById("ad-hint");
-  var btnEl  = document.getElementById("cont-btn");
-
-  var t = 30;
-  /* start progress bar */
-  setTimeout(function(){ fillEl.style.width="100%"; }, 80);
-
-  iv = setInterval(function(){
-    t--;
-    numEl.textContent = t;
-    if(t <= 0){
-      clearInterval(iv);
-      numEl.textContent = "✓";
-      numEl.className = "ad-num done";
-      hintEl.textContent = "✅ Click OPEN to continue!";
-      btnEl.className = "cont-btn ready";
-      btnEl.innerHTML = "🚀<br>OPEN";
-      /* auto after 3s */
-      setTimeout(goSite, 3000);
+    if(vpn){
+      document.getElementById('statusPill').textContent = 'VPN Blocked';
+      document.getElementById('statusPill').style.color = '#f87171';
+      return;
     }
-  }, 1000);
+
+    // Send to GAS
+    const url = GAS_URL
+      + '?action=click'
+      + '&ref='    + encodeURIComponent(refId)
+      + '&ip='     + encodeURIComponent(ip)
+      + '&ua='     + encodeURIComponent(navigator.userAgent.substring(0, 200))
+      + '&ts='     + Date.now();
+
+    const res  = await fetch(url);
+    const data = await res.json();
+
+    // Show toast
+    if(data.status === 'accepted' || data.status === 'rewarded'){
+      showToast();
+      if(data.status === 'rewarded'){
+        document.getElementById('adMessage') && (document.getElementById('adMessage').innerHTML +=
+          '<br><br>🎉 <strong style="color:#4ade80;">Rs 50 Aapki Balance mein Add!</strong>');
+      }
+    }
+
+    console.log('Click result:', data);
+  } catch(e){ console.warn('GAS call failed:', e); }
 }
 
-function goSite(){
-  clearInterval(iv);
-  show("ph-ok");
-  setTimeout(function(){ window.location.replace(destURL); }, 1200);
+function showToast(){
+  const t = document.getElementById('recToast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+
+<!-- Particles -->
+<script>
+for(let i=0;i<14;i++){
+  const p=document.createElement('div');
+  p.className='ptcl';
+  const s=1+Math.random()*2.5;
+  p.style.cssText=`width:${s}px;height:${s}px;background:#e8c547;left:${Math.random()*100}vw;animation-duration:${8+Math.random()*10}s;animation-delay:${-Math.random()*14}s;opacity:${0.3+Math.random()*0.5};`;
+  document.body.appendChild(p);
 }
 </script>
 </body>
