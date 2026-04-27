@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Free Earn Money – Vexora Pro</title>
+
+<!-- ══════════════════════════════════════════════
+     OPEN GRAPH META TAGS
+     Facebook reads these tags and automatically
+     shows your Earn Card as a rich preview.
+     !! Replace og:image with your hosted image !!
+══════════════════════════════════════════════ -->
+<meta property="og:title"        content="🤑 Free Earn Money – No Investment | Vexora Pro"/>
+<meta property="og:description"  content="Earn Rs 50 for every 1000 real clicks. 100% Free. Withdraw via EasyPaisa & JazzCash. Join now!"/>
+<meta property="og:image"        content="https://vexorainternational.online/og-card.jpg"/>
+<meta property="og:image:width"  content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:url"          content="https://vexorainternational.online/share.html"/>
+<meta property="og:type"         content="website"/>
+<meta property="og:site_name"    content="Vexora International"/>
+<meta name="twitter:card"        content="summary_large_image"/>
+<meta name="twitter:image"       content="https://vexorainternational.online/og-card.jpg"/>
+
+<!-- FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<!-- html2canvas — captures card as image for WhatsApp sharing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --g1:#c9a227;--g2:#e8c547;--g3:#fff5b0;
+  --n1:#050a12;--n2:#0a1628;--n3:#0d1b2e;
+}
+body{
+  min-height:100vh;background:var(--n1);
+  display:flex;flex-direction:column;align-items:center;
+  padding:28px 16px 70px;font-family:'Rajdhani',sans-serif;
+  position:relative;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(201,162,39,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,.055) 1px,transparent 1px);
+  background-size:40px 40px;animation:gm 10s linear infinite;
+}
+@keyframes gm{to{background-position:40px 40px;}}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);z-index:0;pointer-events:none;}
+.o1{width:500px;height:500px;background:rgba(201,162,39,.10);top:-160px;left:-140px;animation:op 8s ease-in-out infinite;}
+.o2{width:360px;height:360px;background:rgba(232,197,71,.07);bottom:-120px;right:-100px;animation:op 8s ease-in-out infinite reverse;}
+@keyframes op{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+.ptcl{position:fixed;border-radius:50%;pointer-events:none;z-index:1;box-shadow:0 0 6px var(--g2);animation:fly linear infinite;}
+@keyframes fly{0%{transform:translateY(110vh);opacity:0;}5%{opacity:1;}90%{opacity:.7;}100%{transform:translateY(-20px);opacity:0;}}
+
+/* HEADER */
+.hdr{position:relative;z-index:10;text-align:center;margin-bottom:26px;animation:fd .7s ease both;}
+@keyframes fd{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:none;}}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,var(--g1),var(--g2));color:var(--n1);
+  font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:3px;
+  padding:6px 20px;border-radius:30px;margin-bottom:12px;
+  box-shadow:0 0 28px rgba(201,162,39,.5);
+}
+h1{font-family:'Orbitron',monospace;font-size:clamp(20px,5vw,36px);font-weight:900;letter-spacing:2px;}
+h1 span{
+  background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3),var(--g2),var(--g1));
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:sh 3s linear infinite;
+}
+@keyframes sh{to{background-position:200% center;}}
+.sub{font-size:13px;color:rgba(255,255,255,.4);letter-spacing:1px;margin-top:8px;}
+
+/* CLAUDE MSG */
+.cmsg{
+  position:relative;z-index:10;width:100%;max-width:440px;
+  background:linear-gradient(135deg,rgba(10,22,40,.97),rgba(13,27,46,.97));
+  border:1px solid rgba(201,162,39,.22);border-left:4px solid var(--g1);
+  border-radius:16px;padding:20px 22px;margin-bottom:28px;
+  backdrop-filter:blur(14px);
+  box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 0 1px rgba(201,162,39,.07);
+  animation:fu .8s ease .15s both;
+}
+@keyframes fu{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.cmsg-from{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.ai-av{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  box-shadow:0 0 16px rgba(201,162,39,.4);
+}
+.ai-nm{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--g2);letter-spacing:2px;}
+.ai-rl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:1px;}
+.cmsg-body{font-size:14.5px;color:rgba(255,255,255,.82);line-height:1.75;}
+.cmsg-body strong{color:var(--g2);}
+.chtag{
+  display:inline-block;
+  background:linear-gradient(135deg,rgba(201,162,39,.13),rgba(232,197,71,.09));
+  border:1px solid rgba(201,162,39,.2);border-radius:6px;
+  padding:2px 9px;color:var(--g2);font-family:'Share Tech Mono',monospace;font-size:12.5px;margin:1px 2px;
+}
+
+/* ATM CARD */
+.card-scene{perspective:1000px;position:relative;z-index:10;margin-bottom:26px;animation:fu .9s ease .25s both;}
+.atm{
+  width:min(400px,93vw);height:248px;border-radius:22px;
+  position:relative;transform-style:preserve-3d;
+  animation:float 5s ease-in-out infinite;cursor:pointer;transition:transform .15s;
+}
+@keyframes float{0%,100%{transform:translateY(0) rotateX(2deg);}50%{transform:translateY(-13px) rotateX(-2deg);}}
+.atm:hover{animation:none;transform:rotateY(7deg) rotateX(-4deg) scale(1.04);}
+.cb{
+  position:absolute;inset:0;border-radius:22px;overflow:hidden;
+  background:linear-gradient(135deg,#0a1628,#0d1b2e,#0f2040,#091424);
+  border:1px solid rgba(201,162,39,.3);
+  box-shadow:0 0 0 1px rgba(201,162,39,.07),0 35px 90px rgba(0,0,0,.85),0 0 60px rgba(201,162,39,.12),inset 0 1px 0 rgba(255,255,255,.06);
+}
+.cb::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(125deg,transparent,rgba(201,162,39,.04) 30%,rgba(255,255,255,.07) 50%,rgba(201,162,39,.04) 70%,transparent);
+  background-size:200% 200%;animation:hl 4s ease-in-out infinite;
+}
+@keyframes hl{0%,100%{background-position:0% 0%;}50%{background-position:100% 100%;}}
+.cb::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent,transparent 28px,rgba(201,162,39,.022) 28px,rgba(201,162,39,.022) 29px);
+}
+.c-bar{position:absolute;top:0;left:0;right:0;height:5px;z-index:2;background:linear-gradient(90deg,#7a5c00,var(--g1),var(--g2),var(--g3),var(--g2),var(--g1),#7a5c00);background-size:200% auto;animation:sh 2.5s linear infinite;border-radius:22px 22px 0 0;}
+.scan{position:absolute;left:0;right:0;height:1.5px;z-index:3;background:linear-gradient(90deg,transparent,rgba(201,162,39,.5),transparent);animation:sc 3.5s linear infinite;}
+@keyframes sc{0%{top:0;opacity:0;}8%{opacity:1;}92%{opacity:.8;}100%{top:100%;opacity:0;}}
+.gc{position:absolute;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,.13),transparent 70%);}
+.gc.tl{top:-20px;left:-20px;} .gc.br{bottom:-20px;right:-20px;}
+.chip{
+  position:absolute;top:26px;left:24px;z-index:2;
+  width:48px;height:37px;border-radius:7px;
+  background:linear-gradient(145deg,#d4a017,#f0c040,#b8860b,#e8c547);
+  box-shadow:0 3px 10px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.35);
+  display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px;padding:5px;overflow:hidden;
+}
+.chip span{background:rgba(0,0,0,.22);border-radius:1px;}
+.chip::before,.chip::after{content:'';position:absolute;background:rgba(0,0,0,.25);}
+.chip::before{top:50%;left:0;right:0;height:1px;transform:translateY(-50%);}
+.chip::after{left:50%;top:0;bottom:0;width:1px;transform:translateX(-50%);}
+.nfc{position:absolute;top:31px;left:84px;display:flex;align-items:center;z-index:2;}
+.na{border:2px solid transparent;border-right-color:rgba(201,162,39,.55);border-top-color:rgba(201,162,39,.55);border-radius:0 50% 50% 0;margin-left:-8px;}
+.na:nth-child(1){width:12px;height:20px;} .na:nth-child(2){width:20px;height:30px;opacity:.45;} .na:nth-child(3){width:28px;height:42px;opacity:.22;}
+.c-brand{position:absolute;top:18px;right:20px;text-align:right;z-index:2;}
+.bname{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 10px rgba(201,162,39,.65));}
+.bpro{font-size:9px;letter-spacing:4px;color:rgba(201,162,39,.5);font-weight:600;text-transform:uppercase;}
+.earn-sec{position:absolute;top:82px;left:24px;right:20px;z-index:2;}
+.elbl{font-size:9px;letter-spacing:4px;color:rgba(201,162,39,.5);font-weight:600;text-transform:uppercase;margin-bottom:4px;}
+.emain{font-family:'Orbitron',monospace;font-size:clamp(14px,4vw,20px);font-weight:900;line-height:1.15;background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3),var(--g2));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:sh 3s linear infinite;}
+.etag{font-size:10px;color:rgba(255,255,255,.38);letter-spacing:2px;margin-top:4px;}
+.cnum{position:absolute;bottom:60px;left:24px;right:20px;z-index:2;font-family:'Share Tech Mono',monospace;font-size:15px;color:rgba(255,255,255,.62);letter-spacing:4px;display:flex;gap:16px;}
+.cnum span{text-shadow:0 0 10px rgba(201,162,39,.3);}
+.cftr{position:absolute;bottom:18px;left:24px;right:20px;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;}
+.hlbl{font-size:8px;color:rgba(201,162,39,.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;}
+.hname{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:rgba(255,255,255,.8);letter-spacing:2px;}
+.mc{position:relative;width:52px;height:32px;}
+.mcc{width:32px;height:32px;border-radius:50%;position:absolute;}
+.mcc:nth-child(1){background:rgba(201,162,39,.9);left:0;box-shadow:0 0 14px rgba(201,162,39,.45);}
+.mcc:nth-child(2){background:rgba(232,197,71,.65);left:18px;box-shadow:0 0 14px rgba(232,197,71,.35);}
+
+/* STATS */
+.stats{position:relative;z-index:10;display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap;justify-content:center;animation:fu .9s ease .35s both;}
+.sp{background:rgba(201,162,39,.07);border:1px solid rgba(201,162,39,.18);border-radius:30px;padding:10px 20px;text-align:center;backdrop-filter:blur(10px);}
+.sn{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--g2);text-shadow:0 0 12px rgba(201,162,39,.5);}
+.sl{font-size:9px;color:rgba(255,255,255,.38);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+/* SHARE SECTION */
+.share-wrap{position:relative;z-index:10;width:100%;max-width:440px;animation:fu .9s ease .45s both;}
+.sh-title{text-align:center;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:3px;color:rgba(201,162,39,.75);text-transform:uppercase;margin-bottom:16px;}
+
+/* FACEBOOK */
+.fb-block{
+  background:linear-gradient(135deg,rgba(24,119,242,.1),rgba(13,87,183,.07));
+  border:1px solid rgba(24,119,242,.28);border-radius:16px;padding:18px 20px;margin-bottom:14px;
+}
+.fb-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.fb-ico{width:44px;height:44px;border-radius:12px;flex-shrink:0;background:linear-gradient(135deg,#1877F2,#0d65d9);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(24,119,242,.4);}
+.fb-ico svg{width:22px;height:22px;fill:#fff;}
+.fb-inf{flex:1;}
+.fb-ttl{font-size:15px;font-weight:700;color:#fff;margin-bottom:3px;}
+.fb-dsc{font-size:12px;color:rgba(255,255,255,.4);line-height:1.5;}
+
+/* OG preview card */
+.og-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.og-banner{height:76px;background:linear-gradient(135deg,var(--n2),#0f2040);display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.06);}
+.og-banner-txt{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;background:linear-gradient(90deg,var(--g1),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;}
+.og-meta{padding:10px 12px;}
+.og-mt{font-size:13px;font-weight:700;color:rgba(255,255,255,.78);margin-bottom:3px;}
+.og-md{font-size:11px;color:rgba(255,255,255,.38);}
+.og-mu{font-size:10px;color:rgba(201,162,39,.5);margin-top:4px;font-family:'Share Tech Mono',monospace;}
+
+.fb-btn{
+  width:100%;padding:13px;border:none;border-radius:10px;cursor:pointer;
+  background:linear-gradient(135deg,#1877F2,#0d65d9);color:#fff;
+  font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 6px 20px rgba(24,119,242,.4);transition:all .25s;
+}
+.fb-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(24,119,242,.55);}
+.fb-btn:active{transform:scale(.97);}
+.fb-btn svg{width:18px;height:18px;fill:#fff;}
+
+/* WA + TG grid */
+.wt-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.plt{border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:11px;}
+.wa{background:linear-gradient(135deg,rgba(37,211,102,.09),rgba(18,140,126,.06));border:1px solid rgba(37,211,102,.25);}
+.tg{background:linear-gradient(135deg,rgba(0,136,204,.09),rgba(0,95,142,.06));border:1px solid rgba(0,136,204,.25);}
+.plt-hd{display:flex;align-items:center;gap:10px;}
+.plt-ic{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.plt-ic.wa{background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 4px 12px rgba(37,211,102,.35);}
+.plt-ic.tg{background:linear-gradient(135deg,#0088CC,#005f8e);box-shadow:0 4px 12px rgba(0,136,204,.35);}
+.plt-ic svg{width:18px;height:18px;fill:#fff;}
+.plt-nm{font-size:14px;font-weight:700;color:#fff;}
+
+/* Mini card preview */
+.mini-card{
+  width:100%;aspect-ratio:1.6/1;border-radius:10px;overflow:hidden;
+  background:linear-gradient(135deg,var(--n2),#0f2040);
+  border:1px solid rgba(201,162,39,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:9px;font-weight:700;
+  color:var(--g2);letter-spacing:2px;text-align:center;line-height:1.5;
+  position:relative;overflow:hidden;
+}
+.mini-card::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(201,162,39,.03) 12px,rgba(201,162,39,.03) 13px);}
+.mini-card-txt{position:relative;z-index:1;}
+
+.lnk-prev{
+  background:rgba(0,0,0,.3);border-radius:8px;padding:7px 10px;
+  font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,255,255,.4);
+  word-break:break-all;line-height:1.5;border:1px solid rgba(255,255,255,.06);
+}
+.plt-btn{
+  width:100%;padding:11px;border:none;border-radius:10px;cursor:pointer;
+  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;
+  display:flex;align-items:center;justify-content:center;gap:7px;transition:all .25s;
+}
+.plt-btn:hover{transform:translateY(-2px);}
+.plt-btn:active{transform:scale(.97);}
+.wa-btn{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;box-shadow:0 4px 16px rgba(37,211,102,.35);}
+.tg-btn{background:linear-gradient(135deg,#0088CC,#005f8e);color:#fff;box-shadow:0 4px 16px rgba(0,136,204,.35);}
+.plt-btn svg{width:16px;height:16px;fill:#fff;}
+
+/* Spinner */
+.spin-ov{position:fixed;inset:0;background:rgba(5,10,18,.85);z-index:999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;backdrop-filter:blur(6px);}
+.spin-ov.on{display:flex;}
+.spnr{width:48px;height:48px;border-radius:50%;border:3px solid rgba(201,162,39,.2);border-top-color:var(--g2);animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spn-t{font-family:'Orbitron',monospace;font-size:11px;color:var(--g2);letter-spacing:3px;}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--g1),var(--g2));color:var(--n1);
+  padding:10px 26px;border-radius:30px;font-family:'Orbitron',monospace;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  opacity:0;transition:opacity .35s;pointer-events:none;z-index:9999;white-space:nowrap;
+}
+.toast.on{opacity:1;}
+
+/* HOW IT WORKS */
+.how{position:relative;z-index:10;width:100%;max-width:440px;margin-top:28px;animation:fu .9s ease .6s both;}
+.how-t{text-align:center;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.38);margin-bottom:14px;}
+.step{display:flex;align-items:flex-start;gap:12px;background:rgba(201,162,39,.05);border:1px solid rgba(201,162,39,.11);border-radius:12px;padding:13px 16px;margin-bottom:10px;}
+.stn{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--g1),var(--g2));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--n1);}
+.stt{font-size:14px;color:rgba(255,255,255,.72);line-height:1.5;}
+.stt strong{color:var(--g2);}
+</style>
+</head>
+<body>
+
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+
+<!-- Spinner -->
+<div class="spin-ov" id="spinner">
+  <div class="spnr"></div>
+  <div class="spn-t">PREPARING…</div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="badge">⚡ Vexora International</div>
+  <h1><span>Free Earn Money</span></h1>
+  <p class="sub">Without Investment &nbsp;·&nbsp; 100% Real &nbsp;·&nbsp; Pakistan</p>
+</header>
+
+<!-- CLAUDE AI MESSAGE -->
+<div class="cmsg">
+  <div class="cmsg-from">
+    <div class="ai-av">🤖</div>
+    <div>
+      <div class="ai-nm">CLAUDE AI</div>
+      <div class="ai-rl">Verified System Message · Anthropic</div>
+    </div>
+  </div>
+  <div class="cmsg-body">
+    Hello! I am <strong>Claude AI</strong> — and I want to introduce you to one of Pakistan's most
+    <strong>trusted free earning platforms</strong>.<br><br>
+    <strong>Vexora Pro</strong> lets you earn real money just by sharing your link.
+    No investment. No risk. 100% genuine.<br><br>
+    ✅ <span class="chtag">1000 Real Clicks = Rs 50</span><br>
+    ✅ Withdraw via <strong>EasyPaisa / JazzCash / USDT</strong><br>
+    ✅ <strong>Referral Bonus</strong> — Invite friends, earn more<br><br>
+    Share your card now and start earning <strong>completely FREE</strong> today! 💰
+  </div>
+</div>
+
+<!-- ATM CARD -->
+<div class="card-scene">
+  <div class="atm" id="atmCard">
+    <div class="cb">
+      <div class="c-bar"></div>
+      <div class="scan"></div>
+      <div class="gc tl"></div>
+      <div class="gc br"></div>
+      <div class="chip">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+      <div class="nfc">
+        <div class="na"></div><div class="na"></div><div class="na"></div>
+      </div>
+      <div class="c-brand">
+        <div class="bname">VEXORA</div>
+        <div class="bpro">PRO</div>
+      </div>
+      <div class="earn-sec">
+        <div class="elbl">✦ Online Earning ✦</div>
+        <div class="emain">FREE EARN<br>MONEY</div>
+        <div class="etag">Without Investment · Real Payments</div>
+      </div>
+      <div class="cnum">
+        <span>5247</span><span>••••</span><span>••••</span><span>8391</span>
+      </div>
+      <div class="cftr">
+        <div>
+          <div class="hlbl">Card Holder</div>
+          <div class="hname" id="holderName">VEXORA USER</div>
+        </div>
+        <div class="mc">
+          <div class="mcc"></div><div class="mcc"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="sp"><div class="sn">Rs 50</div><div class="sl">Per Reward</div></div>
+  <div class="sp"><div class="sn">1000</div><div class="sl">Clicks</div></div>
+  <div class="sp"><div class="sn">FREE</div><div class="sl">Join Now</div></div>
+</div>
+
+<!-- SHARE SECTION -->
+<div class="share-wrap">
+  <div class="sh-title">📤 Share Your Card &amp; Earn</div>
+
+  <!-- FACEBOOK -->
+  <div class="fb-block">
+    <div class="fb-row">
+      <div class="fb-ico">
+        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </div>
+      <div class="fb-inf">
+        <div class="fb-ttl">Share on Facebook</div>
+        <div class="fb-dsc">Facebook automatically shows your Earn Card as a rich preview. No image download needed!</div>
+      </div>
+    </div>
+
+    <!-- OG Preview (shows what Facebook will display) -->
+    <div class="og-card">
+      <div class="og-banner">
+        <div class="og-banner-txt">VEXORA PRO · FREE EARN MONEY</div>
+      </div>
+      <div class="og-meta">
+        <div class="og-mt">🤑 Free Earn Money – No Investment | Vexora Pro</div>
+        <div class="og-md">Earn Rs 50 for every 1000 real clicks. 100% Free. Withdraw via EasyPaisa &amp; JazzCash.</div>
+        <div class="og-mu" id="ogUrl">vexorainternational.online</div>
+      </div>
+    </div>
+
+    <button class="fb-btn" onclick="shareOnFacebook()">
+      <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      Share on Facebook
+    </button>
+  </div>
+
+  <!-- WHATSAPP + TELEGRAM -->
+  <div class="wt-row">
+
+    <!-- WHATSAPP -->
+    <div class="plt wa">
+      <div class="plt-hd">
+        <div class="plt-ic wa">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <div class="plt-nm">WhatsApp</div>
+      </div>
+      <div class="mini-card"><div class="mini-card-txt">VEXORA PRO<br>FREE EARN<br>MONEY</div></div>
+      <div class="lnk-prev" id="waLink">Loading…</div>
+      <button class="plt-btn wa-btn" onclick="shareOnWhatsApp()">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Share Card
+      </button>
+    </div>
+
+    <!-- TELEGRAM -->
+    <div class="plt tg">
+      <div class="plt-hd">
+        <div class="plt-ic tg">
+          <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <div class="plt-nm">Telegram</div>
+      </div>
+      <div class="mini-card"><div class="mini-card-txt">VEXORA PRO<br>FREE EARN<br>MONEY</div></div>
+      <div class="lnk-prev" id="tgLink">Loading…</div>
+      <button class="plt-btn tg-btn" onclick="shareOnTelegram()">
+        <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Share Link
+      </button>
+    </div>
+
+  </div>
+</div><!-- end share-wrap -->
+
+<!-- HOW IT WORKS -->
+<div class="how">
+  <div class="how-t">HOW IT WORKS</div>
+  <div class="step"><div class="stn">1</div><div class="stt">Share your <strong>Referral Card</strong> on Facebook, WhatsApp, or Telegram.</div></div>
+  <div class="step"><div class="stn">2</div><div class="stt">People click your link and watch a <strong>30-second ad</strong>.</div></div>
+  <div class="step"><div class="stn">3</div><div class="stt">Every <strong>1000 real verified clicks</strong> = <strong>Rs 50 added</strong> to your balance automatically.</div></div>
+  <div class="step"><div class="stn">4</div><div class="stt">Withdraw anytime via <strong>EasyPaisa / JazzCash / USDT</strong>.</div></div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+// ── CONFIG ──────────────────────────────────────────
+// Replace with your actual hosted domain
+const CLICK_PAGE = 'https://vexorainternational.online/click.html';
+// ────────────────────────────────────────────────────
+
+function getUserId() {
+  const p = new URLSearchParams(window.location.search);
+  return p.get('uid')
+    || localStorage.getItem('userId')
+    || localStorage.getItem('vexoraUserId')
+    || localStorage.getItem('psUserId')
+    || 'GUEST';
+}
+
+function getShareUrl() {
+  const uid = getUserId();
+  return CLICK_PAGE + '?ref=' + encodeURIComponent(uid);
+}
+
+// On load
+window.addEventListener('DOMContentLoaded', () => {
+  const uid = getUserId();
+  const url = getShareUrl();
+  if (uid !== 'GUEST') document.getElementById('holderName').textContent = uid.toUpperCase();
+  document.getElementById('waLink').textContent = url;
+  document.getElementById('tgLink').textContent = url;
+  document.getElementById('ogUrl').textContent  = url;
+});
+
+// 3D tilt
+const atmEl = document.getElementById('atmCard');
+document.addEventListener('mousemove', e => {
+  const r  = atmEl.getBoundingClientRect();
+  const dx = (e.clientX - (r.left + r.width/2)) / 22;
+  const dy = (e.clientY - (r.top  + r.height/2)) / 22;
+  atmEl.style.cssText = `animation:none;transform:rotateY(${dx}deg) rotateX(${-dy}deg) scale(1.03);`;
+});
+document.addEventListener('mouseleave', () => { atmEl.style.cssText = ''; });
+
+function toast(msg, d=2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), d);
+}
+function showSpin() { document.getElementById('spinner').classList.add('on'); }
+function hideSpin() { document.getElementById('spinner').classList.remove('on'); }
+
+// Capture card as image blob
+async function captureCard() {
+  showSpin();
+  try {
+    const canvas = await html2canvas(atmEl, {
+      backgroundColor: null, scale: 2.5, useCORS: true, logging: false
+    });
+    return new Promise(res => canvas.toBlob(b => { hideSpin(); res(b); }, 'image/png'));
+  } catch(e) { hideSpin(); throw e; }
+}
+
+// ── FACEBOOK ─────────────────────────────────────────
+// Android  → intent:// URI opens Facebook app directly
+// iOS      → fb:// scheme, falls back to web (FB app intercepts it)
+// Desktop  → popup window
+function shareOnFacebook() {
+  const url     = getShareUrl();
+  const encoded = encodeURIComponent(url);
+  const webUrl  = 'https://www.facebook.com/sharer/sharer.php?u=' + encoded;
+
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isIOS     = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  if (isAndroid) {
+    // Android intent — opens Facebook app directly, no Chrome
+    const intent = 'intent://www.facebook.com/sharer/sharer.php?u='
+      + encoded
+      + '#Intent;scheme=https;package=com.facebook.katana;fallbackUrl='
+      + encodeURIComponent(webUrl) + ';end';
+    window.location.href = intent;
+  } else if (isIOS) {
+    // iOS — try fb:// scheme first, auto-fallback after 1.5s
+    window.location.href = 'fb://';
+    setTimeout(() => { window.location.href = webUrl; }, 1500);
+  } else {
+    // Desktop
+    const pop = window.open(webUrl, 'fb', 'width=620,height=520,scrollbars=yes');
+    if (!pop) window.open(webUrl, '_blank');
+  }
+
+  toast('✓ Opening Facebook App…');
+}
+
+// ── WHATSAPP ──────────────────────────────────────────
+// Mobile → Web Share API (card image + link) → fallback to whatsapp:// URI
+// Desktop → wa.me link
+async function shareOnWhatsApp() {
+  const url = getShareUrl();
+  const msg =
+`🤑 *FREE EARN MONEY – Vexora Pro*
+
+Earn money online — Completely FREE! No investment needed.
+
+✅ 1000 Real Clicks = Rs 50 Balance
+✅ Withdraw via EasyPaisa / JazzCash
+✅ 100% Genuine – No Fraud!
+
+👇 Join Now:
+${url}`;
+
+  const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  // Try Web Share API with card image (opens share sheet with image)
+  try {
+    const blob = await captureCard();
+    const file = new File([blob], 'vexora-card.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ title: 'Free Earn Money – Vexora Pro', text: msg, files: [file] });
+      toast('✓ Card Shared!');
+      return;
+    }
+  } catch(e) {
+    hideSpin();
+    if (e.name === 'AbortError') return; // user cancelled
+  }
+
+  // Fallback: whatsapp:// URI (opens app directly, no browser)
+  const waApp = 'whatsapp://send?text=' + encodeURIComponent(msg);
+  const waWeb = 'https://wa.me/?text='  + encodeURIComponent(msg);
+
+  if (isMobile) {
+    window.location.href = waApp;
+    // If app not installed, fall back to web after 2s
+    setTimeout(() => { window.location.href = waWeb; }, 2000);
+  } else {
+    window.open(waWeb, '_blank');
+  }
+
+  toast('✓ Opening WhatsApp App…');
+}
+
+// ── TELEGRAM ──────────────────────────────────────────
+// Mobile → tg:// URI (opens Telegram app directly)
+// Desktop → t.me web link
+function shareOnTelegram() {
+  const url  = getShareUrl();
+  const text = `🤑 FREE EARN MONEY – Vexora Pro\n\nEarn money online — Completely FREE! No investment.\n\n✅ 1000 Clicks = Rs 50\n✅ EasyPaisa / JazzCash Withdrawal\n✅ 100% Real & Genuine\n\n👇 Join Now:`;
+
+  const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+  const tgApp    = 'tg://msg?text=' + encodeURIComponent(text + '\n' + url);
+  const tgWeb    = 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
+
+  if (isMobile) {
+    window.location.href = tgApp;
+    // If Telegram not installed, fall back to web after 2s
+    setTimeout(() => { window.location.href = tgWeb; }, 2000);
+  } else {
+    window.open(tgWeb, '_blank');
+  }
+
+  toast('✓ Opening Telegram App…');
+}
+</script>
+
+<!-- Particles -->
+<script>
+for (let i=0;i<20;i++){
+  const p=document.createElement('div');
+  p.className='ptcl';
+  const s=1+Math.random()*2.5;
+  p.style.cssText=`width:${s}px;height:${s}px;background:${Math.random()>.5?'#e8c547':'#c9a227'};left:${Math.random()*100}vw;animation-duration:${8+Math.random()*12}s;animation-delay:${-Math.random()*16}s;opacity:${.3+Math.random()*.6};`;
+  document.body.appendChild(p);
+}
+</script>
+</body>
+</html>
