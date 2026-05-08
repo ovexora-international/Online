@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vexora Pro — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0a0f;--surface:#111118;--card:#16161f;--border:#1e1e2e;--accent:#6c63ff;--accent2:#ff6b6b;--text:#e8e8f0;--muted:#6b6b8a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+#loginScreen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 60% 40%,#1a1040 0%,#0a0a0f 70%);}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:360px;text-align:center;box-shadow:0 0 80px #6c63ff22;animation:fadeUp .5s ease;}
+.login-logo{font-size:2rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.login-sub{color:var(--muted);font-size:.85rem;margin-bottom:8px;}
+.login-secure{display:inline-flex;align-items:center;gap:5px;background:#43e97b11;border:1px solid #43e97b33;border-radius:20px;padding:4px 12px;font-size:.72rem;color:#43e97b;margin-bottom:26px;}
+.login-box input{width:100%;padding:12px 16px;background:#0a0a0f;border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Mono',monospace;font-size:.9rem;margin-bottom:12px;outline:none;transition:border-color .2s;}
+.login-box input:focus{border-color:var(--accent);}
+.login-btn{width:100%;padding:13px;background:linear-gradient(135deg,#6c63ff,#9b59b6);border:none;border-radius:10px;color:#fff;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s;position:relative;}
+.login-btn:hover{opacity:.88;}
+.login-btn:disabled{opacity:.5;cursor:not-allowed;}
+.login-err{color:#ff6b6b;font-size:.82rem;margin-top:10px;display:none;}
+.login-spinner{display:none;width:16px;height:16px;border:2px solid #ffffff44;border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin:0 auto;}
+/* LAYOUT */
+#app{display:none;min-height:100vh;}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;}
+.sidebar-logo{padding:24px 20px 20px;font-size:1.15rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;border-bottom:1px solid var(--border);}
+.sidebar-logo span{display:block;font-size:.62rem;font-weight:400;color:var(--muted);-webkit-text-fill-color:var(--muted);margin-top:2px;}
+.sidebar-nav{flex:1;padding:14px 10px;overflow-y:auto;}
+.nav-sec{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:10px 10px 4px;margin-top:4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:.86rem;font-weight:600;color:var(--muted);transition:all .2s;margin-bottom:2px;}
+.nav-item:hover{background:var(--border);color:var(--text);}
+.nav-item.active{background:linear-gradient(135deg,#6c63ff22,#9b59b622);color:var(--accent);border:1px solid #6c63ff33;}
+.nav-item .ic{font-size:1rem;width:20px;text-align:center;}
+.sidebar-footer{padding:14px;border-top:1px solid var(--border);}
+.session-info{font-size:.68rem;color:var(--muted);margin-bottom:8px;padding:6px 8px;background:var(--bg);border-radius:6px;text-align:center;}
+.logout-btn{width:100%;padding:9px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--accent2);font-family:'Syne',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.logout-btn:hover{background:#ff6b6b22;border-color:#ff6b6b;}
+.main{margin-left:220px;padding:26px 26px 40px;min-height:100vh;}
+.page{display:none;}.page.active{display:block;}
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.page-title{font-size:1.5rem;font-weight:800;}
+.page-sub{color:var(--muted);font-size:.82rem;margin-top:2px;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:22px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;transition:transform .2s;}
+.stat-card:hover{transform:translateY(-2px);}
+.stat-label{font-size:.72rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;}
+.stat-val{font-size:1.7rem;font-weight:800;font-family:'DM Mono',monospace;}
+.stat-badge{font-size:.68rem;padding:2px 8px;border-radius:20px;margin-top:5px;width:fit-content;}
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;}
+.tbl-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;}
+.tbl-title{font-size:.92rem;font-weight:700;}
+.search-bar{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 11px;}
+.search-bar input{background:transparent;border:none;outline:none;color:var(--text);font-family:'DM Mono',monospace;font-size:.8rem;width:170px;}
+.tbl-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{padding:10px 14px;text-align:left;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;background:#0d0d15;border-bottom:1px solid var(--border);}
+td{padding:11px 14px;font-size:.82rem;border-bottom:1px solid #1a1a28;font-family:'DM Mono',monospace;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#ffffff04;}
+.badge{padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:600;font-family:'Syne',sans-serif;}
+.bg{background:#43e97b22;color:#43e97b;border:1px solid #43e97b44;}
+.br{background:#ff6b6b22;color:#ff6b6b;border:1px solid #ff6b6b44;}
+.by{background:#f7971e22;color:#f7971e;border:1px solid #f7971e44;}
+.bb{background:#6c63ff22;color:#6c63ff;border:1px solid #6c63ff44;}
+.btn{padding:5px 11px;border-radius:7px;font-size:.73rem;font-weight:700;cursor:pointer;border:none;transition:all .15s;font-family:'Syne',sans-serif;margin-right:3px;}
+.btn-ok{background:#43e97b22;color:#43e97b;border:1px solid #43e97b44;}.btn-ok:hover{background:#43e97b;color:#000;}
+.btn-no{background:#ff6b6b22;color:#ff6b6b;border:1px solid #ff6b6b44;}.btn-no:hover{background:#ff6b6b;color:#fff;}
+.btn-ed{background:#6c63ff22;color:#6c63ff;border:1px solid #6c63ff44;}.btn-ed:hover{background:#6c63ff;color:#fff;}
+.btn-bl{background:#f7971e22;color:#f7971e;border:1px solid #f7971e44;}.btn-bl:hover{background:#f7971e;color:#000;}
+.btn-ref{padding:8px 16px;font-size:.8rem;}
+.overlay{position:fixed;inset:0;background:#00000099;display:none;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(4px);}
+.overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:30px;width:440px;max-height:85vh;overflow-y:auto;animation:fadeUp .3s ease;}
+.modal h3{font-size:1rem;font-weight:800;margin-bottom:18px;}
+.modal label{font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px;}
+.modal input,.modal select{width:100%;padding:9px 13px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:.86rem;margin-bottom:12px;outline:none;transition:border-color .2s;}
+.modal input:focus,.modal select:focus{border-color:var(--accent);}
+.modal-btns{display:flex;gap:10px;margin-top:4px;}
+.m-save{flex:1;padding:10px;background:linear-gradient(135deg,#6c63ff,#9b59b6);border:none;border-radius:9px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;}
+.m-save:hover{opacity:.88;}
+.m-cancel{flex:1;padding:10px;background:transparent;border:1px solid var(--border);border-radius:9px;color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;}
+.reward-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:520px;}
+.reward-card h3{font-size:.95rem;font-weight:700;margin-bottom:18px;}
+.reward-card label{font-size:.74rem;color:var(--muted);display:block;margin-bottom:4px;}
+.reward-card input,.reward-card select{width:100%;padding:9px 13px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:.86rem;margin-bottom:12px;outline:none;}
+.user-info-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;font-size:.82rem;font-family:'DM Mono',monospace;line-height:1.9;display:none;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 18px;font-size:.83rem;z-index:9999;box-shadow:0 8px 30px #00000066;display:none;}
+.toast.show{display:block;animation:slideIn .3s ease;}
+.toast.success{border-color:#43e97b66;color:#43e97b;}
+.toast.error{border-color:#ff6b6b66;color:#ff6b6b;}
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;gap:10px;color:var(--muted);font-size:.88rem;}
+.spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:.88rem;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px;}
+@media(max-width:768px){
+  .sidebar{width:54px;}
+  .sidebar-logo span,.nav-item span,.nav-sec,.session-info{display:none;}
+  .main{margin-left:54px;padding:14px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">⬡ VEXORA PRO</div>
+    <div class="login-sub">Admin Control Panel</div>
+    <div class="login-secure">🔒 Server-Side Secure Login</div>
+    <input type="text" id="lu" placeholder="Username" autocomplete="off"/>
+    <input type="password" id="lp" placeholder="Password"/>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">
+      <span id="loginText">🔐 Enter Panel</span>
+      <div class="login-spinner" id="loginSpinner"></div>
+    </button>
+    <div class="login-err" id="lerr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">⬡ VEXORA PRO<span>Admin Panel</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-sec">Main</div>
+      <div class="nav-item active" data-page="dashboard"><span class="ic">📊</span><span>Dashboard</span></div>
+      <div class="nav-sec">Reseller Sheet</div>
+      <div class="nav-item" data-page="users"><span class="ic">👥</span><span>Users</span></div>
+      <div class="nav-item" data-page="withdrawals"><span class="ic">💸</span><span>Withdrawals</span></div>
+      <div class="nav-sec">Task Sheet</div>
+      <div class="nav-item" data-page="tasks"><span class="ic">✅</span><span>Submissions</span></div>
+      <div class="nav-item" data-page="taskusers"><span class="ic">🙋</span><span>Task Users</span></div>
+      <div class="nav-item" data-page="config2"><span class="ic">⚙️</span><span>Task Config</span></div>
+      <div class="nav-sec">Tools</div>
+      <div class="nav-item" data-page="reward"><span class="ic">🎁</span><span>Send Reward</span></div>
+      <div class="nav-item" data-page="balance"><span class="ic">⚖️</span><span>Balance Update</span></div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="session-info" id="sessionInfo">⏱ Session active</div>
+      <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-hdr">
+        <div><div class="page-title">📊 Dashboard</div><div class="page-sub">Dono sheets ka overview</div></div>
+        <button class="btn btn-ed btn-ref" onclick="loadDashboard()">🔄 Refresh</button>
+      </div>
+      <div class="stats-grid" id="dashStats"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+      <div class="tbl-wrap">
+        <div class="tbl-hdr"><span class="tbl-title">🕐 Recent Withdrawals</span></div>
+        <div id="recentW"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div class="page" id="page-users">
+      <div class="page-hdr">
+        <div><div class="page-title">👥 Users</div><div class="page-sub">Reseller Sheet</div></div>
+        <button class="btn btn-ed btn-ref" onclick="loadUsers()">🔄 Reload</button>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-hdr">
+          <span class="tbl-title">Users List</span>
+          <div class="search-bar">🔍<input type="text" id="uSrch" placeholder="Search..." oninput="filter('uBody','uSrch')"/></div>
+        </div>
+        <div class="tbl-scroll">
+          <table><thead><tr>
+            <th>ID</th><th>Name</th><th>Phone</th><th>Country</th><th>Balance</th><th>Status</th><th>Joined</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="uBody"><tr><td colspan="8"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- WITHDRAWALS -->
+    <div class="page" id="page-withdrawals">
+      <div class="page-hdr">
+        <div><div class="page-title">💸 Withdrawals</div><div class="page-sub">Approve / Reject</div></div>
+        <button class="btn btn-ed btn-ref" onclick="loadWithdrawals()">🔄 Reload</button>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-hdr">
+          <span class="tbl-title">Withdrawal Requests</span>
+          <div class="search-bar">🔍<input type="text" id="wSrch" placeholder="Search..." oninput="filter('wBody','wSrch')"/></div>
+        </div>
+        <div class="tbl-scroll">
+          <table><thead><tr>
+            <th>Row</th><th>User ID</th><th>Amount</th><th>Fee</th><th>Net</th><th>Method</th><th>Account</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="wBody"><tr><td colspan="9"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASKS -->
+    <div class="page" id="page-tasks">
+      <div class="page-hdr">
+        <div><div class="page-title">✅ Task Submissions</div><div class="page-sub">YT + FB + TK</div></div>
+        <button class="btn btn-ed btn-ref" onclick="loadTasks()">🔄 Reload</button>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-hdr">
+          <span class="tbl-title">All Submissions</span>
+          <div class="search-bar">🔍<input type="text" id="tSrch" placeholder="Search..." oninput="filter('tBody','tSrch')"/></div>
+        </div>
+        <div class="tbl-scroll">
+          <table><thead><tr>
+            <th>Row</th><th>User ID</th><th>Name</th><th>Platform</th><th>Task ID</th><th>Proof</th><th>Date</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="tBody"><tr><td colspan="9"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK USERS -->
+    <div class="page" id="page-taskusers">
+      <div class="page-hdr">
+        <div><div class="page-title">🙋 Task Users</div><div class="page-sub">Task stats</div></div>
+        <button class="btn btn-ed btn-ref" onclick="loadTaskUsers()">🔄 Reload</button>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-hdr">
+          <span class="tbl-title">Users</span>
+          <div class="search-bar">🔍<input type="text" id="tuSrch" placeholder="Search..." oninput="filter('tuBody','tuSrch')"/></div>
+        </div>
+        <div class="tbl-scroll">
+          <table><thead><tr>
+            <th>Row</th><th>User ID</th><th>Name</th><th>Phone</th><th>Balance</th><th>Tasks Done</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="tuBody"><tr><td colspan="8"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK CONFIG -->
+    <div class="page" id="page-config2">
+      <div class="page-hdr">
+        <div><div class="page-title">⚙️ Task Config</div><div class="page-sub">Price aur activate</div></div>
+        <button class="btn btn-ed btn-ref" onclick="loadConfig2()">🔄 Reload</button>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-hdr"><span class="tbl-title">Task List</span></div>
+        <div class="tbl-scroll">
+          <table><thead><tr>
+            <th>Row</th><th>Platform</th><th>Task ID</th><th>Name</th><th>Price</th><th>Active</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="cfgBody"><tr><td colspan="7"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEND REWARD -->
+    <div class="page" id="page-reward">
+      <div class="page-hdr">
+        <div><div class="page-title">🎁 Send Reward</div><div class="page-sub">Bonus / Salary / Coin / TaskReward</div></div>
+      </div>
+      <div class="reward-card">
+        <h3>🔍 User Search Karo</h3>
+        <label>User ID</label>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <input type="text" id="rwUid" placeholder="VX0001..." style="flex:1;padding:9px 13px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:.86rem;outline:none;margin:0;"/>
+          <button class="m-save" style="width:auto;padding:9px 18px;flex:none;" onclick="searchForReward()">🔍 Search</button>
+        </div>
+        <div class="user-info-box" id="rwUserBox"></div>
+        <div id="rwForm" style="display:none;">
+          <label>Reward Type</label>
+          <select id="rwType" style="width:100%;padding:9px 13px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:.86rem;margin-bottom:12px;outline:none;">
+            <option value="Bonus">🎉 Bonus</option>
+            <option value="Salary">💼 Salary</option>
+            <option value="Coin">🪙 Coin</option>
+            <option value="TaskReward">✅ Task Reward</option>
+          </select>
+          <label>Amount (Rs.)</label>
+          <input type="number" id="rwAmt" placeholder="100" min="1" style="width:100%;padding:9px 13px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:.86rem;margin-bottom:14px;outline:none;"/>
+          <button class="m-save" style="width:100%;" onclick="sendReward()">💸 Send Reward</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BALANCE -->
+    <div class="page" id="page-balance">
+      <div class="page-hdr">
+        <div><div class="page-title">⚖️ Balance Update</div><div class="page-sub">Manually set karein</div></div>
+      </div>
+      <div class="reward-card">
+        <h3>⚖️ New Balance Set Karein</h3>
+        <label>User ID</label>
+        <input type="text" id="bUid" placeholder="VX0001" style="width:100%;padding:9px 13px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:.86rem;margin-bottom:12px;outline:none;"/>
+        <label>New Balance (Rs.)</label>
+        <input type="number" id="bAmt" placeholder="0" style="width:100%;padding:9px 13px;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:.86rem;margin-bottom:14px;outline:none;"/>
+        <button class="m-save" style="width:100%;" onclick="updateBal()">💾 Update Balance</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3 id="mTitle">Edit</h3>
+    <div id="mBody"></div>
+    <div class="modal-btns">
+      <button class="m-cancel" onclick="closeModal()">Cancel</button>
+      <button class="m-save" id="mSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+//  CONFIG — Sirf GAS URL yahan
+//  Password yahan NAHI hai — GAS mein hai
+// ══════════════════════════════════════
+const GAS_URL = "YOUR_GAS_DEPLOYMENT_URL_HERE";
+
+// ══════════════════════════════════════
+//  SESSION — Token sessionStorage mein
+// ══════════════════════════════════════
+function getToken() { return sessionStorage.getItem('vx_token'); }
+function setToken(t) { sessionStorage.setItem('vx_token', t); }
+function clearToken() { sessionStorage.removeItem('vx_token'); }
+
+// Session timer display
+function startSessionTimer(ms) {
+  const end = Date.now() + ms;
+  const el  = document.getElementById('sessionInfo');
+  const iv  = setInterval(() => {
+    const left = end - Date.now();
+    if (left <= 0) {
+      clearInterval(iv);
+      doLogout();
+      return;
+    }
+    const h = Math.floor(left/3600000);
+    const m = Math.floor((left%3600000)/60000);
+    if (el) el.textContent = `⏱ ${h}h ${m}m remaining`;
+  }, 30000);
+  if (el) el.textContent = `⏱ 8h 0m remaining`;
+}
+
+// ══════════════════════════════════════
+//  LOGIN — GAS se verify hoga
+// ══════════════════════════════════════
+async function doLogin() {
+  const u   = document.getElementById('lu').value.trim();
+  const p   = document.getElementById('lp').value.trim();
+  const err = document.getElementById('lerr');
+  const btn = document.getElementById('loginBtn');
+
+  if (!u || !p) { err.textContent = '⚠️ Username aur password daalen'; err.style.display='block'; return; }
+
+  // Show loading
+  btn.disabled = true;
+  document.getElementById('loginText').style.display = 'none';
+  document.getElementById('loginSpinner').style.display = 'block';
+  err.style.display = 'none';
+
+  try {
+    const qs = new URLSearchParams({ action:'admin_login', user:u, pass:p });
+    const r  = await fetch(`${GAS_URL}?${qs}`);
+    const d  = await r.json();
+
+    if (d.success && d.token) {
+      setToken(d.token);
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      startSessionTimer(8 * 60 * 60 * 1000);
+      loadDashboard();
+    } else {
+      err.textContent = '❌ ' + (d.error || 'Login failed');
+      err.style.display = 'block';
+    }
+  } catch(e) {
+    err.textContent = '❌ Connection error. GAS URL check karein.';
+    err.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  document.getElementById('loginText').style.display = 'block';
+  document.getElementById('loginSpinner').style.display = 'none';
+}
+
+document.getElementById('lp').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
+document.getElementById('lu').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
+
+function doLogout() {
+  clearToken();
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('lu').value = '';
+  document.getElementById('lp').value = '';
+}
+
+// ══════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function() {
+    const page = this.dataset.page;
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    document.getElementById('page-'+page).classList.add('active');
+    this.classList.add('active');
+    const loaders = {users:loadUsers,withdrawals:loadWithdrawals,tasks:loadTasks,taskusers:loadTaskUsers,config2:loadConfig2};
+    if (loaders[page]) loaders[page]();
+  });
+});
+
+// ══════════════════════════════════════
+//  API — token har request mein
+// ══════════════════════════════════════
+async function gasGet(action, params={}) {
+  const token = getToken();
+  const qs    = new URLSearchParams({ action, token, ...params });
+  const r     = await fetch(`${GAS_URL}?${qs}`);
+  const d     = await r.json();
+  if (d.code === 401) { doLogout(); return { success:false, error:'Session expired' }; }
+  return d;
+}
+
+async function gasPost(payload) {
+  const token = getToken();
+  const r = await fetch(GAS_URL, { method:'POST', body:JSON.stringify({...payload, token}) });
+  const d = await r.json();
+  if (d.code === 401) { doLogout(); return { success:false, error:'Session expired' }; }
+  return d;
+}
+
+// ══════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════
+async function loadDashboard() {
+  document.getElementById('dashStats').innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+  const r = await gasGet('admin_dashboard');
+  const s = r.stats || {};
+  document.getElementById('dashStats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Total Users</div><div class="stat-val" style="color:#6c63ff">${s.totalUsers||0}</div><div class="stat-badge bb">Reseller</div></div>
+    <div class="stat-card"><div class="stat-label">Active Users</div><div class="stat-val" style="color:#43e97b">${s.activeUsers||0}</div><div class="stat-badge bg">Active</div></div>
+    <div class="stat-card"><div class="stat-label">Total Balance</div><div class="stat-val" style="color:#ffd700;font-size:1.3rem">Rs.${(s.totalBalance||0).toLocaleString()}</div><div class="stat-badge by">All</div></div>
+    <div class="stat-card"><div class="stat-label">Pending W/D</div><div class="stat-val" style="color:#f7971e">${s.pendingW||0}</div><div class="stat-badge by">Waiting</div></div>
+    <div class="stat-card"><div class="stat-label">Pending Tasks</div><div class="stat-val" style="color:#ff6b6b">${s.pendingTasks||0}</div><div class="stat-badge br">Waiting</div></div>
+    <div class="stat-card"><div class="stat-label">Approved Tasks</div><div class="stat-val" style="color:#43e97b">${s.approvedTasks||0}</div><div class="stat-badge bg">Done</div></div>
+  `;
+  const rw = r.recentWithdrawals || [];
+  document.getElementById('recentW').innerHTML = rw.length
+    ? `<table><thead><tr><th>User ID</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody>${
+        rw.map(w=>`<tr><td>${w.userId}</td><td>Rs.${w.amount}</td><td>${w.method}</td><td><span class="badge ${w.status==='Approved'?'bg':w.status==='Rejected'?'br':'by'}">${w.status||'Pending'}</span></td></tr>`).join('')
+      }</tbody></table>`
+    : '<div class="empty">No recent withdrawals</div>';
+}
+
+// ══════════════════════════════════════
+//  USERS
+// ══════════════════════════════════════
+async function loadUsers() {
+  const tb = document.getElementById('uBody');
+  tb.innerHTML = '<tr><td colspan="8"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr>';
+  const r = await gasGet('admin_get_users');
+  const d = r.data || [];
+  if (!d.length) { tb.innerHTML='<tr><td colspan="8"><div class="empty">No users</div></td></tr>'; return; }
+  tb.innerHTML = d.map(u=>`<tr>
+    <td>${u.userId||'-'}</td><td>${u.name||'-'}</td><td>${u.phone||'-'}</td>
+    <td>${u.country||'-'}</td><td>Rs.${parseFloat(u.balance||0).toLocaleString()}</td>
+    <td><span class="badge ${u.status==='Active'?'bg':'br'}">${u.status||'Active'}</span></td>
+    <td style="font-size:.72rem">${u.joinedAt||'-'}</td>
+    <td>
+      <button class="btn btn-ed" onclick='openEditUser(${JSON.stringify(u)})'>✏️</button>
+      <button class="btn btn-bl" onclick="toggleUser('${u.userId}','${u.status||'Active'}')">${u.status==='Blocked'?'✅':'🚫'}</button>
+    </td>
+  </tr>`).join('');
+}
+
+function openEditUser(u) {
+  document.getElementById('mTitle').textContent = '✏️ Edit — '+u.userId;
+  document.getElementById('mBody').innerHTML = `
+    <label>Name</label><input id="eu_n" value="${u.name||''}"/>
+    <label>Phone</label><input id="eu_p" value="${u.phone||''}"/>
+    <label>Country</label><input id="eu_c" value="${u.country||''}"/>
+    <label>Balance (Rs.)</label><input type="number" id="eu_b" value="${u.balance||0}"/>
+    <label>Status</label>
+    <select id="eu_s"><option ${u.status==='Active'?'selected':''}>Active</option><option ${u.status==='Blocked'?'selected':''}>Blocked</option></select>
+    <label>Account No</label><input id="eu_ano" value="${u.accountNo||''}"/>
+    <label>Account Type</label><input id="eu_at" value="${u.accountType||''}"/>
+    <label>Account Title</label><input id="eu_atl" value="${u.accountTitle||''}"/>
+    <label>Network</label><input id="eu_an" value="${u.accountNet||''}"/>
+  `;
+  document.getElementById('mSave').onclick = async ()=>{
+    const res = await gasPost({action:'admin_update_user',userId:u.userId,
+      name:v('eu_n'),phone:v('eu_p'),country:v('eu_c'),balance:v('eu_b'),
+      status:v('eu_s'),accountNo:v('eu_ano'),accountType:v('eu_at'),
+      accountTitle:v('eu_atl'),accountNet:v('eu_an')});
+    closeModal(); toast(res.success?'✅ Updated!':'❌ '+res.error, res.success);
+    if(res.success) loadUsers();
+  };
+  openModal();
+}
+
+async function toggleUser(userId, status) {
+  const ns = status==='Blocked'?'Active':'Blocked';
+  if (!confirm(`${userId} ko ${ns} karna?`)) return;
+  const r = await gasPost({action:'admin_update_user',userId,status:ns});
+  toast(r.success?`✅ ${ns}!`:'❌ Error', r.success);
+  if(r.success) loadUsers();
+}
+
+// ══════════════════════════════════════
+//  WITHDRAWALS
+// ══════════════════════════════════════
+async function loadWithdrawals() {
+  const tb = document.getElementById('wBody');
+  tb.innerHTML = '<tr><td colspan="9"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr>';
+  const r = await gasGet('admin_get_withdrawals');
+  const d = r.data || [];
+  if (!d.length) { tb.innerHTML='<tr><td colspan="9"><div class="empty">No withdrawals</div></td></tr>'; return; }
+  tb.innerHTML = d.map(w=>`<tr>
+    <td>${w.row}</td><td>${w.userId||'-'}</td>
+    <td>Rs.${w.amount||0}</td><td>Rs.${w.fee||0}</td><td>Rs.${w.netAmount||0}</td>
+    <td>${w.method||'-'}</td><td>${w.account||'-'}</td>
+    <td><span class="badge ${w.status==='Approved'?'bg':w.status==='Rejected'?'br':'by'}">${w.status||'Pending'}</span></td>
+    <td>${w.status==='Pending'
+      ?`<button class="btn btn-ok" onclick="actWith(${w.row},'Approved')">✅ Approve</button>
+        <button class="btn btn-no" onclick="actWith(${w.row},'Rejected')">❌ Reject</button>`
+      :'-'}
+    </td>
+  </tr>`).join('');
+}
+
+async function actWith(row,status) {
+  if (!confirm(`Row ${row} ko ${status} karna?`)) return;
+  const r = await gasPost({action:'admin_update_withdrawal',row,status});
+  toast(r.success?`✅ ${status}!`:'❌ '+r.error, r.success);
+  if(r.success) loadWithdrawals();
+}
+
+// ══════════════════════════════════════
+//  TASKS
+// ══════════════════════════════════════
+async function loadTasks() {
+  const tb = document.getElementById('tBody');
+  tb.innerHTML = '<tr><td colspan="9"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr>';
+  const r = await gasGet('admin_get_tasks');
+  const d = r.data || [];
+  if (!d.length) { tb.innerHTML='<tr><td colspan="9"><div class="empty">No submissions</div></td></tr>'; return; }
+  tb.innerHTML = d.map(t=>`<tr>
+    <td>${t.row}</td><td>${t.userId||'-'}</td><td>${t.name||'-'}</td>
+    <td><span class="badge ${t.platform==='YouTube'?'br':t.platform==='Facebook'?'bb':'by'}">${t.platform||'-'}</span></td>
+    <td>${t.taskId||'-'}</td>
+    <td>${t.proofUrl?`<a href="${t.proofUrl}" target="_blank" style="color:var(--accent)">📷 View</a>`:'-'}</td>
+    <td style="font-size:.72rem">${t.timestamp||'-'}</td>
+    <td><span class="badge ${t.status==='Approved'?'bg':t.status==='Rejected'?'br':'by'}">${t.status||'Pending'}</span></td>
+    <td>${t.status==='Pending'
+      ?`<button class="btn btn-ok" onclick="actTask(${t.row},'Approved','${t.tab}')">✅</button>
+        <button class="btn btn-no" onclick="actTask(${t.row},'Rejected','${t.tab}')">❌</button>`
+      :'-'}
+    </td>
+  </tr>`).join('');
+}
+
+async function actTask(row,status,tab) {
+  const r = await gasPost({action:'admin_update_task',row,status,tab});
+  toast(r.success?`✅ ${status}! Balance updated.`:'❌ '+r.error, r.success);
+  if(r.success) loadTasks();
+}
+
+// ══════════════════════════════════════
+//  TASK USERS
+// ══════════════════════════════════════
+async function loadTaskUsers() {
+  const tb = document.getElementById('tuBody');
+  tb.innerHTML = '<tr><td colspan="8"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr>';
+  const r = await gasGet('admin_get_taskusers');
+  const d = r.data || [];
+  if (!d.length) { tb.innerHTML='<tr><td colspan="8"><div class="empty">No users</div></td></tr>'; return; }
+  tb.innerHTML = d.map(u=>`<tr>
+    <td>${u.row}</td><td>${u.userId||'-'}</td><td>${u.name||'-'}</td>
+    <td>${u.phone||'-'}</td><td>Rs.${parseFloat(u.balance||0).toLocaleString()}</td>
+    <td><span class="badge bg">${u.tasksDone||0}</span></td>
+    <td><span class="badge ${u.status==='Active'?'bg':'br'}">${u.status||'Active'}</span></td>
+    <td><button class="btn btn-ed" onclick='openEditTU(${JSON.stringify(u)})'>✏️</button></td>
+  </tr>`).join('');
+}
+
+function openEditTU(u) {
+  document.getElementById('mTitle').textContent = '✏️ Task User — '+u.userId;
+  document.getElementById('mBody').innerHTML = `
+    <label>Name</label><input id="tu_n" value="${u.name||''}"/>
+    <label>Balance (Rs.)</label><input type="number" id="tu_b" value="${u.balance||0}"/>
+  `;
+  document.getElementById('mSave').onclick = async ()=>{
+    const res = await gasPost({action:'admin_update_user',userId:u.userId,name:v('tu_n'),balance:v('tu_b')});
+    closeModal(); toast(res.success?'✅ Updated!':'❌ Error', res.success);
+    if(res.success) loadTaskUsers();
+  };
+  openModal();
+}
+
+// ══════════════════════════════════════
+//  TASK CONFIG
+// ══════════════════════════════════════
+async function loadConfig2() {
+  const tb = document.getElementById('cfgBody');
+  tb.innerHTML = '<tr><td colspan="7"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr>';
+  const r = await gasGet('admin_get_config2');
+  const d = r.data || [];
+  if (!d.length) { tb.innerHTML='<tr><td colspan="7"><div class="empty">No tasks</div></td></tr>'; return; }
+  tb.innerHTML = d.map(c=>`<tr>
+    <td>${c.row}</td>
+    <td><span class="badge ${c.platform==='YouTube'?'br':c.platform==='Facebook'?'bb':'by'}">${c.platform||'-'}</span></td>
+    <td>${c.taskId||'-'}</td><td>${c.name||'-'}</td>
+    <td>Rs.${c.price||0}</td>
+    <td><span class="badge ${c.active?'bg':'br'}">${c.active?'Active':'Inactive'}</span></td>
+    <td>
+      <button class="btn btn-ed" onclick='openEditCfg(${JSON.stringify(c)})'>✏️</button>
+      <button class="btn ${c.active?'btn-bl':'btn-ok'}" onclick="toggleCfg(${c.row},${!c.active})">${c.active?'🔴 Off':'🟢 On'}</button>
+    </td>
+  </tr>`).join('');
+}
+
+function openEditCfg(c) {
+  document.getElementById('mTitle').textContent = '⚙️ Edit Task — '+c.taskId;
+  document.getElementById('mBody').innerHTML = `
+    <label>Name</label><input id="cfg_n" value="${c.name||''}"/>
+    <label>URL</label><input id="cfg_u" value="${c.url||''}"/>
+    <label>Price (Rs.)</label><input type="number" id="cfg_p" value="${c.price||0}"/>
+  `;
+  document.getElementById('mSave').onclick = async ()=>{
+    const res = await gasPost({action:'admin_update_config2',row:c.row,name:v('cfg_n'),url:v('cfg_u'),price:v('cfg_p')});
+    closeModal(); toast(res.success?'✅ Config updated!':'❌ Error', res.success);
+    if(res.success) loadConfig2();
+  };
+  openModal();
+}
+
+async function toggleCfg(row,active) {
+  const r = await gasPost({action:'admin_toggle_task',row,active});
+  toast(r.success?`✅ ${active?'Activated':'Deactivated'}!`:'❌ Error', r.success);
+  if(r.success) loadConfig2();
+}
+
+// ══════════════════════════════════════
+//  SEND REWARD
+// ══════════════════════════════════════
+let rewardUser = null;
+
+async function searchForReward() {
+  const uid  = document.getElementById('rwUid').value.trim();
+  const box  = document.getElementById('rwUserBox');
+  const form = document.getElementById('rwForm');
+  if (!uid) { toast('⚠️ User ID daalen', false); return; }
+  box.innerHTML = '🔍 Searching...';
+  box.style.display = 'block';
+  form.style.display = 'none';
+  const r = await gasGet('admin_search_user', {userId:uid});
+  if (r.success && r.user) {
+    rewardUser = r.user;
+    const u = r.user;
+    box.innerHTML = `
+      <div style="color:#6c63ff;font-weight:700;margin-bottom:6px">✅ User Found</div>
+      <div>👤 <b style="color:var(--text)">${u.name}</b></div>
+      <div>🆔 ${u.userId}</div>
+      <div>📞 ${u.phone}</div>
+      <div>💰 Balance: <b id="rwCurBal" style="color:#43e97b">Rs.${parseFloat(u.balance||0).toLocaleString()}</b></div>
+      <div>📌 Status: <span style="color:${u.status==='Active'?'#43e97b':'#ff6b6b'}">${u.status}</span></div>
+    `;
+    form.style.display = 'block';
+  } else {
+    rewardUser = null;
+    box.innerHTML = `<span style="color:#ff6b6b">❌ ${r.error||'User not found'}</span>`;
+    form.style.display = 'none';
+  }
+}
+
+async function sendReward() {
+  if (!rewardUser) { toast('⚠️ Pehle user search karein', false); return; }
+  const type = document.getElementById('rwType').value;
+  const amt  = document.getElementById('rwAmt').value;
+  if (!amt || parseFloat(amt) <= 0) { toast('⚠️ Amount daalen', false); return; }
+  const r = await gasPost({action:'admin_send_reward',userId:rewardUser.userId,rewardType:type,amount:amt});
+  if (r.success) {
+    toast(`✅ ${type} Rs.${amt} → ${rewardUser.userId}`, true);
+    const balEl = document.getElementById('rwCurBal');
+    if (balEl) balEl.textContent = 'Rs.'+parseFloat(r.newBalance).toLocaleString();
+    document.getElementById('rwAmt').value = '';
+  } else {
+    toast('❌ '+r.error, false);
+  }
+}
+
+// ══════════════════════════════════════
+//  BALANCE UPDATE
+// ══════════════════════════════════════
+async function updateBal() {
+  const uid = document.getElementById('bUid').value.trim();
+  const amt = document.getElementById('bAmt').value.trim();
+  if (!uid||!amt) { toast('⚠️ User ID aur amount daalen', false); return; }
+  const r = await gasPost({action:'admin_update_balance',userId:uid,balance:amt});
+  toast(r.success?`✅ ${uid} → Rs.${amt}`:'❌ '+r.error, r.success);
+}
+
+// ══════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════
+function v(id) { return document.getElementById(id)?.value||''; }
+function filter(bodyId,inputId) {
+  const q = document.getElementById(inputId).value.toLowerCase();
+  document.getElementById(bodyId).querySelectorAll('tr').forEach(r=>{
+    r.style.display = r.textContent.toLowerCase().includes(q)?'':'none';
+  });
+}
+function openModal()  { document.getElementById('overlay').classList.add('open'); }
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+document.getElementById('overlay').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
+function toast(msg,ok=true) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${ok?'success':'error'}`;
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+</script>
+</body>
+</html>
